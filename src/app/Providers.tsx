@@ -5,13 +5,15 @@ import MaintenanceGuard from "@/components/reusable/MaintenanceGuard";
 import "@/lib/i18n";
 import i18n from "@/lib/i18n";
 import { store } from "@/redux/store";
+import { useAppDispatch } from "@/redux/hooks";
+import { initializeAuth } from "@/redux/slices/authSlice";
 import { ThemeProvider } from "next-themes";
 import { usePathname } from "next/navigation";
 import { I18nextProvider } from "react-i18next";
 import { Provider } from "react-redux";
 import { Toaster } from "sonner";
-import DirectionWrapper from "../layout/DirectionWrapper";
 import FacebookSDKProvider from "./FacebookSDKProvider";
+import { useEffect } from "react";
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
   const orig = console.error;
@@ -31,6 +33,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <Provider store={store}>
+      <AuthInitializer />
       <I18nextProvider i18n={i18n}>
         <ThemeProvider 
           attribute="class" 
@@ -40,17 +43,25 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           forcedTheme={isLandingPage ? "light" : undefined}
         >
           <FacebookSDKProvider>
-            <DirectionWrapper>
-              <MaintenanceGuard>
-                <DynamicFavicon />
-                {children}
-              </MaintenanceGuard>
-            </DirectionWrapper>
+            <MaintenanceGuard>
+              <DynamicFavicon />
+              {children}
+            </MaintenanceGuard>
           </FacebookSDKProvider>
           <Toaster richColors position="top-right" closeButton />
         </ThemeProvider>
       </I18nextProvider>
     </Provider>
   );
+}
+
+function AuthInitializer() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
+
+  return null;
 }
 

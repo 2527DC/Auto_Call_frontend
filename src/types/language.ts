@@ -4,7 +4,6 @@ export interface Language {
   locale: string
   is_active: boolean
   is_default: boolean
-  is_rtl: boolean
   front_translation_file: string | null
   flag: string | null
   emoji?: string
@@ -111,7 +110,6 @@ export interface LanguageSelectorProps {
 export interface FormValues {
   name: string
   locale: string
-  is_rtl: boolean
   is_active: boolean
   is_default: boolean
   flag: File | string | null

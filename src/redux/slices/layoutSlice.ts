@@ -4,7 +4,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialState: LayoutState = {
   isSidebarCollapsed: false,
-  direction: 'ltr',
 }
 
 const layoutSlice = createSlice({
@@ -14,7 +13,6 @@ const layoutSlice = createSlice({
     initializeLayout: (state) => {
       if (isBrowser) {
         state.isSidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true'
-        state.direction = (localStorage.getItem('direction') as 'ltr' | 'rtl') || 'ltr'
       }
     },
     toggleSidebar: (state) => {
@@ -29,22 +27,10 @@ const layoutSlice = createSlice({
         localStorage.setItem('sidebarCollapsed', String(state.isSidebarCollapsed))
       }
     },
-    toggleDirection: (state) => {
-      state.direction = state.direction === 'ltr' ? 'rtl' : 'ltr'
-      if (isBrowser) {
-        localStorage.setItem('direction', state.direction)
-      }
-    },
-    setDirection: (state, action: PayloadAction<'ltr' | 'rtl'>) => {
-      state.direction = action.payload
-      if (isBrowser) {
-        localStorage.setItem('direction', state.direction)
-      }
-    },
   },
 })
 
-export const { toggleSidebar, setSidebarCollapsed, toggleDirection, setDirection, initializeLayout } =
+export const { toggleSidebar, setSidebarCollapsed, initializeLayout } =
   layoutSlice.actions
 
 export default layoutSlice.reducer
