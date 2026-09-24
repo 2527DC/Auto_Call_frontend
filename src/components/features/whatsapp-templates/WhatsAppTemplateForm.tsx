@@ -611,7 +611,7 @@ export default function WhatsAppTemplateForm({ templateId }: WhatsAppTemplateFor
       {showPreviewModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-zinc-950/70 backdrop-blur-xs transition-opacity" onClick={() => setShowPreviewModal(false)} />
-          <Button type="button" onClick={() => setShowPreviewModal(false)} className="absolute top-4 right-4 rtl:right-[unset] rtl:left-4 text-white p-0! transition-all w-9 h-9 rounded-full z-50">
+          <Button type="button" onClick={() => setShowPreviewModal(false)} className="absolute top-4 right-4   text-white p-0! transition-all w-9 h-9 rounded-full z-50">
             <X size={24} />
           </Button>
           <div className="relative z-10 w-full max-w-[340px] animate-in zoom-in-95 duration-200">

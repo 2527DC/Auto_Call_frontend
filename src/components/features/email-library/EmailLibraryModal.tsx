@@ -55,7 +55,7 @@ export default function EmailLibraryModal({ isOpen, onClose, templateToEdit }: E
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-[800px]! max-w-[calc(100%-2rem)]! max-h-[90vh] overflow-y-auto no-scrollbar bg-bg-card border border-input-border-color p-0 gap-0!">
-        <DialogHeader className="sm:px-6 px-4 py-4 border-b border-input-border-color mb-0 text-left rtl:text-right">
+        <DialogHeader className="sm:px-6 px-4 py-4 border-b border-input-border-color mb-0 text-left ">
           <DialogTitle className="text-xl font-bold text-title">
             {templateToEdit
               ? t('edit_email_template', 'Edit Email Template')

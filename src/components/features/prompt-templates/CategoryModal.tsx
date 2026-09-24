@@ -38,7 +38,7 @@ export const CategoryModal = ({
         onOpenAutoFocus={(e) => e.preventDefault()}
         className="sm:max-w-125! max-w-[calc(100%-2rem)] bg-bg-card border-none shadow-2xl gap-0 rounded-modal-radius p-0 overflow-hidden"
       >
-        <DialogHeader className="sm:px-6 px-4 pt-6 pb-4 bg-bg-card text-left rtl:text-right border-b border-input-border-color">
+        <DialogHeader className="sm:px-6 px-4 pt-6 pb-4 bg-bg-card text-left  border-b border-input-border-color">
           <DialogTitle className="text-xl font-bold text-slate-800 dark:text-white">
             {category ? t("edit_category") : t("create_category")}
           </DialogTitle>

@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label"
 import { ScrollArea, ScrollBar } from "@/components/ui/scrollArea"
 import { Switch } from "@/components/ui/switch"
 import { PERMISSIONS } from "@/constants/permissions"
-import { useAppDirection } from "@/hooks/useAppDirection"
 import { usePermission } from "@/hooks/usePermission"
 import { cn } from "@/lib/utils"
 import { useGetSystemEmailTemplatesQuery, useUpdateSystemEmailTemplateMutation } from "@/redux/api/systemEmailTemplateApi"
@@ -67,7 +66,6 @@ const getPreviewHtml = (html: string, shortcodes: Shortcode[] = []) => {
 export const EmailTemplatesPage = () => {
   const { t } = useTranslation()
   const { hasPermission } = usePermission()
-  const direction = useAppDirection()
 
   const canView = hasPermission(PERMISSIONS.VIEW_SETTINGS)
   const canUpdate = hasPermission(PERMISSIONS.UPDATE_SETTINGS)
@@ -221,7 +219,7 @@ export const EmailTemplatesPage = () => {
             </div>
             {canUpdate && (
               <Button onClick={handleSave} disabled={isSaving || !selectedTemplate} className="bg-primary text-white font-bold shadow-none border-none rounded-lg p-padding! h-9 transition-colors">
-                {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2" />}
+                {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2  " />}
                 {t("save_templates", "Save Templates")}
               </Button>
             )}
@@ -240,7 +238,7 @@ export const EmailTemplatesPage = () => {
             >
               <ChevronLeft className="w-5 h-5" />
             </Button>
-            <ScrollArea id="events-scroll-root" className="w-full px-4 py-4 table-custom-scrollbar" dir={direction}>
+                    <ScrollArea id="events-scroll-root" className="w-full px-4 py-4 table-custom-scrollbar">
               <div className="flex gap-3 pb-2 ">
                 {templates.map(template => {
                   const isSelected = selectedTemplate?.slug === template.slug;
@@ -250,7 +248,7 @@ export const EmailTemplatesPage = () => {
                       key={template.slug}
                       onClick={() => setSelectedSlug(template.slug)}
                       className={cn(
-                        "w-[280px] md560:w-[240px] max-w-[85vw] shrink-0 text-left rtl:text-right p-4 h-auto flex flex-col items-start justify-start gap-3 whitespace-normal rounded-lg border group relative overflow-hidden",
+                        "w-[280px] md560:w-[240px] max-w-[85vw] shrink-0 text-left  p-4 h-auto flex flex-col items-start justify-start gap-3 whitespace-normal rounded-lg border group relative overflow-hidden",
                         isSelected
                           ? "bg-primary text-white border-primary hover:bg-primary hover:text-white"
                           : "bg-subcard text-title border-input-border-color"
@@ -264,9 +262,9 @@ export const EmailTemplatesPage = () => {
                           <CheckCircle className={cn("w-4 h-4 shrink-0", isSelected ? "text-white" : "text-primary/40")} />
                         )}
                       </div>
-                      <div className="flex-1 min-w-0 relative z-10 flex flex-col items-start justify-start text-left rtl:text-right w-full">
-                        <div className="font-bold text-md tracking-wide truncate w-full text-left rtl:text-right">{template.name}</div>
-                        <div className={cn("text-sm line-clamp-1 font-medium w-full text-left rtl:text-right", isSelected ? "text-white/80" : "text-subtitle-color")}>
+                      <div className="flex-1 min-w-0 relative z-10 flex flex-col items-start justify-start text-left  w-full">
+                        <div className="font-bold text-md tracking-wide truncate w-full text-left ">{template.name}</div>
+                        <div className={cn("text-sm line-clamp-1 font-medium w-full text-left ", isSelected ? "text-white/80" : "text-subtitle-color")}>
                           {template.description}
                         </div>
                       </div>
@@ -337,7 +335,7 @@ export const EmailTemplatesPage = () => {
                     <div className="flex-1 flex flex-col gap-2 min-h-0">
                       <Label className="text-sm font-bold text-title">{t('message_content', 'Message Content')}</Label>
                       <div className="flex-1 bg-[#1e1e1e] rounded-lg overflow-hidden relative border border-input-border-color flex flex-col">
-                        <ScrollArea className="flex-1" dir={direction}>
+                        <ScrollArea className="flex-1">
                           <Editor
                             value={selectedTemplate.content || ""}
                             onValueChange={code => handleUpdateLocal({ content: code })}
@@ -356,7 +354,7 @@ export const EmailTemplatesPage = () => {
                               backgroundColor: '#1e1e1e',
                               color: '#d4d4d4',
                             }}
-                            className="editor-container text-left rtl:text-right"
+                            className="editor-container text-left "
                           />
                         </ScrollArea>
                       </div>
@@ -405,7 +403,7 @@ export const EmailTemplatesPage = () => {
               <Info className="w-[18px] h-[18px] text-primary" />
               <span className="font-bold text-title text-lg">{t('dynamic_fields', 'Dynamic Fields')}</span>
             </div>
-            <ScrollArea className="flex-1 sm:px-5 px-4 py-5" dir={direction}>
+                    <ScrollArea className="flex-1 sm:px-5 px-4 py-5">
               <p className="text-sm text-subtitle-color sm:mb-6 mb-4 font-medium leading-relaxed">
                 {t('click_a_variable', 'Click a variable to insert it at the current cursor position.')}
               </p>
@@ -418,8 +416,8 @@ export const EmailTemplatesPage = () => {
                     onClick={() => insertVariable(variable.action)}
                     className="w-full h-auto flex flex-col items-start justify-start whitespace-normal text-left p-3.5 rounded-lg border border-input-border-color bg-subcard transition-all group"
                   >
-                    <div className="font-mono text-md font-bold text-title mb-1.5 group-hover:text-primary transition-colors text-left rtl:text-right w-full break-all whitespace-normal line-clamp-1">{variable.action}</div>
-                    <div className="text-md font-bold text-subtitle-color group-hover:text-primary/70 transition-colors text-left rtl:text-right w-full break-all whitespace-normal line-clamp-1">{variable.text}</div>
+                    <div className="font-mono text-md font-bold text-title mb-1.5 group-hover:text-primary transition-colors text-left  w-full break-all whitespace-normal line-clamp-1">{variable.action}</div>
+                    <div className="text-md font-bold text-subtitle-color group-hover:text-primary/70 transition-colors text-left  w-full break-all whitespace-normal line-clamp-1">{variable.text}</div>
                   </Button>
                 ))}
 

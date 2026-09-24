@@ -48,7 +48,7 @@ const TagModal = ({ isOpen, onClose, tag }: TagModalProps) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-md! max-w-[calc(100%-2rem)] border-input-border-color bg-bg-card rounded-modal-radius gap-0 shadow-2xl p-0 overflow-hidden">
         <DialogHeader className="sm:px-6 px-4 py-4 bg-bg-card border-b border-input-border-color mb-0">
-          <DialogTitle className="text-lg text-left rtl:text-right font-bold tracking-tight">
+          <DialogTitle className="text-lg text-left  font-bold tracking-tight">
             {isEditing ? t('edit_tag') : t('create_tag')}
           </DialogTitle>
         </DialogHeader>

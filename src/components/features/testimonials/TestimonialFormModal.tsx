@@ -104,7 +104,7 @@ const TestimonialFormModal = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-2xl! max-w-[calc(100%-2rem)]! border-none rounded-modal-radius bg-white p-0 overflow-auto max-h-[90vh] gap-0 no-scrollbar">
-        <DialogHeader className="sm:px-6 px-4 py-5 mb-0 text-left rtl:text-right border-b border-input-border-color">
+        <DialogHeader className="sm:px-6 px-4 py-5 mb-0 text-left  border-b border-input-border-color">
           <DialogTitle className="text-xl font-bold text-title">
             {testimonial ? t('edit_testimonial') : t('create_testimonial')}
           </DialogTitle>
@@ -138,7 +138,7 @@ const TestimonialFormModal = ({
                     type="button"
                     size="icon"
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute bottom-0 -right-1 rtl:right-[unset] rtl:-left-1 w-8 h-8 rounded-radius bg-primary text-white hover:scale-110 transition-transform"
+                    className="absolute bottom-0 -right-1   w-8 h-8 rounded-radius bg-primary text-white hover:scale-110 transition-transform"
                   >
                     <Camera className="w-4 h-4" />
                   </Button>
@@ -148,7 +148,7 @@ const TestimonialFormModal = ({
                       variant="destructive"
                       size="icon"
                       onClick={() => handleRemoveImage(setFieldValue)}
-                      className="absolute -top-1 right-2 rtl:right-[unset] rtl:left-2 w-6 h-6 bg-destructive! text-white rounded-lg"
+                      className="absolute -top-1 right-2   w-6 h-6 bg-destructive! text-white rounded-lg"
                     >
                       <X className="w-3 h-3" />
                     </Button>

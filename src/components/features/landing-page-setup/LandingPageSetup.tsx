@@ -402,7 +402,7 @@ export default function LandingPageSetup() {
                           )}>
                             <Icon className="w-5 h-5" />
                           </div>
-                          <div className="min-w-0 text-left rtl:text-right">
+                          <div className="min-w-0 text-left ">
                             <p className={cn("text-base font-bold tracking-tight", isActive ? "text-white" : "text-title group-hover:text-primary dark:text-white")}>
                               {section.title}
                             </p>

@@ -20,7 +20,7 @@ export const LanguageHeader = ({ onAddClick, canManage }: Partial<LanguageHeader
             className="h-10 w-10 bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary dark:bg-primary/20 rounded-radius transition-all shrink-0"
             onClick={() => router.back()}
           >
-            <ArrowLeft className="w-5 h-5 rtl:rotate-180" />
+            <ArrowLeft className="w-5 h-5 " />
           </Button>
           <h1 className="text-3xl font-medium tracking-tight text-title-color dark:text-white capitalize line-clamp-1">
             {t('languages_management')}

@@ -89,7 +89,7 @@ export function PromptTemplateItem({
       </div>
 
       {/* Center Right: Styles */}
-      <div className="flex flex-col gap-2 shrink-0 w-[140px] border-l border-input-border-color pl-6 rtl:pl-0 rtl:pr-6 rtl:bordeer-l-0 rtl:border-r">
+      <div className="flex flex-col gap-2 shrink-0 w-[140px] border-l border-input-border-color pl-6    ">
         {template.communication_style && (
           <div className="flex items-center gap-1.5 text-subtitle-color" title={t('communication_style')}>
             <Mic className="w-4 h-4 text-primary/70 shrink-0" />

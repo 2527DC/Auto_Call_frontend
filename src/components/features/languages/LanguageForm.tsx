@@ -63,7 +63,6 @@ export const LanguageForm = ({ initialValues, onSubmit, isLoading, isEdit }: Lan
   const formikInitialValues: FormValues = {
     name: initialValues?.name || '',
     locale: initialValues?.locale || '',
-    is_rtl: initialValues?.is_rtl || false,
     is_active: initialValues?.is_active ?? true,
     is_default: initialValues?.is_default || false,
     flag: initialValues?.flag || null,
@@ -309,7 +308,6 @@ export const LanguageForm = ({ initialValues, onSubmit, isLoading, isEdit }: Lan
                       desc: t("primary_system_language", "Primary System Language"),
                       checked: values.is_default,
                     },
-                    { id: "is_rtl", label: t("rtl", "RTL"), desc: t("right_to_left_layout", "Right to left layout"), checked: values.is_rtl },
                   ].map((opt) => (
                     <div key={opt.id} className="flex items-center justify-between px-5 py-4 bg-bg-card">
                       <div className="space-y-0.5">
@@ -333,7 +331,6 @@ export const LanguageForm = ({ initialValues, onSubmit, isLoading, isEdit }: Lan
                   {[
                     { text: t("ensure_json_keys_match_defaults", "Ensure JSON keys match defaults") },
                     { text: t("use_high_res_flag_svg_best", "Use high res flag SVG for best quality") },
-                    { text: t("rtl_automatically_flips_layout", "RTL automatically flips layout direction") },
                   ].map((tip, i) => (
                     <div key={i} className="flex items-center gap-2.5 text-[13px] font-medium text-subtitle-color">
                       <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />

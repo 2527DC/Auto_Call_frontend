@@ -49,7 +49,7 @@ export function FaqModal({ isOpen, onClose, faq }: FaqModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-xl! max-w-[calc(100%-2rem)]! rounded-radius border-none bg-white gap-0 p-0 overflow-auto max-h-[90vh] no-scrollbar">
         <DialogHeader className="sm:px-6 text-left px-4 py-5 border-b border-input-border-color mb-0">
-          <DialogTitle className="text-xl text-left rtl:text-right font-bold text-gray-900 dark:text-white">
+          <DialogTitle className="text-xl text-left  font-bold text-gray-900 dark:text-white">
             {isEditing ? t('edit_faq') : t('create_faq')}
           </DialogTitle>
         </DialogHeader>

@@ -42,7 +42,7 @@ export const SmsTemplateModal = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-125! max-w-[calc(100%-2rem)] max-h-[90vh] no-scrollbar gap-0 bg-bg-card border-none shadow-2xl rounded-modal-radius p-0 overflow-auto">
         <DialogHeader className="sm:px-6 px-4 pt-6 pb-4 mb-0 bg-bg-card border-b border-input-border-color">
-          <DialogTitle className="text-xl font-bold text-title text-left rtl:text-right">
+          <DialogTitle className="text-xl font-bold text-title text-left ">
             {smsTemplate ? t("edit_sms_template") : t("create_sms_template")}
           </DialogTitle>
         </DialogHeader>

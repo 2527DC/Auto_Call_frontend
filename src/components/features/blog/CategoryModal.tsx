@@ -70,7 +70,7 @@ const CategoryModal = ({ isOpen, onClose, category }: CategoryModalProps) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-md! max-w-[calc(100%-2rem)] border-input-border-color bg-bg-card gap-0 max-h-[90vh] rounded-modal-radius shadow-2xl p-0 overflow-auto no-scrollbar">
         <DialogHeader className="sm:px-6 px-4 py-4 bg-bg-card border-b border-input-border-color mb-0">
-          <DialogTitle className="text-lg text-left rtl:text-right font-bold tracking-tight ">
+          <DialogTitle className="text-lg text-left  font-bold tracking-tight ">
             {isEditing ? t('edit_category') : t('create_category')}
           </DialogTitle>
         </DialogHeader>

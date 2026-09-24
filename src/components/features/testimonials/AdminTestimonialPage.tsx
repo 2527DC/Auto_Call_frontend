@@ -115,7 +115,7 @@ const AdminTestimonialPage = () => {
         primaryAction={{
           label: t("create_testimonial"),
           onClick: handleCreateOpen,
-          icon: <Plus className="w-5 h-5 mr-1 rtl:mr-0 rtl:ml-1" strokeWidth={2.5} />,
+          icon: <Plus className="w-5 h-5 mr-1  " strokeWidth={2.5} />,
           className: 'bg-primary text-white font-bold transition-all duration-300 rounded-radius p-padding  ',
         }}
         showBackButton={false}

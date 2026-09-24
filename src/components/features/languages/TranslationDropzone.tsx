@@ -107,7 +107,7 @@ export const TranslationDropzone = ({ translationFile, setTranslationFile, error
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-2 right-2 rtl:right-[unset] rtl:left-2 h-7 w-7 rounded-lg hover:bg-destructive hover:text-white bg-destructive/10 text-destructive transition-colors"
+            className="absolute top-2 right-2   h-7 w-7 rounded-lg hover:bg-destructive hover:text-white bg-destructive/10 text-destructive transition-colors"
             onClick={(e) => {
               e.stopPropagation()
               setTranslationFile(null)

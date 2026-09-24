@@ -2,7 +2,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { PERMISSIONS } from '@/constants/permissions'
-import { useAppDirection } from '@/hooks/useAppDirection'
 import { usePermission } from '@/hooks/usePermission'
 import { FileText, FolderTree, Hash } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -12,13 +11,12 @@ import TagManagement from './TagManagement'
 
 const BlogManagement = () => {
   const { t } = useTranslation()
-  const direction = useAppDirection()
   const { hasPermission } = usePermission()
 
   return (
     <div className="space-y-6">
 
-      <Tabs defaultValue="blogs" className="w-full" dir={direction}>
+      <Tabs defaultValue="blogs" className="w-full">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-2">
           <div className="flex flex-row items-center gap-4">
             <div className="space-y-0.5">

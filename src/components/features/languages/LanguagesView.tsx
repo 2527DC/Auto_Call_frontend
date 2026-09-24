@@ -98,16 +98,6 @@ export const LanguagesView = () => {
       cell: (row: Language) => <code className="px-2.5 py-1 bg-primary/10 dark:bg-white/5 border border-primary/20 rounded-radius text-xs font-bold text-primary">{row.locale}</code>,
     },
     {
-      header: t("rtl"),
-      className: "lg991:min-w-[110px]",
-      accessorKey: "is_rtl",
-      cell: (row: Language) => (
-        <Badge variant={row.is_rtl ? "secondary" : "outline"} className="rounded-radius bg-card-color px-3 py-1 text-sm font-bold border-primary/10">
-          {row.is_rtl ? t("yes") : t("no")}
-        </Badge>
-      ),
-    },
-    {
       header: t("status"),
       className: "lg991:min-w-[110px]",
       accessorKey: "is_active",

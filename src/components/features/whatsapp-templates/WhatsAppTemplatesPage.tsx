@@ -184,11 +184,11 @@ export default function WhatsAppTemplatesPage() {
             <div className="flex items-center flex-wrap gap-2 justify-end w-full md:w-auto">
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <Button variant="outline" disabled={isLoadingTemplates || !selectedWabaId} onClick={() => setIsSyncModalOpen(true)} className="h-12 p-padding! bg-primary/10 border-input-border-color text-primary rounded-lg font-bold transition-all hover:bg-primary hover:text-white text-xs shrink-0 flex-1 sm:flex-none px-2!">
-                  <RefreshCw className="w-3.5 h-3.5 mr-2 rtl:mr-0 rtl:ml-2 shrink-0" />
+                  <RefreshCw className="w-3.5 h-3.5 mr-2   shrink-0" />
                   <span className="truncate">{t("sync_templates")}</span>
                 </Button>
                 <Button variant="outline" disabled={isSyncingStatus || isLoadingTemplates} onClick={handleSyncStatus} className="h-12 p-padding! bg-primary/10 border-input-border-color text-primary rounded-lg font-bold transition-all hover:bg-primary hover:text-white text-xs shrink-0 flex-1 sm:flex-none px-2!">
-                  <RefreshCw className={`w-3.5 h-3.5 mr-2 rtl:mr-0 rtl:ml-2 shrink-0 ${isSyncingStatus ? "animate-spin" : ""}`} />
+                  <RefreshCw className={`w-3.5 h-3.5 mr-2   shrink-0 ${isSyncingStatus ? "animate-spin" : ""}`} />
                   <span className="truncate">{t("sync_status")}</span>
                 </Button>
               </div>

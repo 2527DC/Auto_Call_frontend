@@ -139,10 +139,10 @@ export function SyncTemplatesModal({
         <DialogHeader className="relative pr-8 pb-3 m-0! border-b border-input-border-color">
           <div className="flex items-center justify-between">
             <div>
-              <DialogTitle className="text-xl text-left rtl:text-right font-black text-title tracking-tight">
+              <DialogTitle className="text-xl text-left  font-black text-title tracking-tight">
                 {t('sync_templates_meta_title')}
               </DialogTitle>
-              <DialogDescription className="text-md text-left rtl:text-right text-subtitle-color font-semibold leading-none mt-1">
+              <DialogDescription className="text-md text-left  text-subtitle-color font-semibold leading-none mt-1">
                 {t('sync_templates_meta_subtitle')}
               </DialogDescription>
             </div>

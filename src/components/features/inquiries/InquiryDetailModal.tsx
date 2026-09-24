@@ -102,7 +102,7 @@ export function InquiryDetailModal({ inquiryId, isOpen, onClose }: InquiryDetail
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-medium flex items-center">
                     {t("created_on")}
-                    <span className="ml-6 rtl:ml-0 rtl:mr-6 text-gray-900 dark:text-white font-semibold">{formatDate(inquiry.inquiry.created_at)}</span>
+                    <span className="ml-6   text-gray-900 dark:text-white font-semibold">{formatDate(inquiry.inquiry.created_at)}</span>
                   </p>
                 </div>
               </div>

@@ -82,7 +82,7 @@ export default function RestrictedWordModal({ isOpen, onClose, wordToEdit }: Res
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-[425px]! max-w-[calc(100%-2rem)]! border-none bg-bg-card sm:p-6 p-4 gap-0! rounded-modal-radius">
-        <DialogHeader className="mb-4 text-left rtl:text-right">
+        <DialogHeader className="mb-4 text-left ">
           <DialogTitle className="text-xl font-bold text-title">
             {isEditing ? t('edit_restricted_word') : t('create_restricted_word')}
           </DialogTitle>

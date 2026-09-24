@@ -52,7 +52,7 @@ export const TemplatePreviewModal = ({
       {/* Close button on Top Right of screen */}
       <Button
         onClick={onClose}
-        className="absolute top-4 right-4 rtl:right-[unset] rtl:left-4 text-white p-0! transition-all w-9 h-9 rounded-full z-50"
+        className="absolute top-4 right-4   text-white p-0! transition-all w-9 h-9 rounded-full z-50"
       >
         <X size={24} />
       </Button>
