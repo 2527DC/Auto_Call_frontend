@@ -71,7 +71,7 @@ export function DashboardDateFilter({ onFilterChange }: DashboardDateFilterProps
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" className={cn("h-10 justify-start text-left font-bold rounded-lg bg-bg-card min-w-60 transition-all focus:shadow-none focus:border-none! border-none!", !customRange && "text-muted-foreground")}>
-              <CalendarIcon className="mr-2 rtl:mr-0 rtl:ml-2 h-4 w-4 text-primary" />
+              <CalendarIcon className="mr-2   h-4 w-4 text-primary" />
               {customRange?.from ? (
                 customRange.to ? (
                   <span className="text-foreground">

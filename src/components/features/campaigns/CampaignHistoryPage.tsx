@@ -184,7 +184,7 @@ export default function CampaignHistoryPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="group relative overflow-hidden rounded-radius border border-input-border-color! bg-bg-card transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-primary/50! cursor-pointer">
           {/* Top-right corner linear gradient */}
-          <div className="absolute top-0 right-0 rtl:right-[unset]! rtl:left-0! w-1/2 h-full bg-gradient-to-bl rtl:bg-gradient-to-br from-primary/10 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute top-0 right-0   w-1/2 h-full bg-gradient-to-bl  from-primary/10 via-transparent to-transparent pointer-events-none" />
           <CardContent className="relative z-10 p-4 sm:p-6 flex items-center gap-4">
             <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
               <PhoneCall className="w-6 h-6" />
@@ -202,7 +202,7 @@ export default function CampaignHistoryPage() {
 
         <Card className="group relative overflow-hidden rounded-radius border border-input-border-color! bg-bg-card transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500/30! cursor-pointer">
           {/* Top-right corner linear gradient */}
-          <div className="absolute top-0 right-0 rtl:right-[unset]! rtl:left-0! w-1/2 h-full bg-gradient-to-bl rtl:bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute top-0 right-0   w-1/2 h-full bg-gradient-to-bl  from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
           <CardContent className="relative z-10 sm:p-6 p-4 flex items-center gap-4">
             <div className="h-12 w-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/30 flex items-center justify-center text-emerald-600 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
               <CheckCircle2 className="w-6 h-6" />
@@ -220,7 +220,7 @@ export default function CampaignHistoryPage() {
 
         <Card className="group relative overflow-hidden rounded-radius border border-input-border-color! bg-bg-card transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500/50! cursor-pointer">
           {/* Top-right corner linear gradient */}
-          <div className="absolute top-0 right-0 rtl:right-[unset]! rtl:left-0! w-1/2 h-full bg-gradient-to-bl rtl:bg-gradient-to-br from-blue-500/10 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute top-0 right-0   w-1/2 h-full bg-gradient-to-bl  from-blue-500/10 via-transparent to-transparent pointer-events-none" />
           <CardContent className="relative z-10 sm:p-6 p-4 flex items-center gap-4">
             <div className="h-12 w-12 rounded-xl bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center text-blue-600 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
               <Clock className="w-6 h-6" />
@@ -238,7 +238,7 @@ export default function CampaignHistoryPage() {
 
         <Card className="group relative overflow-hidden rounded-radius border border-input-border-color! bg-bg-card transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-amber-500/50! cursor-pointer">
           {/* Top-right corner linear gradient */}
-          <div className="absolute top-0 right-0 rtl:right-[unset]! rtl:left-0! w-1/2 h-full bg-gradient-to-bl rtl:bg-gradient-to-br from-amber-500/10 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute top-0 right-0   w-1/2 h-full bg-gradient-to-bl  from-amber-500/10 via-transparent to-transparent pointer-events-none" />
           <CardContent className="relative z-10 sm:p-6 p-4 flex items-center gap-4">
             <div className="h-12 w-12 rounded-xl bg-amber-100 dark:bg-amber-950/30 flex items-center justify-center text-amber-600 shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
               <TrendingUp className="w-6 h-6" />

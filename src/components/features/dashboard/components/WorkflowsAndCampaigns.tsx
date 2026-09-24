@@ -80,12 +80,12 @@ export const WorkflowsAndCampaigns: React.FC<WorkflowsAndCampaignsProps> = ({
             </div>
 
             <div className="overflow-x-auto custom-scrollbar">
-              <table className="w-full text-left rtl:text-right border-collapse">
+              <table className="w-full text-left  border-collapse">
                 <thead>
                   <tr className="border-b border-input-border-color bg-subcard">
-                    <th className="p-3 pl-6 rtl:pr-6 rtl:pl-0 text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('campaign')}</th>
-                    <th className="p-3 rtl:pr-3 rtl:pl-0 text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('type')}</th>
-                    <th className="p-3 rtl:pr-3 rtl:pl-0 text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('number')}</th>
+                    <th className="p-3 pl-6   text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('campaign')}</th>
+                    <th className="p-3   text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('type')}</th>
+                    <th className="p-3   text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('number')}</th>
                     <th className="p-3 text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('status')}</th>
                   </tr>
                 </thead>

@@ -40,7 +40,7 @@ export const CampaignTypeModal = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-[500px]! max-w-[calc(100%-2rem)] bg-bg-card gap-0! shadow-2xl rounded-modal-radius border-none p-0 overflow-hidden">
         <DialogHeader className="sm:px-6 px-4 pt-6 pb-4 bg-bg-card  border-b border-input-border-color">
-          <DialogTitle className="text-xl  text-left rtl:text-right font-bold text-slate-800 dark:text-white">
+          <DialogTitle className="text-xl  text-left  font-bold text-slate-800 dark:text-white">
             {campaignType ? t("edit_campaign_type") : t("create_campaign_type")}
           </DialogTitle>
         </DialogHeader>

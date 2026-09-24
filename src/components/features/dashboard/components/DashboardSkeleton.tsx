@@ -9,7 +9,7 @@ function WelcomeCardShimmer() {
         backgroundImage: `
     linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, #001a2e 0%, #012d46 50%, #013d5e 100%)
+    linear-gradient(90deg, #0e031a 0%, #1a072e 50%, #2a0c4a 100%)
   `,
         backgroundSize: '35px 35px, 35px 35px, auto'
       }}

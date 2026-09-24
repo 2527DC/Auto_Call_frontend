@@ -23,7 +23,7 @@ export function StatsCard({ title, value, description, icon: Icon, colorClass, g
       className={`group relative overflow-hidden sm:p-5 p-4 rounded-radius bg-bg-card border border-input-border-color transition-all duration-300 hover:shadow-xl flex flex-col justify-between ${href ? 'cursor-pointer' : ''} ${glowClass}`}
     >
       {/* Dynamic top-right gradient glow on hover */}
-      <div className={`absolute top-0 right-0 rtl:right-[unset]! rtl:left-0 -mt-6 -mr-6 w-32 h-32 rounded-full blur-2xl opacity-[0.15] pointer-events-none bg-current ${textColorClass}`} />
+      <div className={`absolute top-0 right-0   -mt-6 -mr-6 w-32 h-32 rounded-full blur-2xl opacity-[0.15] pointer-events-none bg-current ${textColorClass}`} />
 
       <div className="relative z-10 flex items-center justify-between">
         <span className="text-base font-bold text-title transition-colors">

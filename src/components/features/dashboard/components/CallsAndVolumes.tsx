@@ -29,12 +29,12 @@ export const CallsAndVolumes: React.FC<CallsAndVolumesProps> = ({
             </div>
 
             <div className="overflow-x-auto custom-scrollbar">
-              <table className="w-full text-left rtl:text-right border-collapse">
+              <table className="w-full text-left  border-collapse">
                 <thead>
                   <tr className="border-b border-slate-50 bg-subcard dark:border-white/5">
-                    <th className="p-3 pl-6 rtl:pr-6 rtl:pl-0 text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('recipient')}</th>
-                    <th className="p-3 rtl:pr-3 rtl:pl-0 text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('type')}</th>
-                    <th className="p-3 rtl:pr-3 rtl:pl-0 text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('duration')}</th>
+                    <th className="p-3 pl-6   text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('recipient')}</th>
+                    <th className="p-3   text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('type')}</th>
+                    <th className="p-3   text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('duration')}</th>
                     <th className="p-3 text-xs font-bold uppercase text-subtitle-color tracking-wider">{t('status')}</th>
                   </tr>
                 </thead>

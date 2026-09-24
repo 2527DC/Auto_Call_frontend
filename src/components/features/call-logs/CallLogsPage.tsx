@@ -219,7 +219,7 @@ export default function CallLogsPage() {
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px]! gap-0! max-w-[calc(100%-2rem)]! sm:p-6 p-4 border-none bg-bg-card max-h-[90vh] overflow-auto no-scrollbar rounded-modal-radius">
-              <DialogHeader className='text-left rtl:text-right'>
+              <DialogHeader className='text-left '>
                 <DialogTitle>{t('call_transcript') || 'Call Transcript'}</DialogTitle>
               </DialogHeader>
               <ScrollArea className="h-[400px] mt-4 pr-4">
@@ -240,7 +240,7 @@ export default function CallLogsPage() {
                           >
                             <span className={cn(
                               "text-sm font-bold text-slate-500 mb-1",
-                              isRightSide ? "text-right rtl:text-left" : "text-left rtl:text-right"
+                              isRightSide ? "text-right " : "text-left "
                             )}>
                               {msg.role ? msg.role.charAt(0).toUpperCase() + msg.role.slice(1) : 'Unknown'}
                             </span>

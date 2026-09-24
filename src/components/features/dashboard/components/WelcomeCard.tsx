@@ -43,7 +43,7 @@ export function WelcomeCard({ badge, title, subtitle, className = 'p-6' }: Welco
         backgroundImage: `
     linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, #001a2e 0%, #012d46 50%, #013d5e 100%)
+    linear-gradient(90deg, #0e031a 0%, #1a072e 50%, #2a0c4a 100%)
   `,
         backgroundSize: '35px 35px, 35px 35px, auto'
       }}
@@ -88,7 +88,7 @@ export function WelcomeCard({ badge, title, subtitle, className = 'p-6' }: Welco
           </p>
         </div>
 
-        <Image src="assets/images/robot2.png" alt="Welcome card" width={200} height={200} className="absolute w-[45%] sm:w-[50%] max-w-[180px] sm:max-w-[220px] lg:max-w-[250px] -right-3 rtl:right-[unset] rtl:-left-3 bottom-0" unoptimized />
+        <Image src="assets/images/robot2.png" alt="Welcome card" width={200} height={200} className="absolute w-[45%] sm:w-[50%] max-w-[180px] sm:max-w-[220px] lg:max-w-[250px] -right-3   bottom-0" unoptimized />
 
       </div>
     </motion.div>
