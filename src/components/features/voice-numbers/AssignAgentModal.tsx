@@ -68,7 +68,7 @@ const AssignAgentModal = ({
             </DialogTitle>
           </div>
 
-          <DialogDescription className='text-subtitile-color text-left rtl:text-right'>
+          <DialogDescription className='text-subtitile-color text-left '>
             {t('assign_agent_desc', {
               defaultValue:
                 'Assign an incoming agent to {{number}}. Select "None" to remove the current assignment.',

@@ -417,7 +417,7 @@ const PhoneNumberPage = () => {
                 variant="outline"
                 className="h-12 p-padding! rounded-radius bg-primary/10 border-none hover:bg-primary! hover:text-white text-primary font-black text-sm"
               >
-                <ShoppingCart className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                <ShoppingCart className="w-4 h-4 mr-2  " />
                 {t('buy_now', 'Buy Now')}
               </Button>
             )}
@@ -427,7 +427,7 @@ const PhoneNumberPage = () => {
                 variant="outline"
                 className="h-12 p-padding! rounded-radius bg-primary/10 border-none hover:bg-primary! hover:text-white text-primary font-black text-sm"
               >
-                <Server className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                <Server className="w-4 h-4 mr-2  " />
                 {t('import')}
               </Button>
             )}

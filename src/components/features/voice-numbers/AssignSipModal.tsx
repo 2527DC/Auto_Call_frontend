@@ -46,8 +46,8 @@ const AssignSipModal = ({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-md! max-w-[calc(100%-2rem)] border border-input-border-color! dark:border-white/5! rounded-radius sm:p-6 p-4">
         <DialogHeader>
-          <DialogTitle className='text-left rtl:text-right'>{t('assign_sip')}</DialogTitle>
-          <DialogDescription className="text-md font-medium  text-left rtl:text-right text-subtitle-color">
+          <DialogTitle className='text-left '>{t('assign_sip')}</DialogTitle>
+          <DialogDescription className="text-md font-medium  text-left  text-subtitle-color">
             {t('assign_sip_desc', {
               defaultValue: 'Assign a SIP trunk to {{number}}. The number type will be updated to SIP.',
               number: phoneNumber?.phone_number || '',

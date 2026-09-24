@@ -146,7 +146,7 @@ export const useVoiceWidgetCall = (widgetKey: string, widgetData: Widget | undef
     endCall,
     toggleMute,
     isMuted,
-    primaryColor: widgetData?.branding?.primary_color || '#015482',
+    primaryColor: widgetData?.branding?.primary_color || '#7C3AED',
     brandName: widgetData?.branding.brand_name || 'AI Assistant',
   }
 }

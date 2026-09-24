@@ -41,7 +41,7 @@ export default function InitiatePurchaseModal({
               {t('purchase_number', 'Purchase Number')}
             </DialogTitle>
           </div>
-          <DialogDescription className='text-subtitile-color text-left rtl:text-right'>
+          <DialogDescription className='text-subtitile-color text-left '>
             {t('purchase_number_desc', 'Select a payment method to complete your purchase.')}
           </DialogDescription>
         </DialogHeader>

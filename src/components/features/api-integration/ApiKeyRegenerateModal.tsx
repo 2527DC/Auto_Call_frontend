@@ -27,7 +27,7 @@ export function ApiKeyRegenerateModal({
             <AlertTriangle className="h-5 w-5" />
             <span>{t('regenerate_api_key')}</span>
           </DialogTitle>
-          <DialogDescription className="text-md text-left rtl:text-right font-medium text-subtitle-color pt-2">
+          <DialogDescription className="text-md text-left  font-medium text-subtitle-color pt-2">
             {t('regenerate_api_key_desc', {
               defaultValue: 'Regenerating this key will immediately revoke the existing key. Any system currently using it will fail to authenticate until updated. Do you want to continue?',
             })}

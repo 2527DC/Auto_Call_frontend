@@ -57,7 +57,7 @@ export default function AssignPriceModal({
               {t('assign_price', 'Assign Price')}
             </DialogTitle>
           </div>
-          <DialogDescription className='text-subtitile-color text-left rtl:text-right'>
+          <DialogDescription className='text-subtitile-color text-left '>
             {t('assign_price_desc', 'Set a purchase price for this phone number.')}
           </DialogDescription>
         </DialogHeader>

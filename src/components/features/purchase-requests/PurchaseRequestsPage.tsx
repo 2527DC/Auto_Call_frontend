@@ -182,7 +182,7 @@ export default function PurchaseRequestsPage() {
                 onClick={() => setSelectedRequest(row)}
                 className="rounded-lg h-9 font-bold  p-padding! bg-primary/10 border text-primary hover:bg-primary hover:text-white"
               >
-                <ShieldCheck className="w-4 h-4 mr-1.5 rtl:mr-0 rtl:ml-1.5" />
+                <ShieldCheck className="w-4 h-4 mr-1.5  " />
                 {t('verify', 'Verify')}
               </Button>
             )}

@@ -89,7 +89,7 @@ export default function VerifyRequestModal({
               {t('verify_kyc_request', 'Verify KYC Request')}
             </DialogTitle>
           </div>
-          <DialogDescription className='text-subtitile-color text-left rtl:text-right'>
+          <DialogDescription className='text-subtitile-color text-left '>
             {t('verify_kyc_desc', 'Review the submitted documents and approve or reject the request.')}
           </DialogDescription>
         </DialogHeader>
@@ -195,7 +195,7 @@ export default function VerifyRequestModal({
                       onClick={() => setShowRejectInput(true)}
                       className="rounded-lg p-padding! h-10 border-none text-destructive hover:bg-destructive hover:text-white bg-destructive/10 transition-all"
                     >
-                      <XCircle className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                      <XCircle className="w-4 h-4 mr-2  " />
                       {t('reject', 'Reject')}
                     </Button>
                     <Button
@@ -204,8 +204,8 @@ export default function VerifyRequestModal({
                       onClick={() => handleAction('approved')}
                       className="rounded-lg p-padding! bg-edit h-10 text-white transition-all"
                     >
-                      {isLoading && <Loader2 className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2 animate-spin" />}
-                      <CheckCircle className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                      {isLoading && <Loader2 className="w-4 h-4 mr-2   animate-spin" />}
+                      <CheckCircle className="w-4 h-4 mr-2  " />
                       {t('approve', 'Approve')}
                     </Button>
                   </>
@@ -216,7 +216,7 @@ export default function VerifyRequestModal({
                     onClick={() => handleAction('rejected')}
                     className="rounded-lg h-10 p-padding! bg-destructive text-white transition-all"
                   >
-                    {isLoading && <Loader2 className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2 animate-spin" />}
+                    {isLoading && <Loader2 className="w-4 h-4 mr-2   animate-spin" />}
                     {t('confirm_rejection', 'Confirm Rejection')}
                   </Button>
                 )}

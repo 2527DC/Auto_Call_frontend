@@ -48,8 +48,8 @@ const SipImportModal = ({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-md! rounded-modal-radius max-w-[calc(100%-2rem)] p-4 sm:p-6 gap-0 border-none max-h-[90vh] no-scrollbar overflow-auto">
-        <DialogHeader className='text-left rtl:text-right'>
-          <DialogTitle className='text-left rtl:text-right'>{t('sip_import')}</DialogTitle>
+        <DialogHeader className='text-left '>
+          <DialogTitle className='text-left '>{t('sip_import')}</DialogTitle>
           <DialogDescription >
             {t('sip_import_desc', {
               defaultValue: 'Import a SIP phone number and sync it with ElevenLabs using a trunk integration.',

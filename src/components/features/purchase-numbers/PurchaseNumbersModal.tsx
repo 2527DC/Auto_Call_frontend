@@ -54,7 +54,7 @@ export default function PurchaseNumbersModal({ isOpen, onClose }: PurchaseNumber
             <DialogTitle className="flex items-center gap-2 text-xl font-bold">
               {t('purchase_numbers', 'Purchase Numbers')}
             </DialogTitle>
-            <DialogDescription className='text-left rtl:text-right'>
+            <DialogDescription className='text-left '>
               {t('purchase_numbers_desc', 'Browse and purchase available phone numbers for your workspace.')}
             </DialogDescription>
           </DialogHeader>
@@ -97,7 +97,7 @@ export default function PurchaseNumbersModal({ isOpen, onClose }: PurchaseNumber
                           }}
                           className="rounded-lg font-bold p-padding! h-10 bg-amber-500 text-white"
                         >
-                          <FileUp className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                          <FileUp className="w-4 h-4 mr-2  " />
                           {t('upload_kyc', 'Upload KYC')}
                         </Button>
                       )}
@@ -117,7 +117,7 @@ export default function PurchaseNumbersModal({ isOpen, onClose }: PurchaseNumber
                           onClick={() => setSelectedNumber(row)}
                           className="rounded-lg h-10! font-bold p-padding! bg-primary text-white transition-all"
                         >
-                          <ShoppingCart className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                          <ShoppingCart className="w-4 h-4 mr-2  " />
                           {t('buy_now', 'Buy Now')}
                         </Button>
                       )}

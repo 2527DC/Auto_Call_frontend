@@ -402,11 +402,11 @@ export default function VirtualPhonePage() {
               >
                 {isGeneratingToken ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 rtl:mr-[unset] rtl:ml-2 animate-spin" /> {t('virtual_phone_connect_dialer', 'Connect to Dialer')}
+                    <Loader2 className="w-4 h-4 mr-2   animate-spin" /> {t('virtual_phone_connect_dialer', 'Connect to Dialer')}
                   </>
                 ) : (
                   <>
-                    <Phone className="w-4 h-4 mr-2 rtl:mr-[unset] rtl:ml-2" /> {t('virtual_phone_connect_dialer', 'Connect to Dialer')}
+                    <Phone className="w-4 h-4 mr-2  " /> {t('virtual_phone_connect_dialer', 'Connect to Dialer')}
                   </>
                 )}
               </Button>
