@@ -47,7 +47,7 @@ export function Features({ primaryFeaturesData }: FeaturesProps) {
 
       {/* Dynamic Background Grids and Accents */}
       <div className="absolute top-[10%] left-[-100px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(99,102,241,0.05)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[-100px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(1,84,130,0.05)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[-100px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(124,58,237,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       {/* Header Section */}
       <div className="max-w-[1450px] mx-auto px-[calc(10px+(24-10)*((100vw-320px)/(1920-320)))] text-center mb-[calc(20px+(64-20)*((100vw-320px)/(1920-320)))] relative z-10">
@@ -67,7 +67,7 @@ export function Features({ primaryFeaturesData }: FeaturesProps) {
       {/* Premium Grid Features Showcase */}
       <div className="max-w-[1450px] mx-auto px-[calc(10px+(24-10)*((100vw-320px)/(1920-320)))] relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={containerVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-6 auto-rows-fr">
-          <motion.div variants={itemVariants} className="lg:col-span-2 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(1,84,130,0.06)] transition-all duration-500 relative overflow-hidden">
+          <motion.div variants={itemVariants} className="lg:col-span-2 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(124,58,237,0.08)] transition-all duration-500 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-primary/[0.04] to-transparent rounded-full blur-2xl pointer-events-none" />
 
             <div className="flex items-center flex-wrap gap-3 justify-between mb-[calc(14px+(24-14)*((100vw-320px)/(1920-320)))] relative z-10">
@@ -102,10 +102,10 @@ export function Features({ primaryFeaturesData }: FeaturesProps) {
 
           {/* ──────────────── CARD 2: Workflow Builder (lg:col-span-1) ──────────────── */}
           {workflowCard && (
-            <motion.div variants={itemVariants} className="lg:col-span-1 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(1,84,130,0.06)] transition-all duration-500 relative overflow-hidden">
+            <motion.div variants={itemVariants} className="lg:col-span-1 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(124,58,237,0.08)] transition-all duration-500 relative overflow-hidden">
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 border border-blue-100 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 border border-purple-100 group-hover:bg-purple-600 group-hover:text-white transition-all duration-300">
                     <GitBranch className="w-5 h-5" />
                   </div>
                   <h3 className="text-xl font-bold text-title-color leading-tight">{workflowCard.title || t('workflow_builder')}</h3>
@@ -130,7 +130,7 @@ export function Features({ primaryFeaturesData }: FeaturesProps) {
 
           {/* ──────────────── CARD 3: Smart Campaigns (lg:col-span-1) ──────────────── */}
           {campaignsCard && (
-            <motion.div variants={itemVariants} className="lg:col-span-1 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(1,84,130,0.06)] transition-all duration-500 relative overflow-hidden">
+            <motion.div variants={itemVariants} className="lg:col-span-1 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(124,58,237,0.08)] transition-all duration-500 relative overflow-hidden">
               <div>
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-500 border border-emerald-100 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
@@ -158,10 +158,10 @@ export function Features({ primaryFeaturesData }: FeaturesProps) {
 
           {/* ──────────────── CARD 4: Train AI (lg:col-span-1) ──────────────── */}
           {syncCard && (
-            <motion.div variants={itemVariants} className="lg:col-span-1 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(1,84,130,0.06)] transition-all duration-500 relative overflow-hidden">
+            <motion.div variants={itemVariants} className="lg:col-span-1 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(124,58,237,0.08)] transition-all duration-500 relative overflow-hidden">
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 border border-purple-100 group-hover:bg-purple-600 group-hover:text-white transition-all duration-300">
                     <Cpu className="w-5 h-5" />
                   </div>
                   <h3 className="text-xl font-bold text-title-color leading-tight">{t('train_ai')}</h3>
@@ -186,10 +186,10 @@ export function Features({ primaryFeaturesData }: FeaturesProps) {
 
           {/* ──────────────── CARD 5: Contact Hub & CRM (lg:col-span-1) ──────────────── */}
           {toolboxCard && (
-            <motion.div variants={itemVariants} className="lg:col-span-1 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(1,84,130,0.06)] transition-all duration-500 relative overflow-hidden">
+            <motion.div variants={itemVariants} className="lg:col-span-1 bg-white rounded-2xl border border-input-border-color sm:p-6 p-4 flex flex-col justify-between group hover:border-primary/25 hover:shadow-[0_20px_40px_rgba(124,58,237,0.08)] transition-all duration-500 relative overflow-hidden">
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 border border-blue-100 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
                     <Users className="w-5 h-5" />
                   </div>
                   <h3 className="text-xl font-bold text-title-color leading-tight">{t('contact_hub_crm')}</h3>

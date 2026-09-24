@@ -35,7 +35,7 @@ export function Addons({ addonsData }: AddonsProps) {
     "bg-purple-50 text-purple-600 border-purple-100 group-hover:bg-purple-600",
     "bg-emerald-50 text-emerald-600 border-emerald-100 group-hover:bg-emerald-600",
     "bg-orange-50 text-orange-600 border-orange-100 group-hover:bg-orange-600",
-    "bg-blue-50 text-blue-600 border-blue-100 group-hover:bg-blue-600",
+    "bg-indigo-50 text-indigo-600 border-indigo-100 group-hover:bg-indigo-600",
     "bg-rose-50 text-rose-600 border-rose-100 group-hover:bg-rose-600",
   ];
 
@@ -43,8 +43,8 @@ export function Addons({ addonsData }: AddonsProps) {
     <section className="relative py-[calc(40px+(96-40)*((100vw-320px)/(1920-320)))] bg-gradient-to-b from-white via-primary/[0.02] to-white" id="addons">
       {/* Background Grids */}
       <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.15] bg-dot-pattern-lg" />
-      <div className="absolute top-[10%] right-[-100px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(99,102,241,0.05)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute bottom-[10%] left-[-100px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(1,84,130,0.05)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-[10%] right-[-100px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(168,85,247,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-[10%] left-[-100px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(124,58,237,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       {/* Header Section */}
       <div className="max-w-[1450px] mx-auto px-[calc(10px+(24-10)*((100vw-320px)/(1920-320)))] text-center mb-[calc(20px+(64-20)*((100vw-320px)/(1920-320)))] relative z-10">

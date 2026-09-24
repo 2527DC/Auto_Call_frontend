@@ -70,13 +70,13 @@ export function Automate({ automateData }: AutomateProps) {
   };
 
   return (
-    <section className="relative py-[calc(48px+(100-48)*((100vw-320px)/(1920-320)))] bg-gradient-to-r from-[#001a2e] via-[#012d46] to-[#013d5e] overflow-hidden" id="automate">
+    <section className="relative py-[calc(48px+(100-48)*((100vw-320px)/(1920-320)))] bg-gradient-to-r from-[#0e031a] via-[#1a072e] to-[#2a0c4a] overflow-hidden" id="automate">
       {/* Line Grid Background (matching Integrations section) */}
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern" />
 
       {/* Ambient Glows */}
-      <div className="absolute top-[10%] right-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(99,102,241,0.04)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute bottom-[10%] left-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(1,84,130,0.04)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-[10%] right-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(168,85,247,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-[10%] left-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(124,58,237,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="w-full px-[calc(8px+(16-8)*((100vw-320px)/(1920-320)))] text-center relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={containerVariants} className="flex flex-col items-center mb-[calc(20px+(48-20)*((100vw-320px)/(1920-320)))]">

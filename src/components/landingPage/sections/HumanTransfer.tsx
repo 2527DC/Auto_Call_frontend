@@ -26,7 +26,7 @@ export function HumanTransfer({ humanTransferData }: HumanTransferProps) {
 
   const HT_ICONS = [Zap, Users, ArrowRightLeft, BarChart, Settings, Target, CheckCircle, Lightbulb, MessageSquare];
   const HT_COLORS = [
-    "bg-blue-500/10 border-blue-500/20 text-blue-400",
+    "bg-violet-500/10 border-violet-500/20 text-violet-300",
     "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
     "bg-purple-500/10 border-purple-500/20 text-purple-400",
     "bg-orange-500/10 border-orange-500/20 text-orange-400",
@@ -35,11 +35,11 @@ export function HumanTransfer({ humanTransferData }: HumanTransferProps) {
   ];
 
   return (
-    <section className="relative py-8 lg:py-12 bg-gradient-to-r from-[#001a2e] via-[#012d46] to-[#013d5e] overflow-hidden" id="human-transfer">
+    <section className="relative py-8 lg:py-12 bg-gradient-to-r from-[#0e031a] via-[#1a072e] to-[#2a0c4a] overflow-hidden" id="human-transfer">
       {/* Background Grids matching Automate */}
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern" />
-      <div className="absolute top-[10%] right-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(99,102,241,0.04)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute bottom-[10%] left-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(1,84,130,0.04)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-[10%] right-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(168,85,247,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-[10%] left-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(124,58,237,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="max-w-[1450px] mx-auto px-[calc(10px+(24-10)*((100vw-320px)/(1920-320)))] relative z-10">
         <motion.div whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={containerVariants} className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">

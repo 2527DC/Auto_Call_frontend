@@ -29,9 +29,9 @@ export function Footer({ footerData }: FooterProps) {
   };
 
   return (
-    <footer className="relative bg-gradient-to-r from-[#001a2e] via-[#012d46] to-[#013d5e] text-[#e2e8f0] border-t border-white/10 pt-20 pb-10">
+    <footer className="relative bg-gradient-to-r from-[#0e031a] via-[#1a072e] to-[#2a0c4a] text-[#e2e8f0] border-t border-white/10 pt-20 pb-10">
       {/* Decorative ambient subtle bottom-right glow inside footer */}
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(1,84,130,0.06)_0%,transparent_70%)] pointer-events-none z-0" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(124,58,237,0.12)_0%,transparent_70%)] pointer-events-none z-0" />
 
       <div className="max-w-[1450px] mx-auto px-[calc(10px+(24-10)*((100vw-320px)/(1920-320)))] relative z-10">
         {/* Primary Footer Links grid */}

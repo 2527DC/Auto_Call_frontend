@@ -66,11 +66,11 @@ export function HowItWorks({ howItWorksData }: HowItWorksProps) {
 
   return (
     <section
-      className="relative py-[calc(48px+(100-48)*((100vw-320px)/(1920-320)))] bg-gradient-to-r from-[#001a2e] via-[#012d46] to-[#013d5e] overflow-hidden"
+      className="relative py-[calc(48px+(100-48)*((100vw-320px)/(1920-320)))] bg-gradient-to-r from-[#0e031a] via-[#1a072e] to-[#2a0c4a] overflow-hidden"
       id="how-it-works"
     >
       {/* Subtle radial glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse,rgba(59,130,246,0.06)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse,rgba(124,58,237,0.1)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="max-w-[1200px] mx-auto px-[calc(10px+(24-10)*((100vw-320px)/(1920-320)))] relative z-10">
         {/* Title */}

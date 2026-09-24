@@ -165,6 +165,7 @@ export function Header({ navigation }: HeaderProps) {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            key="mobile-drawer-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -231,7 +232,7 @@ export function Header({ navigation }: HeaderProps) {
                     <Link
                       href={ROUTES.AUTH.REGISTER}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="w-full h-12 flex items-center justify-center p-padding rounded-radius bg-primary text-white font-bold text-sm shadow-[0_8px_20px_rgba(1,84,130,0.2)] hover:bg-[#004166] transition-all text-center"
+                      className="w-full h-12 flex items-center justify-center p-padding rounded-radius bg-primary text-white font-bold text-sm shadow-[0_8px_20px_rgba(124,58,237,0.25)] hover:bg-[#6D28D9] transition-all text-center"
                     >
                       {t('get_started')}
                     </Link>

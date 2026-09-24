@@ -25,8 +25,8 @@ export function Comparison({ comparisonData }: { comparisonData?: any }) {
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern" />
 
       {/* Ambient Glows */}
-      <div className="absolute top-[10%] right-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(99,102,241,0.04)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute bottom-[10%] left-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(1,84,130,0.04)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-[10%] right-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(168,85,247,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-[10%] left-[-100px] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(124,58,237,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="max-w-[1500px] mx-auto px-[calc(10px+(24-10)*((100vw-320px)/(1920-320)))] relative z-10">
         <div className="flex flex-col lg:flex-row justify-between gap-8 relative">
@@ -38,7 +38,7 @@ export function Comparison({ comparisonData }: { comparisonData?: any }) {
             transition={{ duration: 0.6 }}
             className="flex-1 w-full max-w-[480px] relative z-10"
           >
-            <h2 className="text-[calc(28px+(46-28)*((100vw-320px)/(1920-320)))] font-extrabold text-[#015482] tracking-tight leading-[1.2] mb-8">
+            <h2 className="text-[calc(28px+(46-28)*((100vw-320px)/(1920-320)))] font-extrabold text-primary tracking-tight leading-[1.2] mb-8">
               {comparisonData?.heading || t('turn_every_call_into_an_opportunity_with_ai')}
             </h2>
             <ul className="pl-5 space-y-4 w-full">

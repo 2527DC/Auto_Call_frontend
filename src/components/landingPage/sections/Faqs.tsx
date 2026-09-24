@@ -32,7 +32,7 @@ export function Faqs({ faqSection, faqsData }: FaqsProps) {
           <div
             className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 
               ${isOpen
-                ? "bg-white border-white text-[#001a2e]"
+                ? "bg-white border-white text-[#1a072e]"
                 : "bg-white/10 border-white/20 text-white"
               }`}
           >
@@ -43,6 +43,7 @@ export function Faqs({ faqSection, faqsData }: FaqsProps) {
         <AnimatePresence initial={false}>
           {isOpen && (
             <motion.div
+              key={`faq-content-${index}`}
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -59,7 +60,7 @@ export function Faqs({ faqSection, faqsData }: FaqsProps) {
   };
 
   return (
-    <section className="relative py-[calc(48px+(100-48)*((100vw-320px)/(1920-320)))] bg-gradient-to-r from-[#001a2e] via-[#012d46] to-[#013d5e] overflow-hidden" id="faqs">
+    <section className="relative py-[calc(48px+(100-48)*((100vw-320px)/(1920-320)))] bg-gradient-to-r from-[#0e031a] via-[#1a072e] to-[#2a0c4a] overflow-hidden" id="faqs">
       {/* Immersive background box grid pattern */}
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern-light" />
 

@@ -44,6 +44,7 @@ export function TapTop() {
     <AnimatePresence>
       {isVisible && (
         <motion.div
+          key="tap-to-top"
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -53,7 +54,7 @@ export function TapTop() {
           <Button
             onClick={scrollToTop}
             size="icon"
-            className="h-12 w-12 rounded-full bg-primary hover:bg-[#004166] text-white shadow-lg shadow-primary/25 transition-all"
+            className="h-12 w-12 rounded-full bg-primary hover:bg-[#6D28D9] text-white shadow-lg shadow-primary/25 transition-all"
             aria-label="Scroll to top"
           >
             <ArrowUp className="h-6 w-6" />

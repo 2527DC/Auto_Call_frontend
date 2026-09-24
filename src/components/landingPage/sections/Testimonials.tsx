@@ -42,7 +42,7 @@ export function Testimonials({ testimonialSection, testimonialsData }: Testimoni
   const col3 = testimonialsData.filter((_, i) => i % 3 === 2);
 
   return (
-    <section className="relative h-[600px] bg-gradient-to-r from-[#001a2e] via-[#012d46] to-[#013d5e] overflow-hidden" id="testimonials">
+    <section className="relative h-[600px] bg-gradient-to-r from-[#0e031a] via-[#1a072e] to-[#2a0c4a] overflow-hidden" id="testimonials">
       {/* Immersive background box grid pattern */}
       <div className="absolute inset-0 pointer-events-none z-0 bg-grid-pattern" />
 
