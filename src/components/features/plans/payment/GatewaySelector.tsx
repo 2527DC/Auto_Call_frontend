@@ -59,7 +59,7 @@ const GatewaySelector = ({
               {plan?.name} — {isOneTime ? 'One-time' : billingCycle}
             </p>
           </div>
-          <div className="text-right rtl:text-left">
+          <div className="text-right ">
             <p className="text-2xl font-black text-primary">{symbol}{Number(price).toFixed(2)}</p>
             {!isOneTime && <p className="text-sm text-subtitle-color">/{billingCycle === 'monthly' ? 'mo' : 'yr'}</p>}
           </div>

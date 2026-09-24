@@ -5,7 +5,6 @@ import { TableLayout } from '@/components/reusable/TableLayout'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useAppDirection } from '@/hooks/useAppDirection'
 import { useDebounce } from '@/hooks/useDebounce'
 import { cn } from '@/lib/utils'
 import { useGetAllPaymentsQuery } from '@/redux/api/subscriptionApi'
@@ -25,7 +24,6 @@ const AdminPayments = () => {
   const [statusFilter, setStatusFilter] = useState('')
   const [sortColumn, setSortColumn] = useState('created_at')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const direction = useAppDirection()
 
   const { data: paymentsData, isLoading } = useGetAllPaymentsQuery({
     page,
@@ -168,7 +166,7 @@ const AdminPayments = () => {
         showBackButton={false}
         title={t('payment_history')}
         extraActions={
-          <DropdownMenu dir={direction}>
+          <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="h-10 px-4 rounded-lg bg-background border-border hover:bg-muted text-muted-foreground shadow-sm font-medium transition-all">
                 <Filter className="w-4 h-4 mr-2" />

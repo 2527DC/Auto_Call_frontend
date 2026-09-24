@@ -241,7 +241,7 @@ const RolePermissionsForm = ({ roleId, onSave, isLoading = false }: RolePermissi
             onClick={() => router.back()}
             className="flex-1 sm:flex-none rounded-[8px] sm:h-12 h-10 bg-light-gray text-light-text-color dark:text-white px-6 font-medium hover:bg-primary hover:text-white transition-all gap-2"
           >
-            <ArrowLeft className="w-5 h-5 rtl:rotate-180" />
+            <ArrowLeft className="w-5 h-5 " />
             {t('back')}
           </Button>
           <Button

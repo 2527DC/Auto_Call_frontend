@@ -56,7 +56,7 @@ const PaymentGatewayContainer = () => {
                 )}
 
                 {/* Status Badges */}
-                <div className="absolute top-4 right-4 rtl:right-[unset] rtl:left-4  z-10">
+                <div className="absolute top-4 right-4    z-10">
                   {isEnabled ? (
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wide uppercase bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -91,7 +91,7 @@ const PaymentGatewayContainer = () => {
 
                 {/* Active check indicator at bottom-right */}
                 {isActive && (
-                  <div className="absolute bottom-4 right-4 rtl:right-[unset] rtl:left-4 bg-primary text-white p-1 rounded-full shadow-md animate-in zoom-in-75 duration-200">
+                  <div className="absolute bottom-4 right-4   bg-primary text-white p-1 rounded-full shadow-md animate-in zoom-in-75 duration-200">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>

@@ -142,7 +142,7 @@ const KycConfigurationCard = () => {
                     }
                     push({ label: '', type: 'Text', placeholder: '', required: false })
                   }}
-                  className="flex ml-auto rtl:ml-[unset] rtl:mr-auto items-center justify-center gap-2 border-input-border-color h-12 rounded-lg text-white font-semibold bg-primary p-padding! shadow-sm transition-all"
+                  className="flex ml-auto   items-center justify-center gap-2 border-input-border-color h-12 rounded-lg text-white font-semibold bg-primary p-padding! shadow-sm transition-all"
                 >
                   <Plus className="w-4 h-4" />
                   {t('add_new_field', 'Add New Field')}

@@ -165,7 +165,7 @@ export const PlanCard = ({
     const isTopUpPopular = plan.is_popular;
 
     return (
-      <div className={cn("relative h-full flex flex-col rounded-lg transition-all duration-300 w-full text-left rtl:text-right sm:p-6 p-4 overflow-visible border border-input-border-color bg-bg-card hover:border-primary/40", isTopUpPopular && "border-primary/50 shadow-lg shadow-primary/5 md:scale-[1.02] z-10")}>
+      <div className={cn("relative h-full flex flex-col rounded-lg transition-all duration-300 w-full text-left  sm:p-6 p-4 overflow-visible border border-input-border-color bg-bg-card hover:border-primary/40", isTopUpPopular && "border-primary/50 shadow-lg shadow-primary/5 md:scale-[1.02] z-10")}>
         {isTopUpPopular && (
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
             <span className="flex items-center gap-1.5 bg-primary text-white px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest whitespace-nowrap shadow-sm shadow-primary/30">

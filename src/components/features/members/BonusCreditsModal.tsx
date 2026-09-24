@@ -54,7 +54,7 @@ export function BonusCreditsModal({ isOpen, onClose, user }: BonusCreditsModalPr
           <div className="flex items-center gap-3 mb-0">
             <DialogTitle className="text-xl font-bold text-title">{t('add_bonus_credits', 'Add Bonus Credits')}</DialogTitle>
           </div>
-          <DialogDescription className="pt-2 text-subtitle-color text-left rtl:text-right font-medium">
+          <DialogDescription className="pt-2 text-subtitle-color text-left  font-medium">
             {t('add_bonus_credits_description', 'Enter the number of bonus credits you want to add for')} <span className="font-bold text-title">{user?.name}</span>.
           </DialogDescription>
         </DialogHeader>
@@ -80,7 +80,7 @@ export function BonusCreditsModal({ isOpen, onClose, user }: BonusCreditsModalPr
               {isLoading ? (
                 <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
               ) : (
-                <Gift className="h-4 w-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                <Gift className="h-4 w-4 mr-2  " />
               )}
               {t('add_credits', 'Add Credits')}
             </Button>

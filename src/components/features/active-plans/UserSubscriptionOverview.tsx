@@ -52,7 +52,7 @@ const UserSubscriptionOverview = ({
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md! gap-0! max-w-[calc(100%-2rem)]! rounded-modal-radius border-none sm:p-6 p-4">
-                <DialogHeader className='text-left rtl:text-right'>
+                <DialogHeader className='text-left '>
                   <DialogTitle className='text-title'>{t('cancel_subscription')}</DialogTitle>
                   <DialogDescription>
                     {t('retain_access_until', {

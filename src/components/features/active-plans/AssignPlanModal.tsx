@@ -111,7 +111,7 @@ const AssignPlanModal = ({ isOpen, onClose, editingSubscription }: AssignPlanMod
                       <span className="font-bold text-base break-all whitespace-normal line-clamp-1">{u.name}</span>
                       <span className="text-md text-subtitle-color break-all whitespace-normal line-clamp-1">{u.email}</span>
                     </div>
-                    {selectedUserId === u.id && <Check className="w-4 h-4 text-primary ml-auto rtl:ml-0 rtl:mr-auto" />}
+                    {selectedUserId === u.id && <Check className="w-4 h-4 text-primary ml-auto  " />}
                   </div>
                 ))}
               </div>

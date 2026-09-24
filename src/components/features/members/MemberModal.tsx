@@ -137,13 +137,13 @@ export function MemberModal({ isOpen, onClose, user }: MemberModalProps) {
                         )
                       })()}
                     </Avatar>
-                    <div className="absolute bottom-0 right-0 rtl:right-[unset] rtl:left-0 w-9 h-9 bg-primary text-white rounded-lg flex items-center justify-center shadow-lg z-20">
+                    <div className="absolute bottom-0 right-0   w-9 h-9 bg-primary text-white rounded-lg flex items-center justify-center shadow-lg z-20">
                       <Camera size={18} />
                     </div>
                   </div>
                   {(!values.removeAvatar && (previewImage || (user?.avatar && user.avatar !== 'null'))) && (
                     <div
-                      className="absolute top-0 right-0 rtl:right-[unset] rtl:left-0 w-8 h-8 bg-destructive text-white rounded-full flex items-center justify-center shadow-lg z-30 cursor-pointer"
+                      className="absolute top-0 right-0   w-8 h-8 bg-destructive text-white rounded-full flex items-center justify-center shadow-lg z-30 cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation()
                         setPreviewImage(null)

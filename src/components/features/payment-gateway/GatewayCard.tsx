@@ -29,7 +29,7 @@ const GatewayCard = ({ title, enabled, onToggle, children }: GatewayCardProps) =
           </div>
         </div>
 
-        <div className="flex items-center gap-3 ml-auto rtl:ml-0 rtl:mr-auto rounded-radius">
+        <div className="flex items-center gap-3 ml-auto   rounded-radius">
           <Switch
             checked={enabled}
             onCheckedChange={onToggle}

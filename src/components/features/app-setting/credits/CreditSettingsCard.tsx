@@ -14,7 +14,6 @@ import { CreditSettingsFormValues } from '@/types/settings'
 const CreditSettingsCard = () => {
   const { t } = useTranslation()
   const [deductionField, , deductionHelpers] = useField<string>('credit_deduction_type')
-  const direction = useAppSelector((state) => state.layout.direction)
 
   const { values } = useFormikContext<CreditSettingsFormValues>()
 
@@ -75,7 +74,6 @@ const CreditSettingsCard = () => {
             value={deductionField.value}
             onValueChange={(value) => deductionHelpers.setValue(value)}
             className="flex flex-wrap gap-4"
-            dir={direction}
           >
             <div className={cn(
               'flex items-center space-x-2 rounded-lg border px-3 py-2',
@@ -122,7 +120,7 @@ const CreditSettingsCard = () => {
                   placeholder="0"
                   className="h-10 w-full px-3 pr-16 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-white/10 focus:ring-1 focus:ring-primary/20 transition-all rounded-lg text-sm"
                 />
-                <div className="absolute right-3 rtl:right-[unset] rtl:left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+                <div className="absolute right-3   top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
                   {t('credits')}
                 </div>
               </div>

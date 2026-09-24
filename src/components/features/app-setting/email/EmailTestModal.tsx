@@ -24,7 +24,7 @@ const EmailTestModal = ({ show, onClose, onSend, testEmail, setTestEmail, isTest
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="border-glass-border bg-light-body dark:bg-modal-bg-color backdrop-blur-2xl rounded-border-radius sm:p-6 p-4 sm:max-w-lg! max-w-[calc(100%-2rem)]! shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)]">
         <DialogHeader className="space-y-3">
           <DialogTitle className="text-xl font-medium">{t('send_test_email')}</DialogTitle>
-          <DialogDescription className="font-medium text-left rtl:text-right">{t('enter_test_email_desc')}</DialogDescription>
+          <DialogDescription className="font-medium text-left ">{t('enter_test_email_desc')}</DialogDescription>
         </DialogHeader>
         <div className="space-y-6">
           <div className="space-y-2 flex flex-col">

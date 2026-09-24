@@ -6,7 +6,6 @@ import { PageHeader } from '@/components/reusable/PageHeader'
 import { Button } from '@/components/ui/button'
 import { PERMISSIONS } from '@/constants/permissions'
 import { ROUTES } from '@/constants/routes'
-import { useAppDirection } from '@/hooks/useAppDirection'
 import { usePermission } from '@/hooks/usePermission'
 import { cn } from '@/lib/utils'
 import { FileText, HardDrive, Info, Layers, Layout, Mail, MailOpen, ShieldAlert, Sliders, Sparkles, User } from 'lucide-react'
@@ -29,7 +28,6 @@ export default function AppSettingsManagement() {
   const [activeTab, setActiveTab] = useState(
     tab === 'logos' ? 'logos' : tab === 'limits' ? 'limits' : tab === 'storage' ? 'storage' : tab === 'credit_manage' ? 'credit_manage' : tab === 'kyc_configuration' ? 'kyc_configuration' : tab === 'signup_customization' ? 'signup_customization' : tab === 'reusable_email' ? 'reusable_email' : 'app_info'
   )
-  const direction = useAppDirection()
   const { hasPermission, role, isAdmin } = usePermission()
 
   const [saveState, setSaveState] = useState({
@@ -177,7 +175,7 @@ export default function AppSettingsManagement() {
         }
       />
 
-      <div className="flex flex-col min-[1400px]:flex-row gap-6 flex-1 min-w-0" dir={direction}>
+      <div className="flex flex-col min-[1400px]:flex-row gap-6 flex-1 min-w-0">
         {/* Left Sidebar (Mobile Navigation Header Tabs) */}
         <div className="min-[1400px]:hidden mb-2 bg-bg-card rounded-lg border border-input-border-color shadow-xs">
           <div className="overflow-x-auto table-custom-scrollbar" ref={scrollContainerRef}>
@@ -218,7 +216,7 @@ export default function AppSettingsManagement() {
                   <div className={`w-8 h-8 rounded-radius flex items-center justify-center shrink-0 transition-colors ${isActive ? "bg-white/20 text-white dark:text-zinc-100 " : "bg-subcard text-subtitle-color dark:text-zinc-400 group-hover:bg-slate-100 dark:group-hover:bg-zinc-800"}`}>
                     <Icon className="w-4 h-4" />
                   </div>
-                  <div className="flex-1 min-w-0  text-left rtl:text-right">
+                  <div className="flex-1 min-w-0  text-left ">
                     <p className="text-md font-bold leading-tight">{section.title}</p>
                     <p className={cn("text-xs lg:text-sm truncate hidden lg:block text-white/80 text-wrap", isActive ? "text-white/80" : "text-subtitle-color")}>
                       {section.desc}

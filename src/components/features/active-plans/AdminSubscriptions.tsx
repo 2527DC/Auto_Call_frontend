@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { PERMISSIONS } from '@/constants/permissions'
 import { subscriptionStatus } from '@/data/subscription'
-import { useAppDirection } from '@/hooks/useAppDirection'
 import { usePermission } from '@/hooks/usePermission'
 import { cn } from '@/lib/utils'
 import { useApproveManualSubscriptionMutation, useGetAllSubscriptionsQuery, useRejectManualSubscriptionMutation } from '@/redux/api/subscriptionApi'
@@ -34,7 +33,6 @@ const AdminSubscriptions = () => {
   const [statusFilter, setStatusFilter] = useState('')
   const [sortBy, setSortBy] = useState('created_at')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const direction = useAppDirection()
 
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false)
   const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null)
@@ -291,7 +289,7 @@ const AdminSubscriptions = () => {
         onSort={handleSort}
         extraActions={
           <div className="flex items-center gap-3">
-            <DropdownMenu dir={direction}>
+            <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
