@@ -180,7 +180,7 @@ const ProfilePage = () => {
                     <Button
                       size="icon"
                       variant="premium"
-                      className="absolute -bottom-1 -right-0 rtl:right-[unset] rtl:-left-0 rounded-full h-9 w-9"
+                      className="absolute -bottom-1 -right-0   rounded-full h-9 w-9"
                       onClick={() => fileInputRef.current?.click()}
                     >
                       <Camera className="w-4 h-4" />
@@ -189,7 +189,7 @@ const ProfilePage = () => {
                       <Button
                         size="icon"
                         variant="destructive"
-                        className="absolute top-0 right-0 rtl:right-[unset] rtl:left-0 bg-destructive! text-white! rounded-full h-8 w-8 shadow-lg z-10 transition-transform"
+                        className="absolute top-0 right-0   bg-destructive! text-white! rounded-full h-8 w-8 shadow-lg z-10 transition-transform"
                         onClick={(e) => {
                           e.preventDefault()
                           e.stopPropagation()
@@ -286,12 +286,12 @@ const ProfilePage = () => {
                     >
                       {isUpdating ? (
                         <>
-                          <Loader2 className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2 animate-spin" />
+                          <Loader2 className="w-4 h-4 mr-2   animate-spin" />
                           {t('updating')}
                         </>
                       ) : (
                         <>
-                          <Save className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                          <Save className="w-4 h-4 mr-2  " />
                           {t('update_profile')}
                         </>
                       )}
@@ -401,12 +401,12 @@ const ProfilePage = () => {
                     >
                       {isChangingPassword ? (
                         <>
-                          <Loader2 className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2 animate-spin" />
+                          <Loader2 className="w-4 h-4 mr-2   animate-spin" />
                           {t('changing')}
                         </>
                       ) : (
                         <>
-                          <Save className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                          <Save className="w-4 h-4 mr-2  " />
                           {t('change_password')}
                         </>
                       )}

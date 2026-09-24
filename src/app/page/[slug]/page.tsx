@@ -96,7 +96,7 @@ export default function CMSPage({ params }: PageProps) {
             <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20 mb-20">
               <article className="bg-bg-card rounded-lg shadow-2xl shadow-black/5 border border-input-border-color overflow-hidden">
                 <div className="p-4 sm:p-12 md:p-16">
-                  <div className="public-content text-[15px] text-subtitle-color leading-relaxed text-left rtl:text-right max-w-4xl mx-auto" >
+                  <div className="public-content text-[15px] text-subtitle-color leading-relaxed text-left  max-w-4xl mx-auto" >
                     <div 
                       className="
                         break-words

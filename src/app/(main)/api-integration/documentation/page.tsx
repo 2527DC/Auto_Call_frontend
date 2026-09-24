@@ -143,7 +143,7 @@ export default function ApiDocumentationPage() {
             <div className="flex flex-col gap-1 bg-bg-card border border-input-border-color p-4  rounded-radius max-h-[60vh] overflow-y-auto no-scrollbar">
               {guides.map((guide) => (
                 <Button key={guide._id} onClick={() => setSelectedGuideId(guide._id)} className={cn("w-full flex items-center justify-between text-left px-3 py-2.5 rounded-lg transition-all font-semibold text-sm", activeGuide?._id === guide._id ? "bg-primary/10 text-primary border-l-3 border-primary" : "hover:bg-slate-50 dark:hover:bg-slate-900 dark:hover:text-slate-200 bg-[unset] text-subtitle-color hover:text-slate-800")}>
-                  <span className="truncate pr-2 rtl:pr-0 rtl:pl-2 text-md">{guide.title}</span>
+                  <span className="truncate pr-2   text-md">{guide.title}</span>
                   <ChevronRight className="h-4 w-4 shrink-0 opacity-40" />
                 </Button>
               ))}
