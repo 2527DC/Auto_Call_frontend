@@ -4,11 +4,9 @@ import { cn } from '@/lib/utils'
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { Check, ChevronDown, ChevronUp } from 'lucide-react'
 import * as React from 'react'
-import { useAppDirection } from '@/hooks/useAppDirection'
 
 const Select = (props: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>) => {
-  const direction = useAppDirection()
-  return <SelectPrimitive.Root dir={direction} {...props} />
+  return <SelectPrimitive.Root {...props} />
 }
 const SelectGroup = SelectPrimitive.Group
 const SelectValue = SelectPrimitive.Value

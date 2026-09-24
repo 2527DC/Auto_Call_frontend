@@ -3,7 +3,6 @@
 import * as React from "react"
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
-import { useAppDirection } from "@/hooks/useAppDirection"
 
 
 
@@ -11,14 +10,11 @@ function RadioGroup({
   className,
   ...props
 }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
-  const direction = useAppDirection()
-
   return (
     <RadioGroupPrimitive.Root
       data-slot="radio-group"
       className={cn("grid w-full gap-2", className)}
       {...props}
-      dir={direction}
     />
   )
 }
