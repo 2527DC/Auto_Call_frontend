@@ -33,13 +33,13 @@ export function WidgetPreview({ widgetData }: WidgetPreviewProps) {
   const branding = widgetData.branding || {
     brand_name: 'Your Company',
     button_label: 'VOICE CHAT',
-    primary_color: '#015482',
+    primary_color: '#7C3AED',
     require_terms: false,
     terms_content: 'Please accept our terms and conditions before continuing.',
     icon_url: null,
   }
 
-  const primaryColor = branding.primary_color || '#015482'
+  const primaryColor = branding.primary_color || '#7C3AED'
   const brandName = branding.brand_name || t('your_company')
   const buttonLabel = branding.button_label || t('voice_chat')
   const requireTerms = branding.require_terms || false

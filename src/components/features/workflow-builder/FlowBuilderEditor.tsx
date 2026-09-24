@@ -92,7 +92,7 @@ function FlowBuilderEditorContent({ id }: FlowBuilderEditorProps) {
           targetHandle: e.targetHandle,
           type: 'customEdge',
           animated: false,
-          style: { stroke: '#015482', strokeWidth: 2 }
+          style: { stroke: '#7C3AED', strokeWidth: 2 }
         })))
       }, 0)
     }
@@ -103,7 +103,7 @@ function FlowBuilderEditorContent({ id }: FlowBuilderEditorProps) {
       ...params,
       type: 'customEdge',
       animated: false,
-      style: { stroke: '#015482', strokeWidth: 2 }
+      style: { stroke: '#7C3AED', strokeWidth: 2 }
     }, eds)),
     [setEdges]
   )

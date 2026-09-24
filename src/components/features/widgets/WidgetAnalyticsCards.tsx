@@ -85,7 +85,7 @@ export function WidgetAnalyticsCards({ analytics, isLoading }: WidgetAnalyticsCa
             whileHover={{ y: -4 }}
             className={`relative group overflow-hidden bg-bg-card rounded-radius border border-input-border-color sm:p-5 p-4 transition-all duration-300 hover:shadow-xl ${stat.glow}`}
           >
-            <div className={`absolute top-0 right-0 rtl:right-[unset]! rtl:left-0 -mt-6 -mr-6 w-32 h-32 bg-gradient-to-br ${stat.color} rounded-full blur-2xl opacity-[0.10] group-hover:opacity-[0.20] transition-opacity duration-500 pointer-events-none`} />
+            <div className={`absolute top-0 right-0   -mt-6 -mr-6 w-32 h-32 bg-gradient-to-br ${stat.color} rounded-full blur-2xl opacity-[0.10] group-hover:opacity-[0.20] transition-opacity duration-500 pointer-events-none`} />
 
             <div className="relative z-10 flex items-center gap-4">
               <motion.div

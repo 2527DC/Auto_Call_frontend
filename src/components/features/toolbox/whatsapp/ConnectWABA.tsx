@@ -159,7 +159,7 @@ const ConnectWABA = () => {
                     </div>
                   </div>
                   {connectionMethod === "embedded" && (
-                    <Check size={18} className="text-primary shrink-0 ms-auto rtl:mr-auto rtl:ml-0" />
+                    <Check size={18} className="text-primary shrink-0 ms-auto  " />
                   )}
                 </div>
 
@@ -185,7 +185,7 @@ const ConnectWABA = () => {
                     </div>
                   </div>
                   {connectionMethod === "manual" && (
-                    <Check size={18} className="text-primary shrink-0 ms-auto rtl:mr-auto rtl:ml-0" />
+                    <Check size={18} className="text-primary shrink-0 ms-auto  " />
                   )}
                 </div>
               </div>

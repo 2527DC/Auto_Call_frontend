@@ -36,7 +36,7 @@ export default function WabaSetupGuide({ isConnected }: WabaSetupGuideProps) {
             <div key={step.id} className="flex gap-4 group relative">
               {/* Dashed connector line */}
               {index !== WABA_SETUP_STEPS.length - 1 && (
-                <div className="absolute left-5 rtl:left-0 rtl:right-5 top-10 bottom-0 w-0 border-l border-dashed border-input-border-color transition-colors" />
+                <div className="absolute left-5   top-10 bottom-0 w-0 border-l border-dashed border-input-border-color transition-colors" />
               )}
 
               {/* Step Circle Icon */}

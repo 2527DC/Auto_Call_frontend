@@ -56,7 +56,7 @@ export default function EventWebhookModal({ isOpen, onClose, webhookToEdit }: Ev
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-[600px]! max-w-[calc(100%-2rem)]! max-h-[90vh] overflow-auto no-scrollbar bg-bg-card border border-input-border-color p-0 gap-0!">
-        <DialogHeader className="sm:px-6 px-4 py-4 border-b border-input-border-color mb-0 text-left rtl:text-right">
+        <DialogHeader className="sm:px-6 px-4 py-4 border-b border-input-border-color mb-0 text-left ">
           <DialogTitle className="text-xl font-bold text-title">
             {webhookToEdit
               ? t('edit_webhook', 'Edit Webhook')

@@ -65,7 +65,7 @@ const TestFlowModal = ({ flow, isOpen, onClose }: TestFlowModalProps) => {
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
               <PhoneCall className="w-5 h-5" />
             </div>
-            <div className="flex flex-col text-left rtl:text-right">
+            <div className="flex flex-col text-left ">
               <span className="text-title">{t('test_flow_title', { name: flow?.name })}</span>
               <span className="text-md font-medium text-subtitle-color mt-0.5">{t('test_flow_description')}</span>
             </div>

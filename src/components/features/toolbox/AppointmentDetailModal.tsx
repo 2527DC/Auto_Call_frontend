@@ -79,7 +79,7 @@ export function AppointmentDetailModal({
   return (
     <Dialog open={isOpen} onOpenChange={(val) => !val && onClose()}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-md! max-w-[calc(100%-2rem)]! max-h-[90vh] overflow-y-auto no-scrollbar bg-bg-card border border-input-border-color p-4 sm:p-6 gap-0! rounded-modal-radius shadow-xl">
-        <DialogHeader className='text-left rtl:text-right'>
+        <DialogHeader className='text-left '>
           <div className="flex items-center gap-2 text-primary font-bold text-lg mb-1">
             <CalendarIcon className="w-5 h-5" />
             <span>{t('appointment_details')}</span>

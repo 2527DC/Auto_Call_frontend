@@ -258,7 +258,7 @@ export function WidgetForm({ initialValues, onSubmit, isLoading, onValuesChange 
                         {/* Dynamic Side accent line using the brand primary color */}
                         {isTabActive && (
                           <div
-                            className="absolute bg-primary left-0 rtl:left-[unset] rtl:right-0 top-3 bottom-3 w-[4px] rounded-r-full"
+                            className="absolute bg-primary left-0   top-3 bottom-3 w-[4px] rounded-r-full"
                           />
                         )}
 
@@ -273,7 +273,7 @@ export function WidgetForm({ initialValues, onSubmit, isLoading, onValuesChange 
                           <TabIcon className="w-4.5 h-4.5" />
                         </div>
 
-                        <div className="block text-left rtl:text-right truncate flex-1">
+                        <div className="block text-left  truncate flex-1">
                           <h4 className={cn(
                             'text-md truncate font-bold',
                             isTabActive ? 'text-primary' : 'text-subtitle-color'
@@ -295,7 +295,7 @@ export function WidgetForm({ initialValues, onSubmit, isLoading, onValuesChange 
                 <div className=" border border-input-border-color rounded-radius bg-bg-card sm:p-6 p-4 relative h-full min-h-[600px] flex flex-col">
 
                   {/* Fixed positioning for the WidgetPreview in bottom right of the screen */}
-                  <div className="fixed bottom-8 right-8 rtl:right-[unset] rtl:left-8 z-[100]">
+                  <div className="fixed bottom-8 right-8   z-[100]">
                     <WidgetPreview widgetData={formik.values as unknown as Partial<Widget>} />
                   </div>
 
