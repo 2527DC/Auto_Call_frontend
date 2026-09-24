@@ -63,15 +63,15 @@
 
 
 :root {
-  --primary: #015482;
-  --primary-rgb: 1, 84, 130;
+  --primary: #7C3AED;
+  --primary-rgb: 124, 58, 237;
   /* --bg-body: #f7fcff; */
   --bg-body: #fafafa;
   --white: #ffffff;
   --bg-card: #fff;
   --sidebar-bg: #fff;
   --sidebar-border: #e2e8f0;
-  --sidebar-active: #6994acf5;
+  --sidebar-active: #9333EA;
   --sidebar-heading: #67717e;
   --input-color: #fff;
   --table-input-color: #d1d3d7;
@@ -191,27 +191,27 @@
 }
 
 .dark {
-  --primary: #015482;
-  --primary-rgb: 1, 84, 130;
+  --primary: #8B5CF6;
+  --primary-rgb: 139, 92, 246;
   --white: #ffffff;
-  --sidebar-bg: #05131D;
-  --sidebar-border: rgba(255, 255, 255, 0.05);
-  --sidebar-active: #015482;
-  --sidebar-heading: #94a3b8;
-  --title-color: #f1f5f9;
+  --sidebar-bg: #120724;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-active: #8B5CF6;
+  --sidebar-heading: #a78bfa;
+  --title-color: #f5f3ff;
   --card-color: #ffffff08;
-  --title: #f1f5f9;
-  --subtitle-color: #b9b9b9;
+  --title: #f5f3ff;
+  --subtitle-color: #c4b5fd;
   --input-color: #ffffff0f;
-  --input-border-color: #0F1C26;
+  --input-border-color: #240c3d;
   --pagination: #334155;
   --table-border: #ffffff1a;
   --slate-300: #334155;
-  --landing-light: #0f172a;
-  --bg-body: #000E18;
-  --bg-card: #05131D;
-  --header: #0F1C26;
-  --subcard: #0F1C26;
+  --landing-light: #0f051d;
+  --bg-body: #0A0314;
+  --bg-card: #120724;
+  --header: #19092B;
+  --subcard: #19092B;
   --incoming: #73e8b1 !important;
   --outgoing: #f65b5b !important;
   --campaign: #ffcb64 !important;
@@ -268,8 +268,8 @@ select:focus-visible {
 }
 
 @utility bg-grid-pattern {
-  background-image: linear-gradient(to right, rgba(1, 84, 130, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(1, 84, 130, 0.03) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 50%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 50%, transparent 100%);
@@ -284,25 +284,29 @@ select:focus-visible {
 }
 
 @utility bg-grid-pattern-hero {
-  background-image: linear-gradient(to right, rgba(1, 84, 130, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(1, 84, 130, 0.04) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(124, 58, 237, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(124, 58, 237, 0.06) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 50%, transparent 100%);
 }
 
 @utility bg-dot-pattern {
-  background-image: radial-gradient(circle, #0155827c 1px, transparent 1px);
+  background-image: radial-gradient(circle, #7c3aed40 1px, transparent 1px);
   background-size: 25px 25px;
   mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 50%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, black 50%, transparent 100%);
 }
 
 @utility bg-dot-pattern-lg {
-  background-image: radial-gradient(circle, #015482 1px, transparent 1px);
+  background-image: radial-gradient(circle, #7c3aed 1px, transparent 1px);
   background-size: 32px 32px;
   mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 50%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 50%, transparent 100%);
+}
+
+@utility bg-nebula-gradient {
+  background-image: linear-gradient(135deg, #0e031a 0%, #1a072e 50%, #2a0c4a 100%);
 }
 
 .ck.ck-toolbar {
@@ -380,12 +384,12 @@ select:focus-visible {
 .fc {
   font-family: inherit;
   --fc-border-color: rgba(226, 232, 240, 0.5);
-  --fc-today-bg-color: rgba(1, 84, 130, 0.05);
+  --fc-today-bg-color: rgba(124, 58, 237, 0.06);
 }
 
 .dark .fc {
   --fc-border-color: rgba(255, 255, 255, 0.06);
-  --fc-today-bg-color: rgba(255, 255, 255, 0.02);
+  --fc-today-bg-color: rgba(139, 92, 246, 0.05);
 }
 
 .fc .fc-button-primary {
@@ -399,8 +403,8 @@ select:focus-visible {
 }
 
 .fc .fc-button-primary:hover {
-  background-color: rgb(1, 70, 110);
-  border-color: rgb(1, 70, 110);
+  background-color: rgb(109, 40, 217);
+  border-color: rgb(109, 40, 217);
 }
 
 .fc .fc-button-primary:focus,
