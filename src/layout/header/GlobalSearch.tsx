@@ -134,7 +134,7 @@ const GlobalSearch = ({ isMobile = false }: GlobalSearchProps) => {
               placeholder={t('search_placeholder') || "Search anything..."}
               value={searchQuery}
               onChange={handleSearchChange}
-              className="bg-transparent h-full border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-md! text-title placeholder:text-subtitle-color w-full ml-3 rtl:ml-0 rtl:mr-3"
+              className="bg-transparent h-full border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-md! text-title placeholder:text-subtitle-color w-full ml-3  "
             />
           </div>
           <div className="max-h-[350px] overflow-y-auto no-scrollbar rounded-xl">
@@ -157,7 +157,7 @@ const GlobalSearch = ({ isMobile = false }: GlobalSearchProps) => {
           onFocus={() => {
             if (searchQuery.trim().length > 0) setIsOpen(true)
           }}
-          className="bg-transparent h-10 border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-md! text-white placeholder:text-white/40 w-full ml-3 rtl:ml-0 rtl:mr-3"
+          className="bg-transparent h-10 border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-md! text-white placeholder:text-white/40 w-full ml-3  "
         />
       </div>
 

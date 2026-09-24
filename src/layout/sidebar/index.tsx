@@ -64,14 +64,14 @@ const Sidebar = ({ isMobile, onClose, onLogoClick }: SidebarProps) => {
       className={cn(
         "bg-sidebar-bg backdrop-blur-xl h-full flex flex-col relative transition-all duration-500 ease-in-out",
         isExpanded ? 'w-66.25' : 'w-[55px]',
-        isMobile ? 'w-66.25 rounded-none' : 'rounded-tl-2xl rtl:rounded-tl-none rtl:rounded-tr-2xl'
+        isMobile ? 'w-66.25 rounded-none' : 'rounded-tl-2xl  '
       )}
     >
       {isMobile && onClose && (
         <Button
           onClick={onClose}
           variant="ghost"
-          className="absolute right-4 rtl:right-auto rtl:left-4 top-5 z-50 w-9 h-9 p-0! text-slate-500 dark:text-slate-400 hover:bg-destructive/20 hover:text-destructive dark:hover:bg-white/5 rounded-full transition-colors"
+          className="absolute right-4   top-5 z-50 w-9 h-9 p-0! text-slate-500 dark:text-slate-400 hover:bg-destructive/20 hover:text-destructive dark:hover:bg-white/5 rounded-full transition-colors"
         >
           <X className="w-5 h-5" />
         </Button>
@@ -82,8 +82,8 @@ const Sidebar = ({ isMobile, onClose, onLogoClick }: SidebarProps) => {
           onClick={() => dispatch(toggleSidebar())}
           variant="ghost"
           className={cn(
-            'absolute -right-3 rtl:right-auto rtl:-left-3 top-3 z-40 w-2! h-2 p-3! rounded-full text-primary border border-input-border-color dark:border-white/10 bg-bg-card dark:bg-input-dark-bg hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center',
-            isSidebarCollapsed ? 'rotate-180 rtl:rotate-0' : 'rtl:rotate-180'
+            'absolute -right-3   top-3 z-40 w-2! h-2 p-3! rounded-full text-primary border border-input-border-color dark:border-white/10 bg-bg-card dark:bg-input-dark-bg hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center',
+            isSidebarCollapsed ? 'rotate-180 ' : ''
           )}
         >
           <ChevronLeft className="w-4 h-4" />

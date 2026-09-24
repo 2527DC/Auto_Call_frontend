@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useAppDirection } from '@/hooks/useAppDirection'
 import { cn } from '@/lib/utils'
 import { languageApi, useGetActiveLanguagesQuery } from '@/redux/api/languageApi'
 import { useAppDispatch } from '@/redux/hooks'
@@ -16,7 +15,6 @@ const LanguageDropdown = () => {
   const { i18n } = useTranslation()
   const { data: languagesData, isLoading } = useGetActiveLanguagesQuery({})
   const [currentLanguage, setCurrentLanguage] = useState<Language | null>(null)
-  const direction = useAppDirection()
   const dispatch = useAppDispatch()
 
   const activeLanguages = useMemo(() => languagesData?.data.languages || [], [languagesData])
@@ -107,7 +105,7 @@ const LanguageDropdown = () => {
   }
 
   return (
-    <DropdownMenu dir={direction}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"

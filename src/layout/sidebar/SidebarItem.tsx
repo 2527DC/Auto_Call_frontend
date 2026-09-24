@@ -65,8 +65,8 @@ const SidebarItem: FC<ExtendedSidebarItemProps> = ({ item, depth = 0, isCollapse
         <motion.div
           layoutId="active-indicator"
           className={cn(
-            "absolute left-0 rtl:left-auto rtl:right-0 w-1 h-6 bg-sidebar-active rounded-r-full rtl:rounded-r-none rtl:rounded-l-full transition-all duration-300",
-            isCollapsed && isTopLevel && "left-0 rtl:left-auto rtl:right-0"
+            "absolute left-0   w-1 h-6 bg-sidebar-active rounded-r-full   transition-all duration-300",
+            isCollapsed && isTopLevel && "left-0  "
           )}
         />
       )} */}

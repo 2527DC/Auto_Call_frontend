@@ -36,7 +36,6 @@ const UserDropdown = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { user, isLoading: isAuthLoading } = useAppSelector((state) => state.auth)
-  const direction = useAppSelector((state) => state.layout.direction)
 
   const [showLogoutDialog, setShowLogoutDialog] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
@@ -68,7 +67,7 @@ const UserDropdown = () => {
 
   return (
     <>
-      <DropdownMenu dir={direction}>
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="w-9 h-9 rounded-radius transition-all duration-300">
             {isAuthLoading ? (

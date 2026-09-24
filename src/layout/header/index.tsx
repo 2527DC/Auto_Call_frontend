@@ -10,7 +10,6 @@ import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import DirectionToggle from './DirectionToggle'
 import CreditBalanceDropdown from './CreditBalanceDropdown'
 import GlobalSearch from './GlobalSearch'
 import LanguageDropdown from './LanguageDropdown'
@@ -93,9 +92,6 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
           {!isAdmin() && !isTeamMember() && <CreditBalanceDropdown />}
           <div className="flex">
             <LanguageDropdown />
-          </div>
-          <div className="flex">
-            <DirectionToggle />
           </div>
           <div className="flex">
             <ThemeToggle />
