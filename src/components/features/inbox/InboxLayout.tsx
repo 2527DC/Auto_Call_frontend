@@ -15,8 +15,8 @@ const InboxLayout = () => {
         "w-[320px] max-w-[90vw] min-[1200px]:w-[380px] min-[1200px]:max-w-none flex-shrink-0 bg-bg-card border border-input-border-color flex flex-col z-40 rounded-lg overflow-hidden transition-all duration-300 shadow-2xl min-[1200px]:shadow-none h-full",
         "absolute min-[1200px]:relative",
         isSidebarOpen
-          ? "left-0 rtl:left-auto rtl:right-0"
-          : "-left-[400px] rtl:left-auto rtl:-right-[400px] min-[1200px]:left-0 min-[1200px]:rtl:left-auto min-[1200px]:rtl:right-0"
+          ? "left-0  "
+          : "-left-[400px]   min-[1200px]:left-0 min-[1200px]: min-[1200px]:"
       )}>
         <ConversationList
           selectedSessionId={selectedSessionId}

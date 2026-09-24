@@ -275,7 +275,7 @@ export default function CreateSheetPage() {
               isLoading={isCreating}
               className="rounded-lg h-11 bg-primary font-medium border border-input-border-color p-padding! text-white"
             >
-              {!isCreating && <Plus className="h-4 w-4 mr-2 rtl:mr-0 rtl:ml-2" />}
+              {!isCreating && <Plus className="h-4 w-4 mr-2  " />}
               {isCreating ? t('creating_sheet') : t('create_sheet')}
             </Button>
           </div>

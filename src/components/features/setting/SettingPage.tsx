@@ -282,7 +282,7 @@ const SettingPage = () => {
                         <div className={`w-8 h-8 rounded-radius flex items-center justify-center shrink-0 transition-colors ${isActive ? "bg-white/20 text-white dark:text-zinc-100 " : "bg-subcard text-subtitle-color dark:text-zinc-400 group-hover:bg-slate-100 dark:group-hover:bg-zinc-800"}`}>
                           <Icon className="w-4 h-4" />
                         </div>
-                        <div className="flex-1 min-w-0 text-left rtl:text-right">
+                        <div className="flex-1 min-w-0 text-left ">
                           <p className="text-md font-bold leading-tight">{t(`settings_tabs_${id}`, label)}</p>
                           <p className={cn("text-xs lg:text-sm truncate text-subtitle-color  hidden lg:block", isActive ? "text-white/80" : "text-subtitle-color")}>{t(`settings_tabs_${id}_desc`, description)}</p>
                         </div>

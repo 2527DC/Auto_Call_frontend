@@ -73,8 +73,8 @@ export default function SyncSheetsModal({ isOpen, onClose }: SyncSheetsModalProp
               <RefreshCw className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <DialogTitle className="text-lg text-left rtl:text-right font-semibold text-title-color">{t('sync_google_sheets', 'Sync Google Sheets')}</DialogTitle>
-              <p className="text-sm text-left rtl:text-right text-subtitle-color mt-0.5">{t('fetch_sheets_from_your_google_account_and_sync_them', 'Fetch sheets from your Google account and sync them')}</p>
+              <DialogTitle className="text-lg text-left  font-semibold text-title-color">{t('sync_google_sheets', 'Sync Google Sheets')}</DialogTitle>
+              <p className="text-sm text-left  text-subtitle-color mt-0.5">{t('fetch_sheets_from_your_google_account_and_sync_them', 'Fetch sheets from your Google account and sync them')}</p>
             </div>
           </div>
         </DialogHeader>

@@ -33,7 +33,7 @@ export const TeamMemberProfile = ({ user }: TeamMemberProfileProps) => {
               )}
             </div>
 
-            <div className="flex flex-col text-left rtl:text-right justify-center">
+            <div className="flex flex-col text-left  justify-center">
               <h1 className="text-[28px] font-bold text-title leading-none mb-1.5">
                 {user?.name}
               </h1>
@@ -57,7 +57,7 @@ export const TeamMemberProfile = ({ user }: TeamMemberProfileProps) => {
         <Card className="rounded-lg border border-input-border-color bg-bg-card animate-in fade-in slide-in-from-left duration-500 lg:col-span-2">
           <CardHeader className="pb-4 border-b border-input-border-color sm:px-8 px-4 sm:pt-6 pt-4">
             <CardTitle className="text-xl font-bold text-title flex items-center">
-              <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-500 flex items-center justify-center mr-3 rtl:mr-0 rtl:ml-3 shrink-0">
+              <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-500 flex items-center justify-center mr-3   shrink-0">
                 <User className="w-5 h-5" />
               </div>
               {t('contact_information')}
@@ -91,7 +91,7 @@ export const TeamMemberProfile = ({ user }: TeamMemberProfileProps) => {
         <Card className="rounded-lg border border-input-border-color bg-bg-card animate-in fade-in slide-in-from-right duration-500 lg:col-span-1">
           <CardHeader className="pb-4 border-b border-input-border-color sm:px-8 px-4 sm:pt-6 pt-4">
             <CardTitle className="text-xl font-bold text-title flex items-center">
-              <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-500 flex items-center justify-center mr-3 rtl:mr-0 rtl:ml-3 shrink-0">
+              <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-500 flex items-center justify-center mr-3   shrink-0">
                 <User className="w-5 h-5" />
               </div>
               {t('department_reporting')}

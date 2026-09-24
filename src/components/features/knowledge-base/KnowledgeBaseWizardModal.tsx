@@ -84,7 +84,7 @@ const KnowledgeBaseWizardModal = ({
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-md! max-w-[calc(100%-2rem)]! gap-0 p-0 overflow-hidden bg-white [&>button]:hidden">
         <DialogHeader className="sm:p-6 p-4 pb-0!">
           <DialogTitle className="flex items-start sm:items-center justify-between gap-2">
-            <span className="text-lg sm:text-xl font-bold text-title text-left rtl:text-right leading-tight mt-1 sm:mt-0">{t("create_knowledge_base")}</span>
+            <span className="text-lg sm:text-xl font-bold text-title text-left  leading-tight mt-1 sm:mt-0">{t("create_knowledge_base")}</span>
             <div className="flex items-center gap-2 sm:gap-4 shrink-0">
               <span className="whitespace-nowrap text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2 sm:px-3 py-1 rounded-md">Step {step} / 3</span>
               <Button onClick={handleClose} className="group text-gray-400 bg-unset p-1 sm:p-2 hover:bg-destructive/20 hover:text-destructive hover:text-gray-600 dark:hover:text-gray-200 transition-colors flex items-center justify-center h-auto">

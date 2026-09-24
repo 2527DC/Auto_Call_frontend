@@ -304,7 +304,7 @@ export default function LeadCaptureFormDetail({ id }: LeadCaptureFormDetailProps
                 </Button>
               </div>
             ) : (
-              <div className="space-y-4 no-scrollbar overflow-y-auto overflow-x-hidden max-h-[625px] sm:pr-8 sm:-mr-8 rtl:sm:pr-0 rtl:sm:mr-0 rtl:sm:pl-8 rtl:sm:-ml-8">
+              <div className="space-y-4 no-scrollbar overflow-y-auto overflow-x-hidden max-h-[625px] sm:pr-8 sm:-mr-8    ">
                 {fields.map((field, index) => (
                   <div
                     key={index}
@@ -315,7 +315,7 @@ export default function LeadCaptureFormDetail({ id }: LeadCaptureFormDetailProps
                     onDragOver={handleDragOver}
                     className="sm:p-5 p-4 pt-12 sm:pt-12 rounded-lg border border-input-border-color bg-subcard grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-end gap-4 relative animate-in fade-in zoom-in duration-300 group cursor-move"
                   >
-                    <div className="absolute top-3 right-3 rtl:right-[unset] rtl:left-3 sm:top-4 sm:right-4 rtl:sm:right-[unset] rtl:sm:left-4 flex items-center gap-4">
+                    <div className="absolute top-3 right-3   sm:top-4 sm:right-4   flex items-center gap-4">
                       <div className="flex items-center gap-2">
                         <Switch
                           checked={field.required}
@@ -335,7 +335,7 @@ export default function LeadCaptureFormDetail({ id }: LeadCaptureFormDetailProps
                       </Button>
                     </div>
 
-                    <div className="absolute top-3 left-3 translate-y-0 rtl:left-auto rtl:right-3 sm:top-1/2 sm:-translate-y-1/2 sm:left-auto sm:right-[-19px] rtl:sm:right-auto rtl:sm:left-[-19px] bg-primary/10 text-primary rounded-lg h-9 w-9 flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-move z-10">
+                    <div className="absolute top-3 left-3 translate-y-0   sm:top-1/2 sm:-translate-y-1/2 sm:left-auto sm:right-[-19px]   bg-primary/10 text-primary rounded-lg h-9 w-9 flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-move z-10">
                       <GripVertical className="w-5 h-5" />
                     </div>
 

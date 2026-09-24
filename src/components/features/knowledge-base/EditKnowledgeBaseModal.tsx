@@ -92,7 +92,7 @@ const EditKnowledgeBaseModal = ({
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-md! border-none max-w-[calc(100%-2rem)]! gap-0! p-0 overflow-hidden bg-white [&>button]:hidden">
         <DialogHeader className="sm:p-6 p-4 pb-0!">
           <DialogTitle className="flex items-start sm:items-center justify-between gap-2">
-            <span className="text-lg sm:text-xl font-bold text-title text-left rtl:text-right leading-tight mt-1 sm:mt-0">
+            <span className="text-lg sm:text-xl font-bold text-title text-left  leading-tight mt-1 sm:mt-0">
               {t("edit_knowledge_base")}
             </span>
             {/* <div className="flex items-center gap-2 sm:gap-4 shrink-0">

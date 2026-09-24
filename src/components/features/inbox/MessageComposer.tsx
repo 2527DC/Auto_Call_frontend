@@ -77,7 +77,7 @@ const MessageComposer: React.FC<MessageComposerProps> = ({ sessionId }) => {
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
             ) : (
-              <Send className={cn("h-5 w-5 rtl:rotate-180")} />
+              <Send className={cn("h-5 w-5 ")} />
             )}
           </Button>
         </div>

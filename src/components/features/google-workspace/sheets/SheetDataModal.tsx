@@ -106,8 +106,8 @@ export default function SheetDataModal({ isOpen, onClose, sheet, mode }: SheetDa
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="max-w-[calc(100%-2rem)]! sm:max-w-2xl w-[1300px] max-h-[90vh] flex flex-col p-0 gap-0! overflow-auto no-scrollbar border-none">
 
         {/* ── Toolbar ── */}
-        <DialogHeader className="shrink-0 border-b text-left rtl:text-right border-input-border-color mb-0">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-5 py-4 sm:py-3.5 pr-12 sm:pr-14 rtl:pr-5 rtl:pl-12 rtl:sm:pl-14">
+        <DialogHeader className="shrink-0 border-b text-left  border-input-border-color mb-0">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-5 py-4 sm:py-3.5 pr-12 sm:pr-14   ">
             {/* Left: title */}
             <div className="flex items-start sm:items-center gap-3 min-w-0">
               <div className="p-2 bg-primary/10 rounded-lg shrink-0 mt-0.5 sm:mt-0">

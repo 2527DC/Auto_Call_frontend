@@ -143,7 +143,7 @@ export default function KycUploadPage({ purchaseRequestId }: KycUploadPageProps)
                 onClick={(e) => { e.stopPropagation(); handleFileChange(type, null); }}
                 className="text-destructive bg-destructive/10 hover:bg-destructive hover:text-white text-sm p-padding! h-9 mt-2"
               >
-                <X className="w-3 h-3 mr-1 rtl:mr-0 rtl:ml-1" /> {t('remove', 'Remove')}
+                <X className="w-3 h-3 mr-1  " /> {t('remove', 'Remove')}
               </Button>
             </div>
           ) : existingFile ? (
@@ -263,7 +263,7 @@ export default function KycUploadPage({ purchaseRequestId }: KycUploadPageProps)
 
         <div className="flex justify-end pt-4 border-t border-input-border-color">
           {!kycRequired && (
-            <Button type="button" variant="outline" onClick={() => router.push(ROUTES.PHONE_NUMBERS)} className="mr-4 rtl:mr-0 rtl:ml-4 rounded-lg p-padding! border-none bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all">
+            <Button type="button" variant="outline" onClick={() => router.push(ROUTES.PHONE_NUMBERS)} className="mr-4   rounded-lg p-padding! border-none bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all">
               {t('skip', 'Skip')}
             </Button>
           )}
@@ -272,13 +272,13 @@ export default function KycUploadPage({ purchaseRequestId }: KycUploadPageProps)
                  if (window.confirm(t('kyc_mandatory_warning', 'Are you sure? Your number will remain inactive until identity verification is completed.'))) {
                    router.push(ROUTES.PHONE_NUMBERS)
                  }
-               }} className="mr-4 rtl:mr-0 rtl:ml-4 rounded-lg p-padding! border-none bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all">
+               }} className="mr-4   rounded-lg p-padding! border-none bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all">
                {t('do_it_later', 'Do it later')}
              </Button>
           )}
           
           <Button type="submit" disabled={isLoading || (kycMaxFiles === 0 && kycFormFields.length === 0)} className="rounded-lg p-padding! bg-primary text-white font-bold transition-all">
-            {isLoading && <Loader2 className="w-4 h-4 mr-2 rtl:mr-0 rtl:ml-2 animate-spin" />}
+            {isLoading && <Loader2 className="w-4 h-4 mr-2   animate-spin" />}
             {t('submit_kyc', 'Submit Documents')}
           </Button>
         </div>

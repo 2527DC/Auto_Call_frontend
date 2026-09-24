@@ -40,14 +40,14 @@ export default function DeleteSourceModal({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="sm:max-w-md! max-w-[calc(100%-2rem)]! gap-0 overflow-auto max-h-[90vh] no-scrollbar border-none p-4! sm:p-6!">
-        <DialogHeader className="text-left rtl:text-right pr-8 rtl:pr-0 rtl:pl-8">
+        <DialogHeader className="text-left  pr-8  ">
           <div className="flex items-start gap-3">
             <div className="p-2 bg-red-100 dark:bg-red-500/20 rounded-lg shrink-0 mt-0.5">
               <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
             </div>
             <div className="flex flex-col gap-1 min-w-0">
-              <DialogTitle className="text-lg font-semibold text-left rtl:text-right break-words">{title}</DialogTitle>
-              <DialogDescription className="text-sm text-subtitle-color text-left rtl:text-right">
+              <DialogTitle className="text-lg font-semibold text-left  break-words">{title}</DialogTitle>
+              <DialogDescription className="text-sm text-subtitle-color text-left ">
                 {itemCount > 1
                   ? `You are about to delete ${itemCount} items. ${description}`
                   : description}
@@ -63,7 +63,7 @@ export default function DeleteSourceModal({
           <Button
             type="button"
             onClick={() => setSelected('system')}
-            className={`w-full h-auto min-h-[103px] rounded-radius! flex items-start gap-3 p-4 rounded-lg border-2 text-left rtl:text-right transition-all ${
+            className={`w-full h-auto min-h-[103px] rounded-radius! flex items-start gap-3 p-4 rounded-lg border-2 text-left  transition-all ${
               selected === 'system'
                 ? 'border-primary bg-primary/5 dark:bg-primary/10'
                 : 'border-input-border-color! bg-subcard hover:border-primary/50 '
@@ -89,7 +89,7 @@ export default function DeleteSourceModal({
           <Button
             type="button"
             onClick={() => setSelected('google')}
-            className={`w-full h-auto min-h-[103px] rounded-radius! flex items-start gap-3 p-4 rounded-lg border-2 text-left rtl:text-right transition-all ${
+            className={`w-full h-auto min-h-[103px] rounded-radius! flex items-start gap-3 p-4 rounded-lg border-2 text-left  transition-all ${
               selected === 'google'
                 ? 'border-red-500! bg-red-50! dark:bg-red-500/10!'
                 : 'border-input-border-color! bg-subcard hover:border-red-400/50! !'

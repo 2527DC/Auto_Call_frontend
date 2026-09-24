@@ -156,7 +156,7 @@ export default function CalendarEventsModal({ isOpen, onClose, calendar }: Calen
               <div className="p-2 bg-primary/10 rounded-lg shrink-0">
                 <CalendarIcon className="w-5 h-5 text-primary" />
               </div>
-              <div className="min-w-0 flex-1 text-left rtl:text-right">
+              <div className="min-w-0 flex-1 text-left ">
                 <DialogTitle className="text-lg sm:text-xl font-semibold truncate text-title">
                   {mode === 'list' ? calendar?.name : (mode === 'edit' ? t('editEvent', 'Edit Event') : t('createEvent', 'Create New Event'))}
                 </DialogTitle>

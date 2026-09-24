@@ -85,10 +85,10 @@ export default function LinkCalendarModal({ isOpen, onClose }: LinkCalendarModal
               <Link2 className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <DialogTitle className="text-lg text-left rtl:text-right font-semibold text-title">
+              <DialogTitle className="text-lg text-left  font-semibold text-title">
                 {t('linked_google_calendars')}
               </DialogTitle>
-              <p className="text-sm text-left rtl:text-right text-subtitle-color mt-0.5">
+              <p className="text-sm text-left  text-subtitle-color mt-0.5">
                 {t('fetch_calendars_from_your_google_account_and_link_one_to_this_platform')}
               </p>
             </div>
