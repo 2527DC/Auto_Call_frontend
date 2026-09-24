@@ -126,8 +126,8 @@ const AuthSplitPage: React.FC<AuthSplitPageProps> = ({ initialMode = "login" }) 
       >
         <Button
           onClick={toggle}
-          className="pointer-events-auto flex items-center gap-2 p-padding! rounded-modal-radius! h-12 font-bold text-sm tracking-wide text-white shadow-[0_8px_30px_rgba(0,0,0,0.35)] border border-white/20 backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer outline-none"
-          style={{ background: "linear-gradient(135deg, #015482 0%, #013a5c 100%)" }}
+          className="pointer-events-auto flex items-center gap-2 p-padding! rounded-modal-radius! h-12 font-bold text-sm tracking-wide text-white shadow-[0_8px_30px_rgba(124,58,237,0.35)] border border-white/20 backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer outline-none"
+          style={{ background: "linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)" }}
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.span

@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useAppDirection } from '@/hooks/useAppDirection'
 import { cn } from '@/lib/utils'
 import { Column, DataTableProps } from '@/types/table'
 import {
@@ -68,7 +67,6 @@ export function DataTable<T>({
   const [showImportModal, setShowImportModal] = useState(false)
   const [isSearchFocused, setIsSearchFocused] = useState(false)
 
-  const direction = useAppDirection()
 
   const defaultEmptyMessage = emptyMessage || t('no_results')
 
@@ -161,7 +159,7 @@ export function DataTable<T>({
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 ml-auto rtl:ml-0 rtl:mr-auto">
+          <div className="flex flex-wrap items-center gap-4 ml-auto  ">
             {filters && (
               <div className="flex items-center gap-2">
                 {filters}
@@ -203,7 +201,7 @@ export function DataTable<T>({
 
                   {/* Export Dropdown */}
                   {hasExport && (
-                    <DropdownMenu dir={direction}>
+                    <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" className=" gap-2 rounded-xl border-none transition-all font-medium text-sm">
                           <Download className="w-4 h-4 text-primary" />

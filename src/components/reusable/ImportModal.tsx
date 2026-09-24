@@ -69,7 +69,7 @@ export const ImportModal = ({
             <div className="flex flex-col relative z-10">
               <div className="flex items-center gap-4">
                 <div>
-                  <DialogTitle className="text-xl text-left rtl:text-right font-bold text-title dark:text-white">{title || t("import_data")}</DialogTitle>
+                  <DialogTitle className="text-xl text-left  font-bold text-title dark:text-white">{title || t("import_data")}</DialogTitle>
                 </div>
               </div>
             </div>

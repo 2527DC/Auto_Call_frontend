@@ -28,7 +28,7 @@ export function DataViewCard({
   if (viewMode === 'list') {
     return (
       <div
-        className={`group w-full sm:p-6 p-4 flex items-center transition-all duration-200 border-l-2 rtl:border-l-0  rtl:border-r-2 border-l-transparent hover:border-l-primary hover:bg-slate-50/80 dark:hover:bg-slate-800/50 ${!isLastItem ? 'border-b border-input-border-color' : ''
+        className={`group w-full sm:p-6 p-4 flex items-center transition-all duration-200 border-l-2    border-l-transparent hover:border-l-primary hover:bg-slate-50/80 dark:hover:bg-slate-800/50 ${!isLastItem ? 'border-b border-input-border-color' : ''
           }`}
       >
         {/* Left: Icon + Name + Type */}
@@ -79,10 +79,10 @@ export function DataViewCard({
           </>
         )}
 
-        <div className={`w-px h-12 bg-input-border-color shrink-0 ${!listContent ? 'ml-auto rtl:ml-0 rtl:mr-auto' : ''}`} />
+        <div className={`w-px h-12 bg-input-border-color shrink-0 ${!listContent ? 'ml-auto  ' : ''}`} />
 
         {/* Right: Actions & Updated */}
-        <div className="flex items-center justify-start gap-8 shrink-0 min-w-[320px] lg:min-w-[400px] pl-4 rtl:pl-0 rtl:pr-4">
+        <div className="flex items-center justify-start gap-8 shrink-0 min-w-[320px] lg:min-w-[400px] pl-4  ">
           <div className="flex flex-col items-start min-w-[140px] lg:min-w-[160px] shrink-0">
             <span className="text-md font-medium text-title break-all whitespace-normal line-clamp-1">{t('updated')}</span>
             <div className="flex items-center gap-1.5 text-md text-subtitle-color mt-0.5">

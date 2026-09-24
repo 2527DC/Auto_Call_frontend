@@ -88,6 +88,7 @@ export const CookieConsent = () => {
       <AnimatePresence>
         {showConsent && !showManageSettings && (
           <motion.div
+            key="cookie-consent-bar"
             initial={{ opacity: 0, y: 50, x: 0 }}
             animate={{ opacity: 1, y: 0, x: 0 }}
             exit={{ opacity: 0, y: 50, x: 0 }}
@@ -138,16 +139,16 @@ export const CookieConsent = () => {
             </div>
           </motion.div>
         )}
-
-        <CookiePreferencesModal
-          open={showManageSettings}
-          onOpenChange={setShowManageSettings}
-          preferences={preferences}
-          onToggle={handleToggle}
-          onSave={(prefs) => handleConsent('preferences', prefs)}
-          onCancel={() => setShowManageSettings(false)}
-        />
       </AnimatePresence>
+
+      <CookiePreferencesModal
+        open={showManageSettings}
+        onOpenChange={setShowManageSettings}
+        preferences={preferences}
+        onToggle={handleToggle}
+        onSave={(prefs) => handleConsent('preferences', prefs)}
+        onCancel={() => setShowManageSettings(false)}
+      />
     </>
   );
 };

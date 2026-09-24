@@ -123,7 +123,7 @@ export function RegistrationOtpForm({ email, onSuccess }: RegistrationOtpFormPro
           className="w-full h-12 rounded-lg bg-primary text-white font-bold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 border-none"
         >
           {isLoading ? (
-            <Loader2 className="h-5 w-5 animate-spin mr-2 rtl:mr-0 rtl:ml-2" />
+            <Loader2 className="h-5 w-5 animate-spin mr-2  " />
           ) : null}
           {isLoading ? t('verifying', 'Verifying...') : t('verify_email_btn', 'Verify Email')}
         </Button>

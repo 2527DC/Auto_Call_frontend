@@ -99,7 +99,7 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({ label, name, onUpl
                   e.stopPropagation();
                   onRemove();
                 }}
-                className="absolute top-2 w-8 h-8 right-2 rtl:right-[unset] rtl:left-2 bg-destructive/10! hover:bg-destructive! hover:text-white! text-destructive! p-0! rounded-lg transition-colors"
+                className="absolute top-2 w-8 h-8 right-2   bg-destructive/10! hover:bg-destructive! hover:text-white! text-destructive! p-0! rounded-lg transition-colors"
                 title={t('remove')}
               >
                 <X className="w-4 h-4" />

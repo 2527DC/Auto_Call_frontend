@@ -14,7 +14,7 @@ export const KezakLogoEmblem = ({ className = "w-8 h-8", color = "currentColor" 
     <path d="M68 30C68 27.7909 66.2091 26 64 26H50L32 50L50 74H64C66.2091 74 68 72.2091 68 70V30Z" fill="white" className="opacity-40" />
     <path
       d="M44 40L56 50L44 60"
-      stroke={color === "currentColor" ? "#015482" : color}
+      stroke={color === "currentColor" ? "#7C3AED" : color}
       strokeWidth="6"
       strokeLinecap="round"
       strokeLinejoin="round"

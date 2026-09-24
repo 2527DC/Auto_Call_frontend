@@ -1,7 +1,6 @@
 'use client'
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useAppDirection } from '@/hooks/useAppDirection'
 import { cn } from '@/lib/utils'
 import { languageApi, useGetActiveLanguagesQuery } from '@/redux/api/languageApi'
 import { useAppDispatch } from '@/redux/hooks'
@@ -17,7 +16,6 @@ const UnifiedAuthControls = ({ className }: { className?: string }) => {
   const { i18n } = useTranslation()
   const { data: languagesData, isLoading } = useGetActiveLanguagesQuery({})
   const [currentLanguage, setCurrentLanguage] = useState<Language | null>(null)
-  const direction = useAppDirection()
   const dispatch = useAppDispatch()
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -92,7 +90,7 @@ const UnifiedAuthControls = ({ className }: { className?: string }) => {
     <div className={cn("absolute top-4 right-4 sm:top-8 sm:right-8 xl:top-12 xl:right-12 flex items-center bg-[#07131C] border border-[#1A2D3D] p-[5px] rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.4)] z-50 transition-colors", className)}>
 
       {/* Language Section */}
-      <DropdownMenu dir={direction}>
+      <DropdownMenu>
         <DropdownMenuTrigger className="outline-none flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors cursor-pointer">
           {!isLoading && currentLanguage ? getLanguageIcon(currentLanguage) : <Globe className="w-4 h-4 text-white" />}
           <span className="text-[14px] font-bold text-white tracking-wide uppercase mt-0.5">
