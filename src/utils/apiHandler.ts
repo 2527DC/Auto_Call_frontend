@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// Server-side calls go straight to the backend on the same machine when
+// BACKEND_INTERNAL_URL is set (e.g. http://127.0.0.1:5000/api); the public URL
+// is only the fallback.
+const BACKEND_API_URL = process.env.BACKEND_INTERNAL_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
 
 /**
  * Common handler to proxy requests from Next.js API routes to the backend API.

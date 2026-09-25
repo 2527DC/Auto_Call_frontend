@@ -7,7 +7,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog/${id}`, {
+    const res = await fetch(`${process.env.BACKEND_INTERNAL_URL || process.env.NEXT_PUBLIC_API_BASE_URL}/blog/${id}`, {
       next: { revalidate: 60 },
     });
     

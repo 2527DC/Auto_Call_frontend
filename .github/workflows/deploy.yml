@@ -66,6 +66,7 @@ jobs:
       PM2_NAME: ${{ vars.FRONTEND_PM2_NAME || 'autocall-frontend' }}
       APP_PORT: ${{ vars.FRONTEND_PORT || '3000' }}
       RELEASE: ${{ github.sha }}
+      BACKEND_INTERNAL_URL: ${{ vars.BACKEND_INTERNAL_URL || 'http://127.0.0.1:5000/api' }}
       SSHPASS: ${{ secrets.VPS_PASSWORD }}
       SSH_OPTS: -o PreferredAuthentications=password -o PubkeyAuthentication=no
     steps:
@@ -88,7 +89,7 @@ jobs:
       - name: Activate release with PM2
         run: |
           sshpass -e ssh $SSH_OPTS -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" \
-            "APP_DIR='$APP_DIR' PM2_NAME='$PM2_NAME' APP_PORT='$APP_PORT' RELEASE='$RELEASE' bash -s" <<'REMOTE'
+            "APP_DIR='$APP_DIR' PM2_NAME='$PM2_NAME' APP_PORT='$APP_PORT' RELEASE='$RELEASE' BACKEND_INTERNAL_URL='$BACKEND_INTERNAL_URL' bash -s" <<'REMOTE'
           set -euo pipefail
 
           RELEASE_DIR="$APP_DIR/releases/$RELEASE"
@@ -108,10 +109,10 @@ jobs:
 
           start_or_reload() {
             if pm2 describe "$PM2_NAME" >/dev/null 2>&1; then
-              NODE_ENV=production PORT="$APP_PORT" HOSTNAME=0.0.0.0 \
+              NODE_ENV=production PORT="$APP_PORT" HOSTNAME=127.0.0.1 BACKEND_INTERNAL_URL="$BACKEND_INTERNAL_URL" \
                 pm2 reload "$PM2_NAME" --update-env
             else
-              NODE_ENV=production PORT="$APP_PORT" HOSTNAME=0.0.0.0 \
+              NODE_ENV=production PORT="$APP_PORT" HOSTNAME=127.0.0.1 BACKEND_INTERNAL_URL="$BACKEND_INTERNAL_URL" \
                 pm2 start "$APP_DIR/current/server.js" \
                 --name "$PM2_NAME" --cwd "$APP_DIR/current" --time
             fi
