@@ -37,11 +37,23 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
 
   const handleSubmit = async (values: RegisterFormValues, { setSubmitting, resetForm }: FormikHelpers<RegisterFormValues>) => {
     try {
-      await register({
+      const response = await register({
         name: values.name,
         email: values.email,
         password: values.password,
       }).unwrap();
+
+      // Email verification is switched off: the account already exists.
+      if (response?.otp_required === false) {
+        resetForm();
+        toast.success(t('registration_successful_login', "Registration successful! You can now log in."));
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          router.push(ROUTES.AUTH.LOGIN);
+        }
+        return;
+      }
 
       setRegisteredEmail(values.email);
       setIsOtpOpen(true);

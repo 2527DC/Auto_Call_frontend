@@ -149,6 +149,7 @@ export interface CreditSettingsFormValues {
 }
 
 export interface SignupCustomizationFormValues {
+  registration_otp_required: boolean
   signup_agreement_enabled: boolean
   signup_agreement_prefix_text: string
   signup_agreement_link_text: string

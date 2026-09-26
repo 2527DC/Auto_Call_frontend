@@ -42,6 +42,7 @@ const SignupCustomizationSettings = ({ setSaveState }: { setSaveState: (state: a
   const [updateSettings, { isLoading: isUpdating }] = useUpdateAdminSettingsMutation()
 
   const initialValues = {
+    registration_otp_required: true,
     signup_agreement_enabled: false,
     signup_agreement_prefix_text: 'I agree to the',
     signup_agreement_link_text: 'Privacy Policy',

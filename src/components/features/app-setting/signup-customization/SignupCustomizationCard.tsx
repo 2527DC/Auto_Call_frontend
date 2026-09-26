@@ -37,6 +37,17 @@ const SignupCustomizationCard = () => {
       <CardContent className="sm:p-6 p-4 space-y-6">
         <div className="flex items-center justify-between border-b border-input-border-color pb-6">
           <div className="space-y-0.5">
+            <Label className="text-base font-bold text-title">{t('require_registration_otp')}</Label>
+            <p className="text-md text-subtitle-color">{t('require_registration_otp_desc')}</p>
+          </div>
+          <Switch
+            checked={values.registration_otp_required}
+            onCheckedChange={(checked) => setFieldValue('registration_otp_required', checked)}
+          />
+        </div>
+
+        <div className="flex items-center justify-between border-b border-input-border-color pb-6">
+          <div className="space-y-0.5">
             <Label className="text-base font-bold text-title">{t('enable_signup_agreement_line')}</Label>
             <p className="text-md text-subtitle-color">{t('enable_signup_agreement_line_desc')}</p>
           </div>

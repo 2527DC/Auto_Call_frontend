@@ -33,8 +33,9 @@ export interface LoginResponse {
 
 export interface RegisterResponse {
   message: string
-  token: string
-  user: User
+  token?: string
+  user?: User
+  otp_required?: boolean
 }
 
 export interface GenericResponse {
