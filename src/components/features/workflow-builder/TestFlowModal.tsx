@@ -6,13 +6,15 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useGetAgentsQuery } from "@/redux/api/agentApi"
+import { useGetPhoneNumbersQuery } from "@/redux/api/phoneNumberApi"
 import { usePlaceCallMutation } from "@/redux/api/callApi"
 import { TestFlowModalProps } from "@/types/flow"
 import { Info, Phone, PhoneCall } from 'lucide-react';
 import { Loader2 } from '@/components/reusable/Loader2';
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from 'sonner'
+import { PhoneNumberSearchSelect } from "@/components/shared/PhoneNumberSearchSelect"
 
 const TestFlowModal = ({ flow, isOpen, onClose }: TestFlowModalProps) => {
   const { t } = useTranslation()
@@ -23,6 +25,15 @@ const TestFlowModal = ({ flow, isOpen, onClose }: TestFlowModalProps) => {
 
   const { data: agentsData, isLoading: isLoadingAgents } = useGetAgentsQuery({ type: 'flow', status: 'active' })
   const agents = agentsData?.data || []
+
+  const { data: phoneNumbersData, isLoading: isLoadingPhones } = useGetPhoneNumbersQuery({})
+  const phoneNumbers = phoneNumbersData?.data || []
+
+  useEffect(() => {
+    if (!fromNumber && phoneNumbers.length > 0) {
+      setFromNumber(phoneNumbers[0].phone_number)
+    }
+  }, [phoneNumbers, fromNumber])
 
   const handleStartTestCall = async () => {
     if (!flow) return
@@ -78,17 +89,14 @@ const TestFlowModal = ({ flow, isOpen, onClose }: TestFlowModalProps) => {
               <Label className="text-sm font-medium text-title ml-0.5">
                 {t('from_number')} <span className="text-destructive">*</span>
               </Label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                  <Phone className="w-4 h-4" />
-                </div>
-                <Input
-                  placeholder="+1234567890"
-                  value={fromNumber}
-                  onChange={(e) => setFromNumber(e.target.value)}
-                  className="rounded-radius bg-input-color border-input-border-color pl-10 text-sm focus:ring-primary/20 transition-all"
-                />
-              </div>
+              <PhoneNumberSearchSelect
+                value={fromNumber}
+                onChange={setFromNumber}
+                phoneNumbers={phoneNumbers}
+                isLoading={isLoadingPhones}
+                disabled={isLoading}
+                placeholder={t('select_phone_number', { defaultValue: 'Search & select caller ID' })}
+              />
             </div>
 
             <div className="space-y-1.5">

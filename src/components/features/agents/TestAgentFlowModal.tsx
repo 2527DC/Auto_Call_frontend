@@ -4,14 +4,17 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useGetPhoneNumbersQuery } from "@/redux/api/phoneNumberApi"
 import { usePlaceCallMutation } from "@/redux/api/callApi"
 import { ApiError } from "@/types/api"
 import { TestAgentFlowModalProps } from "@/types/knowledgeBase"
 import { Phone, PhoneCall } from 'lucide-react';
 import { Loader2 } from '@/components/reusable/Loader2';
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
+import { PhoneNumberSearchSelect } from "@/components/shared/PhoneNumberSearchSelect"
 
 export function TestAgentFlowModal({ agent, isOpen, onClose }: TestAgentFlowModalProps) {
   const { t } = useTranslation()
@@ -19,6 +22,15 @@ export function TestAgentFlowModal({ agent, isOpen, onClose }: TestAgentFlowModa
   const [toNumber, setToNumber] = useState("")
 
   const [placeCall, { isLoading }] = usePlaceCallMutation()
+
+  const { data: phoneNumbersData, isLoading: isLoadingPhones } = useGetPhoneNumbersQuery({})
+  const phoneNumbers = phoneNumbersData?.data || []
+
+  useEffect(() => {
+    if (!fromNumber && phoneNumbers.length > 0) {
+      setFromNumber(phoneNumbers[0].phone_number)
+    }
+  }, [phoneNumbers, fromNumber])
 
   const handleTestFlowSubmit = async () => {
     if (!agent) return
@@ -85,23 +97,19 @@ export function TestAgentFlowModal({ agent, isOpen, onClose }: TestAgentFlowModa
         </DialogHeader>
 
         <div className="sm:p-6 p-4 pt-4 space-y-6">
-          {/* From Number Input */}
+          {/* From Number Dropdown */}
           <div className="space-y-2">
             <Label className="text-sm font-medium text-muted-foreground ml-1">
               {t('from_number')} *
             </Label>
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40">
-                <Phone className="w-4 h-4" />
-              </div>
-              <Input
-                placeholder="+1234567890"
-                value={fromNumber}
-                onChange={(e) => setFromNumber(e.target.value)}
-                disabled={isLoading}
-                className="rounded-radius bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10 pl-12 font-bold text-sm focus:ring-primary/20 shadow-none"
-              />
-            </div>
+            <PhoneNumberSearchSelect
+              value={fromNumber}
+              onChange={setFromNumber}
+              phoneNumbers={phoneNumbers}
+              isLoading={isLoadingPhones}
+              disabled={isLoading}
+              placeholder={t('select_phone_number', { defaultValue: 'Search & select caller ID' })}
+            />
           </div>
 
           {/* To Number Input */}
