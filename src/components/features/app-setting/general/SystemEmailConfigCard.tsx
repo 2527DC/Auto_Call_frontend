@@ -69,7 +69,7 @@ const SystemEmailConfigCard = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8 border-b border-input-border-color">
           <TextInput name="mail_from_name" label={t('sender_name')} placeholder={t('auto_call_support')} />
-          <TextInput name="mail_from_email" label={t('sender_email')} placeholder="noreply@autocall.com" type="email" />
+          <TextInput name="mail_from_email" label={t('sender_email')} placeholder="noreply@voxeno.ai" type="email" />
         </div>
 
         <div className="space-y-4">

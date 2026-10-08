@@ -30,7 +30,7 @@ export const AuthLogo = ({ className, forceLogo }: { className?: string; forceLo
       ) : (
         <Image
           src={logoUrl || "/logo.png"}
-          alt="autoCall logo"
+          alt="Voxeno logo"
           width={120}
           height={48}
           unoptimized

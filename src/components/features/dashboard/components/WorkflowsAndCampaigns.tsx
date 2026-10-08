@@ -32,7 +32,7 @@ export const WorkflowsAndCampaigns: React.FC<WorkflowsAndCampaignsProps> = ({
               </Link>
             </div>
 
-            {/* AutoCall Horizontal List View */}
+            {/* Voxeno Horizontal List View */}
             <div className="max-h-[318px] overflow-auto no-scrollbar">
               {(systemFlow || []).map((flow, i) => (
                 <div key={i} className="flex items-center justify-between p-3 mb-3 rounded-lg border border-input-border-color bg-subcard transition-all">

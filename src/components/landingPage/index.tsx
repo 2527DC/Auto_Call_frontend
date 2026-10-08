@@ -94,7 +94,7 @@ export default function LandingPage() {
 
   const footerData = lp?.footer
     ? {
-      title: "AutoCall",
+      title: "Voxeno",
       subtitle: lp.footer.tagline,
       content: {
         instagram: getSocialHref("instagram", "#"),

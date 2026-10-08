@@ -63,7 +63,7 @@ const SidebarLogo = ({ isCollapsed, onClick }: SidebarLogoProps) => {
         ) : (
           <Image 
             src={logoUrl || (isCollapsed ? "/favicon.png" : (theme === "dark" ? "/light-logo.png" : "/logo.png"))} 
-            alt={settings?.app_name || "autocall logo"} 
+            alt={settings?.app_name || "Voxeno logo"} 
             width={isCollapsed ? 40 : 140} 
             height={40} 
             unoptimized 

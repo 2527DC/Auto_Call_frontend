@@ -41,7 +41,7 @@ export function Footer({ footerData }: FooterProps) {
             <div>
               <div className="flex items-center gap-2.5 mb-6">
                 <Link href={ROUTES.DASHBOARD} className="flex items-center gap-3 self-start no-underline">
-                  <Image src="/light-logo.png" alt="autocall logo" width={180} height={48} unoptimized className="max-h-12 w-auto object-contain transition-all duration-300" />
+                  <Image src="/light-logo.png" alt="Voxeno logo" width={180} height={48} unoptimized className="max-h-12 w-auto object-contain transition-all duration-300" />
                 </Link>
               </div>
 
@@ -121,7 +121,7 @@ export function Footer({ footerData }: FooterProps) {
 
         {/* Bottom row copyrights */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-[calc(25px+(40-25)*((100vw-320px)/(1920-320)))] text-[12px] text-white">
-          <p>© 2026 AutoCall AI. All rights reserved.</p>
+          <p>© 2026 Voxeno AI. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-6">
             <Link href={ROUTES.PRIVACY_POLICY} target="_blank" rel="noopener noreferrer" className="text-white transition-colors duration-200">
               {t("privacy_policy")}

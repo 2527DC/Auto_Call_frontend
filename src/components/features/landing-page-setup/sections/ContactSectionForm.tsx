@@ -35,7 +35,7 @@ export const ContactSectionForm: React.FC<ContactSectionFormProps> = ({ t }) => 
           <TextInput
             name="contact.email"
             label={t("support_email_address")}
-            placeholder="support@autocall.ai"
+            placeholder="support@voxeno.ai"
           />
           <TextInput
             name="contact.phone"

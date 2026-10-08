@@ -19,9 +19,9 @@ const WebhookConfiguration = () => {
     toast.success(t("copied_success", { title }));
   };
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.autocall.com";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://api.voxeno.ai";
   const webhookUrl = `${API_URL}/api/whatsapp/webhook`;
-  const verifyToken = userSettings?.webhook_verification_token || "autocall";
+  const verifyToken = userSettings?.webhook_verification_token || "voxeno";
 
   return (
     <Card className="rounded-radius border border-input-border-color bg-bg-card overflow-hidden h-full">

@@ -12,12 +12,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     });
     
     if (!res.ok) {
-      return { title: 'Blog Details | Auto Call' }
+      return { title: 'Blog Details | Voxeno' }
     }
     
     const blog = await res.json();
     
-    if (!blog) return { title: 'Blog Not Found | Auto Call' };
+    if (!blog) return { title: 'Blog Not Found | Voxeno' };
 
     const title = blog.meta_title || blog.title;
     const description = blog.meta_description || blog.description;
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       }
     }
   } catch (error) {
-    return { title: 'Blog Details | Auto Call' }
+    return { title: 'Blog Details | Voxeno' }
   }
 }
 

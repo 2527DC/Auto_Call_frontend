@@ -38,7 +38,7 @@ export const RevenueAndRegistrations: React.FC<RevenueAndRegistrationsProps> = (
               </Link>
             </div>
 
-            {/* Auto Call Horizontal List View */}
+            {/* Voxeno Horizontal List View */}
             <div className="space-y-3 max-h-[390px] overflow-y-auto pr-1 no-scrollbar">
               {(recentRegisteredUsers || []).slice(0, 5).map((usr, i) => {
                 const avatarSrc = getImageUrl(usr.avatar);

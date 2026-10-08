@@ -35,8 +35,8 @@ const EmailProviderSelect = () => {
           </h4>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <TextInput name="fromName" label={t('from_name')} placeholder="e.g. Auto Call Support" />
-          <TextInput name="fromEmail" label={t('from_email')} placeholder="e.g. support@autocall.com" type="email" />
+          <TextInput name="fromName" label={t('from_name')} placeholder="e.g. Voxeno Support" />
+          <TextInput name="fromEmail" label={t('from_email')} placeholder="e.g. support@voxeno.ai" type="email" />
         </div>
       </div>
     </div>

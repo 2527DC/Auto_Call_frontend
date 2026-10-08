@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AutoCall",
+  title: "Voxeno",
   description: "Automate calls, reminders, and customer interactions.",
 };
 

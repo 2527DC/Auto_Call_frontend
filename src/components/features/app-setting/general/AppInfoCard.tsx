@@ -20,7 +20,7 @@ const AppInfoCard = () => {
         </div>
       </CardHeader>
       <CardContent className="space-y-4 sm:p-6 p-4 pt-2">
-        <TextInput name="app_name" label={t('app_name')} placeholder="e.g. Auto Call" />
+        <TextInput name="app_name" label={t('app_name')} placeholder="e.g. Voxeno" />
         <TextAreaField name="app_description" label={t('app_description')} placeholder="Describe your app..." />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <TextInput name="app_email" label={t('app_email')} placeholder="admin@example.com" type="email" />

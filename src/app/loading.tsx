@@ -53,7 +53,7 @@ export default function Loading() {
       <div className="relative z-10 flex flex-col items-center justify-center gap-10">
         <Image
           src={logoUrl || "/logo.png"}
-          alt={settings?.app_name || "autocall logo"}
+          alt={settings?.app_name || "Voxeno logo"}
           width={64}
           height={64}
           unoptimized

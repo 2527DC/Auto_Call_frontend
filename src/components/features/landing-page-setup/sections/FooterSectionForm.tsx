@@ -28,13 +28,13 @@ export const FooterSectionForm: React.FC<FooterSectionFormProps> = ({ t, values 
         <TextInput
           name="footer.copyright"
           label={t("copyright_statement")}
-          placeholder="© 2026 Autocall AI. All Rights Reserved."
+          placeholder="© 2026 Voxeno AI. All Rights Reserved."
         />
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           <TextInput
             name="footer.email"
             label={t("footer_email_address")}
-            placeholder="support@autocall.ai"
+            placeholder="support@voxeno.ai"
           />
           <TextInput
             name="footer.phone"
