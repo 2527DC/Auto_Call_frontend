@@ -69,7 +69,7 @@ const ThemeToggle = () => {
       variant="ghost"
       size="icon"
       onClick={handleThemeToggle}
-      className="w-9 h-9 sm:w-10 sm:h-10 p-2 sm:p-2.5 rounded-lg transition-all duration-200 cursor-pointer bg-transparent text-white/80 hover:bg-white/10"
+      className="w-9 h-9 sm:w-10 sm:h-10 p-2 sm:p-2.5 rounded-lg transition-all duration-200 cursor-pointer bg-transparent text-title/80 hover:text-primary hover:bg-primary/10"
     >
       {darkMode ? (
         <Sun className="w-6 h-6" />

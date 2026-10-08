@@ -89,7 +89,7 @@ export function EmbedModal({ isOpen, onClose, embedCode }: EmbedModalProps) {
         </div>
 
         <div className="sm:px-6 px-4 pb-6 w-full min-w-0">
-          <div className="bg-header rounded-xl overflow-hidden border border-white/5 w-full flex flex-col min-w-0 shadow-lg">
+          <div className="bg-[#000E18] dark:bg-header rounded-xl overflow-hidden border border-white/5 w-full flex flex-col min-w-0 shadow-lg">
             {/* Terminal Header */}
             <div className="flex flex-wrap gap-3 items-center justify-between px-5 py-4 border-b border-white/5 bg-white/[0.02] shrink-0">
               <div className="flex items-center gap-2 text-zinc-400 shrink-0 overflow-hidden">

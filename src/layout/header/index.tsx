@@ -7,6 +7,7 @@ import { usePermission } from '@/hooks/usePermission'
 import useSettings from '@/hooks/useSettings'
 import { HeaderProps } from '@/types/layout'
 import { Menu } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
@@ -19,7 +20,9 @@ import UserDropdown from './UserDropdown'
 
 const HeaderLogo = () => {
   const { settings, isLoading } = useSettings()
+  const { theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const fallbackLogo = theme === 'dark' || resolvedTheme === 'dark' ? '/light-logo.png' : '/logo.png'
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -32,13 +35,13 @@ const HeaderLogo = () => {
     if (!mounted) return null
     const API_URL = process.env.NEXT_PUBLIC_STORAGE_URL ?? ''
     const url = settings?.favicon_url
-    if (!url) return '/light-logo.png'
+    if (!url) return fallbackLogo
     if (url.startsWith('http')) return url
     const base = API_URL.replace(/\/$/, '')
     const path = url.replace(/^\//, '')
     if (!base) return `/${path}`
     return `${base}/${path}`
-  }, [mounted, settings])
+  }, [mounted, settings, fallbackLogo])
 
   if (!mounted || isLoading) {
     return <Skeleton className="h-8 w-8 rounded-lg shrink-0" />
@@ -47,7 +50,7 @@ const HeaderLogo = () => {
   return (
     <Link href={ROUTES.DASHBOARD} className="flex items-center gap-2.5 no-underline group shrink-0">
       <Image
-        src={faviconUrl || '/light-logo.png'}
+        src={faviconUrl || fallbackLogo}
         alt={settings?.app_name || 'Logo'}
         width={170}
         height={70}
@@ -62,7 +65,7 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
   const { isAdmin, isTeamMember } = usePermission()
 
   return (
-    <header className="sticky top-0 z-40 bg-header transition-all duration-300">
+    <header className="sticky top-0 z-40 bg-header border-b border-sidebar-border transition-all duration-300">
       <div className="px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Left: Mobile Menu + Logo */}
         <div className="flex items-center gap-4 shrink-0">
@@ -70,7 +73,7 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
             onClick={onMenuToggle}
             variant="ghost"
             size="icon"
-            className="min-[992px]:hidden hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+            className="min-[992px]:hidden hover:bg-primary/10 text-title/70 hover:text-primary transition-colors"
           >
             <Menu className="w-5 h-5" />
           </Button>

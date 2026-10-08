@@ -120,13 +120,13 @@ const GlobalSearch = ({ isMobile = false }: GlobalSearchProps) => {
           <Button
             variant="ghost"
             size="icon"
-            className="w-9 h-9 sm:w-10 sm:h-10 text-white/80 hover:bg-white/10 hover:text-white rounded-lg transition-all duration-300"
+            className="w-9 h-9 sm:w-10 sm:h-10 text-title/80 hover:bg-primary/10 hover:text-primary rounded-lg transition-all duration-300"
           >
             <Search className="w-5 h-5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[320px] p-2 bg-bg-card border-input-border-color shadow-xl rounded-2xl z-50">
-          <div className="flex items-center h-11 bg-white/5 dark:bg-white/5 border border-input-border-color! rounded-radius px-3 mb-2 focus-within:border-white/20">
+          <div className="flex items-center h-11 bg-white/5 dark:bg-white/5 border border-input-border-color! rounded-radius px-3 mb-2 focus-within:border-primary/40">
             <Search className="w-5 h-5 text-subtitle-color shrink-0" />
             <Input
               type="text"
@@ -147,8 +147,8 @@ const GlobalSearch = ({ isMobile = false }: GlobalSearchProps) => {
 
   return (
     <div ref={wrapperRef} className="relative flex items-center w-full max-w-[500px]">
-      <div className="flex w-full items-center h-10 dark:bg-white/5 bg-white/10 rounded-radius px-4 py-2 group transition-all duration-300 focus-within:bg-white/15 focus-within:border-white/20">
-        <Search className="w-5 h-5 text-white/50 shrink-0" />
+      <div className="flex w-full items-center h-10 bg-subcard dark:bg-white/5 border border-input-border-color rounded-radius px-4 py-2 group transition-all duration-300 focus-within:border-primary/40">
+        <Search className="w-5 h-5 text-subtitle-color group-focus-within:text-primary shrink-0" />
         <Input
           type="text"
           placeholder={t('search_placeholder') || "Search anything..."}
@@ -157,7 +157,7 @@ const GlobalSearch = ({ isMobile = false }: GlobalSearchProps) => {
           onFocus={() => {
             if (searchQuery.trim().length > 0) setIsOpen(true)
           }}
-          className="bg-transparent h-10 border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-md! text-white placeholder:text-white/40 w-full ml-3  "
+          className="bg-transparent h-10 border-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0 text-md! text-title placeholder:text-subtitle-color w-full ml-3  "
         />
       </div>
 

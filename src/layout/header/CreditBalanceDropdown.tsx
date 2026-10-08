@@ -32,7 +32,7 @@ const CreditBalanceDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="h-10 px-3 rounded-md text-white/80 hover:text-white hover:bg-white/10 gap-2 inline-flex"
+          className="h-10 px-3 rounded-md text-title/80 hover:text-primary hover:bg-primary/10 gap-2 inline-flex"
         >
           {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span className="font-semibold text-xs">{t('credits')}: {availableCredits}</span>}
         </Button>

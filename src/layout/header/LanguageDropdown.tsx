@@ -99,7 +99,7 @@ const LanguageDropdown = () => {
         size="icon"
         className="rounded-[8px]  cursor-not-allowed h-9 w-9 sm:h-10 sm:w-10 "
       >
-        <Globe className="w-6 h-6 text-white/80" />
+        <Globe className="w-6 h-6 text-title/80" />
       </Button>
     )
   }
@@ -109,11 +109,11 @@ const LanguageDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex items-center p-0! gap-1.5 h-9 w-9 sm:h-10 sm:w-10 rounded-[8px] hover:bg-white/10 glass-button glass-header-card transition-all duration-300 group"
+          className="flex items-center p-0! gap-1.5 h-9 w-9 sm:h-10 sm:w-10 rounded-[8px] hover:bg-primary/10 glass-button glass-header-card transition-all duration-300 group"
         >
-          <div className="flex items-center justify-center text-white/80 transition-transform duration-200">
+          <div className="flex items-center justify-center text-title/80 group-hover:text-primary transition-transform duration-200">
             <span className="text-[16px] leading-none">
-              {currentLanguage ? getLanguageIcon(currentLanguage) : <Globe className="w-5 h-5 text-white/80" />}
+              {currentLanguage ? getLanguageIcon(currentLanguage) : <Globe className="w-5 h-5" />}
             </span>
           </div>
         </Button>
