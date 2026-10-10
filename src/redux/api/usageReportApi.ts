@@ -1,4 +1,4 @@
-import { UsageReport } from '@/types/usageReport'
+import { CreditCost, UsageReport } from '@/types/usageReport'
 import { baseApi } from './baseApi'
 
 export const usageReportApi = baseApi.injectEndpoints({
@@ -7,7 +7,10 @@ export const usageReportApi = baseApi.injectEndpoints({
     getUsageReport: builder.query<UsageReport, { from: string; to: string }>({
       query: (params) => ({ url: '/usage-report', params }),
     }),
+    getCreditCost: builder.query<CreditCost, void>({
+      query: () => '/usage-report/credit-cost',
+    }),
   }),
 })
 
-export const { useGetUsageReportQuery } = usageReportApi
+export const { useGetUsageReportQuery, useGetCreditCostQuery } = usageReportApi

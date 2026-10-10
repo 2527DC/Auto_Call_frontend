@@ -30,3 +30,42 @@ export interface UsageReport {
   clients: UsageReportClient[]
   totals: Omit<UsageReportClient, 'user' | 'plan' | 'usage'>
 }
+
+export interface VoiceCreditCost {
+  provider: 'deepgram' | 'sarvam_ai' | 'elevenlabs'
+  credits_per_minute: number
+  estimated_cost_per_credit: number
+  measured_calls: number
+  measured_cost_per_credit: number | null
+  cost_per_credit: number
+}
+
+export interface MessageCreditCost {
+  credits_per_message: number
+  cost_per_message: number
+  cost_per_credit: number
+}
+
+export interface PlanCreditPrice {
+  id: string
+  name: string
+  amount: number
+  total_credits: number
+  plan_type: string
+  billing_cycle: string
+  visibility: 'public' | 'private'
+  price_per_credit: number
+  margin_percent: number | null
+}
+
+export interface CreditCost {
+  success: boolean
+  deduction_type: 'per_minute' | 'per_call'
+  measure_days: number
+  min_measured_calls: number
+  voices: VoiceCreditCost[]
+  sms: MessageCreditCost | null
+  whatsapp: MessageCreditCost | null
+  cost_per_credit: number
+  plans: PlanCreditPrice[]
+}

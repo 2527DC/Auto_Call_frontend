@@ -8,6 +8,7 @@ import { currencies, limitFields, switchFields } from '@/data/setting'
 import { PlanBasicFieldsProps } from '@/types/plans'
 import { useTranslation } from 'react-i18next'
 import PlanClientPicker from './PlanClientPicker'
+import PlanCreditMath from './PlanCreditMath'
 
 const PlanBasicFields = ({ formData, onChange }: PlanBasicFieldsProps) => {
   const { t } = useTranslation()
@@ -187,6 +188,7 @@ const PlanBasicFields = ({ formData, onChange }: PlanBasicFieldsProps) => {
           className="h-10 rounded-lg border-input-border-color focus-visible:ring-primary/20 bg-input-color"
         />
         <p className="text-xs text-muted-foreground">{t('total_credits_hint')}</p>
+        <PlanCreditMath amount={formData.amount} credits={formData.total_credits} />
       </div>
 
       {formData.plan_type !== 'top_up' && limitFields(t).map(({ key, label }) => (

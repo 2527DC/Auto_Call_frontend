@@ -407,7 +407,7 @@ export const sidebarMenuData: MenuSection[] = [
         label: 'Cost & Profit',
         icon: 'trendingUp',
         path: ROUTES.COST_REPORT,
-        requiredPermission: PERMISSIONS.VIEW_TRANSACTIONS,
+        requiredRole: "admin",
       },
       {
         id: 'payment-gateway',

@@ -4,7 +4,7 @@ import { DataTable } from '@/components/reusable/DataTable'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CURRENCY_SYMBOL } from '@/lib/currency'
+import { formatMoney as money } from '@/lib/currency'
 import { cn } from '@/lib/utils'
 import { useGetUsageReportQuery } from '@/redux/api/usageReportApi'
 import { Column } from '@/types/table'
@@ -12,8 +12,9 @@ import { UsageReportClient } from '@/types/usageReport'
 import { IndianRupee, Percent, TrendingDown, TrendingUp } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import CreditCostCard from './CreditCostCard'
 
-const money = (n: number) => `${CURRENCY_SYMBOL}${n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+const compact = new Intl.NumberFormat('en-IN', { notation: 'compact', maximumFractionDigits: 1 }).format
 const isoDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
 // Per client: what they used, what it cost you, what their credits earned and the profit.
@@ -55,12 +56,15 @@ const UsageReportPage = () => {
     },
     {
       header: t('usage', 'Usage'),
-      className: 'min-w-[170px]',
+      className: 'min-w-[200px]',
       cell: (row) => (
         <div className="text-xs text-subtitle-color space-y-0.5">
           <div><span className="font-semibold text-title">{row.calls}</span> {t('calls', 'calls')} · {row.minutes} {t('min', 'min')}</div>
           {(row.sms > 0 || row.whatsapp > 0) && <div>{row.sms} SMS · {row.whatsapp} WhatsApp</div>}
           <div>{row.credits_used} {t('credits_used', 'credits used')}</div>
+          {(row.usage.llm_tokens > 0 || row.usage.tts_characters > 0 || row.usage.stt_minutes > 0) && (
+            <div>AI {compact(row.usage.llm_tokens)} {t('tokens', 'tokens')} · {t('voice', 'Voice')} {compact(row.usage.tts_characters)} {t('chars', 'chars')} · STT {row.usage.stt_minutes} {t('min', 'min')}</div>
+          )}
         </div>
       ),
     },
@@ -126,6 +130,8 @@ const UsageReportPage = () => {
           </div>
         ))}
       </div>
+
+      <CreditCostCard />
 
       <DataTable
         columns={columns}
