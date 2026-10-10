@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { AdminDashboardProps } from '@/types/dashboard'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
@@ -54,7 +55,7 @@ export function AdminDashboard({ stats }: AdminDashboardProps) {
     },
     yaxis: {
       labels: {
-        formatter: (val: number) => `$${val}`,
+        formatter: (val: number) => `${CURRENCY_SYMBOL}${val}`,
         style: {
           colors: '#64748b',
           fontSize: '11px',

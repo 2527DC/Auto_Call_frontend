@@ -1,7 +1,8 @@
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { ROUTES } from '@/constants/routes';
 import { useAppSelector } from '@/redux/hooks';
 import { WelcomeAndCountersProps } from '@/types/dashboard';
-import { Contact2, DollarSign, GitBranch, PhoneCall, UserPlus, Users } from 'lucide-react';
+import { Contact2, IndianRupee, GitBranch, PhoneCall, UserPlus, Users } from 'lucide-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StatsCard } from './StatsCard';
@@ -32,10 +33,10 @@ export const WelcomeAndCounters: React.FC<WelcomeAndCountersProps> = ({ statisti
           title={t('total_revenue')}
           value={statistics.totalRevenue || 0}
           description={t('all_time_earnings')}
-          icon={DollarSign}
+          icon={IndianRupee}
           colorClass="from-primary/10 to-primary/10 text-primary border-primary/20"
           glowClass="shadow-primary/5 hover:border-primary/30"
-          prefix="$"
+          prefix={CURRENCY_SYMBOL}
           href={ROUTES.TRANSACTIONS}
         />
 

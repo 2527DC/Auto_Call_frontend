@@ -13,7 +13,7 @@ import { useGetLandingPageQuery, useUpdateLandingPageMutation } from '@/redux/ap
 import { useGetActivePlansQuery } from '@/redux/api/planApi'
 import { useGetActiveTestimonialsQuery } from '@/redux/api/testimonialApi'
 import { Form, Formik } from 'formik'
-import { BookOpen, DollarSign, Footprints, GitCompare, HelpCircle, Layers, Layout, MessageSquare, Phone, Rocket, Save, Wand2 } from 'lucide-react';
+import { BookOpen, IndianRupee, Footprints, GitCompare, HelpCircle, Layers, Layout, MessageSquare, Phone, Rocket, Save, Wand2 } from 'lucide-react';
 import { Loader2 } from '@/components/reusable/Loader2';
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -106,7 +106,7 @@ export default function LandingPageSetup() {
     { id: 'automate', title: t('Automate'), desc: t("marquee_cards"), icon: Wand2 },
     { id: 'addons', title: t('Addons'), desc: t("additional_tools"), icon: PlusSquare },
     { id: 'human_transfer', title: t('Human Transfer'), desc: t("handoff_settings"), icon: UserCheck },
-    { id: 'pricing', title: t('Pricing & Plans'), desc: t("choose_active_plans"), icon: DollarSign },
+    { id: 'pricing', title: t('Pricing & Plans'), desc: t("choose_active_plans"), icon: IndianRupee },
     { id: 'blog', title: t('Blog Settings'), desc: t("insights_and_articles"), icon: BookOpen },
     { id: 'testimonials', title: t('Customer Stories'), desc: t("user_feedback"), icon: MessageSquare },
     { id: 'faq', title: t('FAQ Settings'), desc: t("common_q_a"), icon: HelpCircle },

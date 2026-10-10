@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { TableLayout } from '@/components/reusable/TableLayout'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -140,7 +141,7 @@ export default function PurchaseRequestsPage() {
       cell: (row) => (
         <div className="flex flex-col min-w-0">
           <span className="font-bold text-base text-title">{(row.phone_number_id as any)?.phone_number}</span>
-          <span className="text-md text-primary font-bold">${row.amount?.toFixed(2)}</span>
+          <span className="text-md text-primary font-bold">{CURRENCY_SYMBOL}{row.amount?.toFixed(2)}</span>
         </div>
       ),
     },

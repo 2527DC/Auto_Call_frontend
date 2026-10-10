@@ -99,7 +99,7 @@ const PaymentModal = ({ isOpen, onClose, plan, billingCycle, activeSubscription,
       key,
       [isOneTime ? 'order_id' : 'subscription_id']: orderId,
       amount: isOneTime ? Math.round((plan?.amount || 0) * 100) : undefined,
-      currency: plan?.currency || 'USD',
+      currency: plan?.currency || 'INR',
       name: 'Smart AI Content Generation Suite',
       description: isOneTime ? `${t('payment_for')} ${plan?.name}` : `${t('subscription_for')} ${plan?.name}`,
       handler: async (response: any) => {

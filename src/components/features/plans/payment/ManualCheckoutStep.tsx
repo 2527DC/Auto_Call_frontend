@@ -1,11 +1,11 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { ImageDropzone } from '@/components/shared/ImageDropzone'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textArea'
-import { currencySymbols } from '@/data/plan'
 import { useCreateManualSubscriptionMutation } from '@/redux/api/subscriptionApi'
 import { ManualCheckoutStepProps } from '@/types/plans'
 import { Landmark, Loader2 } from 'lucide-react'
@@ -26,7 +26,7 @@ const ManualCheckoutStep = ({ plan, onComplete, onBack }: ManualCheckoutStepProp
   })
   const [receiptFile, setReceiptFile] = useState<File | null>(null)
 
-  const symbol = currencySymbols[plan?.currency || 'USD'] || (plan?.currency || '$')
+  const symbol = CURRENCY_SYMBOL
   const amount = plan?.amount || 0
 
   const handleSubmit = async (e: React.FormEvent) => {

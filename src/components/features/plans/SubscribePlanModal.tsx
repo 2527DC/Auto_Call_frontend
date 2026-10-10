@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
@@ -145,7 +146,7 @@ const SubscribePlanModal: React.FC<SubscribePlanModalProps> = ({
                   </p>
                 </div>
                 <p className="text-2xl font-black text-foreground">
-                  {plan.currency === 'INR' ? '₹' : plan.currency === 'EUR' ? '€' : plan.currency === 'GBP' ? '£' : '$'}
+                  {CURRENCY_SYMBOL}
                   {totalAmount.toFixed(2)}
                 </p>
               </div>
@@ -165,14 +166,14 @@ const SubscribePlanModal: React.FC<SubscribePlanModalProps> = ({
                 <div className="flex items-center justify-between text-muted-foreground">
                   <span>{t('price_per_user')}</span>
                   <span className="font-semibold text-foreground">
-                    {plan.currency === 'INR' ? '₹' : plan.currency === 'EUR' ? '€' : plan.currency === 'GBP' ? '£' : '$'}
+                    {CURRENCY_SYMBOL}
                     {pricePerUserPerMonth.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between border-t border-border pt-2 mt-2">
                   <span className="font-bold text-foreground">{t('total_amount')}</span>
                   <span className="font-bold text-foreground">
-                    {plan.currency === 'INR' ? '₹' : plan.currency === 'EUR' ? '€' : plan.currency === 'GBP' ? '£' : '$'}
+                    {CURRENCY_SYMBOL}
                     {totalAmount.toFixed(2)}
                   </span>
                 </div>

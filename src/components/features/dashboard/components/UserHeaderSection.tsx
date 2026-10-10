@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/routes'
 import { UserHeaderSectionProps } from '@/types/dashboard'
@@ -121,7 +122,7 @@ export function UserHeaderSection({
                     </div>
                   </div>
                   <span className="text-sm font-bold text-subtitle-color">
-                    ${(() => {
+                    {CURRENCY_SYMBOL}{(() => {
                       const planAmount = sub.plan?.amount ?? sub.plan?.price ?? (sub.plan_id as any)?.amount ?? (sub.plan_id as any)?.price ?? 0;
                       const amountPaid = sub.payment_gateway === 'manual'
                         ? (sub.amount_paid || sub.amount || planAmount || 0)

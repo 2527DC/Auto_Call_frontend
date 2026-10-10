@@ -8,7 +8,7 @@ export interface Plan {
   slug: string;
   description: string | null;
   price?: number;
-  currency: 'USD' | 'INR' | 'EUR' | 'GBP';
+  currency: 'INR';
   billing_cycle: 'free_trial' | 'monthly' | 'yearly' | 'lifetime' | 'both';
   trial_days: number;
   trial_period_days?: number;

@@ -78,7 +78,7 @@ const PlanBasicFields = ({ formData, onChange }: PlanBasicFieldsProps) => {
 
       <div className="space-y-2 flex flex-col">
         <Label className="text-md font-medium text-foreground">{t('currency')}</Label>
-        <Select value={formData.currency || 'USD'} onValueChange={(val: any) => onChange('currency', val)}>
+        <Select value={formData.currency || 'INR'} onValueChange={(val: any) => onChange('currency', val)}>
           <SelectTrigger className="h-10 rounded-lg border-input-border-color shadow-none">
             <SelectValue placeholder={t('select_currency')} />
           </SelectTrigger>

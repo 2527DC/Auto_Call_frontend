@@ -17,7 +17,7 @@ const DEFAULT_FORM: Partial<Plan> = {
   billing_cycle: 'monthly',
   plan_type: 'subscription',
   amount: 0,
-  currency: 'USD',
+  currency: 'INR',
   module_access: [],
   validity_days: null,
   status: 'active',

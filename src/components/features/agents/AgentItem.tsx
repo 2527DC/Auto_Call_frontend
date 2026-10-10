@@ -1,3 +1,4 @@
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { RadialProgressChart } from '@/components/reusable/charts/RadialProgressChart'
 import { SparklineChart } from '@/components/reusable/charts/SparklineChart'
 import { DataViewCard } from '@/components/reusable/data-view'
@@ -234,7 +235,7 @@ export function AgentItem({
 
         <div className="flex flex-col bg-subcard rounded-lg p-3 border border-input-border-color">
           <span className="text-md font-medium text-title mb-1 break-all whitespace-normal line-clamp-1">{t('credits_used')}</span>
-          <span className="text-lg font-bold text-title mb-2">${(analytics.total_credits / 100).toFixed(2)}</span>
+          <span className="text-lg font-bold text-title mb-2">{CURRENCY_SYMBOL}{(analytics.total_credits / 100).toFixed(2)}</span>
           <ProgressBar value={((analytics.total_credits / 100) / 100) * 100} className="mt-auto" height={6} />
         </div>
       </div>
@@ -292,7 +293,7 @@ export function AgentItem({
           <span className="text-md font-medium text-muted-foreground">{t('credits_used')}</span>
         </div>
         <div className='flex gap-3 mb-1.5'>
-          <span className="text-base font-bold text-title">${(analytics.total_credits / 100).toFixed(2)}</span>
+          <span className="text-base font-bold text-title">{CURRENCY_SYMBOL}{(analytics.total_credits / 100).toFixed(2)}</span>
         </div>
         <ProgressBar value={((analytics.total_credits / 100) / 100) * 100} className="mt-1" />
       </div>

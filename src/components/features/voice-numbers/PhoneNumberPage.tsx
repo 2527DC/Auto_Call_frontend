@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { DeleteConfirmationModal } from '@/components/reusable/DeleteConfirmationModal'
 import { TableLayout } from '@/components/reusable/TableLayout'
 import { Badge } from '@/components/ui/badge'
@@ -23,7 +24,7 @@ import {
   Bot,
   CheckCircle2,
   CloudDownload,
-  DollarSign,
+  IndianRupee,
   Phone,
   RefreshCw,
   Server,
@@ -327,7 +328,7 @@ const PhoneNumberPage = () => {
       sortable: true,
       cell: (row) => (
         <div className="font-bold text-sm text-title">
-          {row.purchase_price ? `$${row.purchase_price.toFixed(2)}` : '-'}
+          {row.purchase_price ? `${CURRENCY_SYMBOL}${row.purchase_price.toFixed(2)}` : '-'}
         </div>
       ),
     },
@@ -360,7 +361,7 @@ const PhoneNumberPage = () => {
               className="h-9 w-9 rounded-lg text-amber-600 bg-amber-600/10 font-bold text-xs hover:bg-amber-600 hover:text-white"
               title={t('assign_price', 'Assign Price')}
             >
-              <DollarSign className="h-4 w-4" />
+              <IndianRupee className="h-4 w-4" />
             </Button>
           )}
           {canUpdatePhone && (

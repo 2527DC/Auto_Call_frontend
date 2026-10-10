@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { CopyEmailCell } from '@/components/reusable/CopyEmailCell'
 import { TableLayout } from '@/components/reusable/TableLayout'
 import { Badge } from '@/components/ui/badge'
@@ -176,7 +177,7 @@ const AdminSubscriptions = () => {
       sortKey: 'amount_paid',
       cell: (row: Subscription) => (
         <div className="font-medium text-sm text-title/60 whitespace-nowrap">
-          {row.currency || 'USD'} {row.amount_paid || 0}
+          {CURRENCY_SYMBOL}{row.amount_paid || 0}
         </div>
       ),
     },

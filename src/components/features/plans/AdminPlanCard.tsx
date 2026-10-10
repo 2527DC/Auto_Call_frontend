@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { BookOpen, Bot, Brain, Calendar, Check, Crown, FileText, Gem, Gift, HardDrive, Megaphone, MessageSquare, Network, Pencil, Send, Sparkles, Star, Trash2, Users } from 'lucide-react'
@@ -20,7 +21,7 @@ const AdminPlanCard = ({
 }: any) => {
   const { t } = useTranslation()
 
-  const currencySymbol = plan.currency === 'INR' ? '₹' : plan.currency === 'EUR' ? '€' : plan.currency === 'GBP' ? '£' : '$'
+  const currencySymbol = CURRENCY_SYMBOL
   const billingCycle = plan.billing_cycle || 'monthly'
   const formattedCycle = billingCycle === 'yearly' ? 'Year' : billingCycle === 'monthly' ? 'Month' : billingCycle
 

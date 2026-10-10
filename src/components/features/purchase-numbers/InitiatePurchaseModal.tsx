@@ -1,3 +1,4 @@
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -54,7 +55,7 @@ export default function InitiatePurchaseModal({
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-md font-semibold text-subtitle-color break-all whitespace-normal line-clamp-1">{t('price', 'Price')}</span>
-                <span className="text-sm font-black text-primary">${phoneNumber.purchase_price?.toFixed(2) || '0.00'}</span>
+                <span className="text-sm font-black text-primary">{CURRENCY_SYMBOL}{phoneNumber.purchase_price?.toFixed(2) || '0.00'}</span>
               </div>
               <div className="flex justify-between items-center mt-2 pt-2 border-t border-input-border-color">
                 <span className="text-md font-semibold text-subtitle-color break-all whitespace-normal line-clamp-1">{t('validity', 'Validity')}</span>

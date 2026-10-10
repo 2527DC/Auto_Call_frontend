@@ -1,3 +1,4 @@
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -123,7 +124,7 @@ export default function VerifyRequestModal({
               <div>
                 <span className="text-md font-semibold text-title">{t('phone_number', 'Phone Number')}</span>
                 <p className="font-semibold text-title dark:text-white">{(request.phone_number_id as any)?.phone_number}</p>
-                <p className="text-md text-primary font-semibold">${request.amount?.toFixed(2)}</p>
+                <p className="text-md text-primary font-semibold">{CURRENCY_SYMBOL}{request.amount?.toFixed(2)}</p>
               </div>
             </div>
           )}

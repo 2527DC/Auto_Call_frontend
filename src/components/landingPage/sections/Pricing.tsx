@@ -1,5 +1,6 @@
 "use client";
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from "@/components/ui/button";
 import { PricingProps } from "@/types/landing";
 import { Check, Crown, Gem, Gift, ShieldCheck, Sparkles } from "lucide-react";
@@ -145,7 +146,7 @@ export function Pricing({ pricingSection, plansData }: PricingProps) {
 
                         {/* Pricing Display */}
                         <div className="mb-6 flex items-baseline gap-1">
-                          <span className="text-4xl font-extrabold text-title tracking-tight">{plan.slug.includes("enterprise") ? "Custom" : `$${displayAmount}`}</span>
+                          <span className="text-4xl font-extrabold text-title tracking-tight">{plan.slug.includes("enterprise") ? "Custom" : `${CURRENCY_SYMBOL}${displayAmount}`}</span>
                           {!plan.slug.includes("enterprise") && <span className="text-[13px] font-semibold text-subtitle-color">/ month</span>}
                         </div>
 

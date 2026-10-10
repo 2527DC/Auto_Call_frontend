@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -42,7 +43,7 @@ const PlanCard = ({ plan, index, billingCycle, isCurrent, onSubscribe }: PlanCar
 
       <div className="flex items-baseline gap-1 mb-8">
         <span className="text-4xl font-black tracking-tight">
-          {plan.currency === 'INR' ? '₹' : plan.currency === 'EUR' ? '€' : plan.currency === 'GBP' ? '£' : '$'}
+          {CURRENCY_SYMBOL}
           {price}
         </span>
         <span className="text-muted-foreground font-medium">/{billingCycle === 'monthly' ? t('mo') : t('yr')}</span>

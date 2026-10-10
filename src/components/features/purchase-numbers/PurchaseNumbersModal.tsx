@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import Spinner from '@/components/reusable/Spinner'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -80,7 +81,7 @@ export default function PurchaseNumbersModal({ isOpen, onClose }: PurchaseNumber
                     <div className="flex flex-col gap-1">
                       <span className="font-bold text-lg text-title leading-none break-all whitespace-normal line-clamp-1">{row.phone_number}</span>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-black text-primary break-all whitespace-normal line-clamp-1">${row.purchase_price?.toFixed(2) || '0.00'}</span>
+                        <span className="font-black text-primary break-all whitespace-normal line-clamp-1">{CURRENCY_SYMBOL}{row.purchase_price?.toFixed(2) || '0.00'}</span>
                         <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/10">
                           {row.validity_days ? `${row.validity_days} ${t('days', 'Days')}` : t('lifetime', 'Lifetime')}
                         </span>

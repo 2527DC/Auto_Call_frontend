@@ -143,10 +143,7 @@ export const limitFields = (t: any) => [
 ]
 
 export const currencies = (t: any) => [
-  { value: 'USD', label: t('usd') },
   { value: 'INR', label: t('inr') },
-  { value: 'EUR', label: t('eur') },
-  { value: 'GBP', label: t('gbp') },
 ]
 
 export const switchFields = (t: any) => [

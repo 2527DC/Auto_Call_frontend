@@ -15,7 +15,7 @@ const DEFAULT_FORM: Partial<Plan> = {
   description: '',
   billing_cycle: 'monthly',
   amount: 0,
-  currency: 'USD',
+  currency: 'INR',
   is_active: true,
 
   is_popular: false,

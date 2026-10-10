@@ -31,13 +31,6 @@ export const gatewayFields = [
   },
 ]
 
-export const currencySymbols: Record<string, string> = {
-  USD: '$',
-  INR: '₹',
-  EUR: '€',
-  GBP: '£',
-}
-
 export const gateways: GatewayConfig[] = [
   {
     id: 'stripe',

@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Column, DataTable } from '@/components/reusable/DataTable'
 import { Button } from '@/components/ui/button'
 import { subscription_history_filters } from '@/data/subscription'
@@ -38,7 +39,7 @@ const SubscriptionHistory = ({
       header: t('amount'),
       accessorKey: 'amount',
       className: 'font-semibold text-foreground whitespace-nowrap min-w-[100px]',
-      cell: (row) => `$${row.amount.toFixed(2)}`,
+      cell: (row) => `${CURRENCY_SYMBOL}${row.amount.toFixed(2)}`,
     },
     {
       header: t('status'),

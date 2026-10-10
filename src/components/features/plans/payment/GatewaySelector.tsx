@@ -1,7 +1,8 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
-import { currencySymbols, gateways } from '@/data/plan'
+import { gateways } from '@/data/plan'
 import { cn } from '@/lib/utils'
 import { Gateway, GatewaySelectorProps } from '@/types/plans'
 import { CheckCircle2 } from 'lucide-react';
@@ -22,14 +23,10 @@ const GatewaySelector = ({
   const isOneTime = plan?.plan_type === 'prepaid' || plan?.plan_type === 'lifetime' || billingCycle === 'one-time'
   const price = plan?.amount || 0
 
-  const symbol = currencySymbols[plan?.currency || 'USD'] || (plan?.currency || '$')
+  const symbol = CURRENCY_SYMBOL
 
-  const availableGateways = gateways.filter((g) => {
-    if (g.id === 'manual') return true;
-    if (plan?.currency === 'INR') return g.id === 'stripe' || g.id === 'razorpay'
-    if (plan?.currency === 'USD') return g.id === 'stripe' || g.id === 'paypal'
-    return true
-  })
+  // Plans are priced in INR, which PayPal does not take here.
+  const availableGateways = gateways.filter((g) => g.id === 'manual' || g.id === 'stripe' || g.id === 'razorpay')
 
   const activeGateway = availableGateways.find((g) => g.id === selectedGateway) || availableGateways[0]
 

@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { CopyEmailCell } from '@/components/reusable/CopyEmailCell'
 import { TableLayout } from '@/components/reusable/TableLayout'
 import { Badge } from '@/components/ui/badge'
@@ -101,7 +102,7 @@ const AdminPayments = () => {
       className: 'xl1580:min-w-[160px] min-w-[100px]',
       cell: (row: any) => (
         <div className="font-bold text-sm whitespace-nowrap">
-          {row.currency === 'INR' ? '₹' : '$'}
+          {CURRENCY_SYMBOL}
           {row.total_amount || row.amount}
         </div>
       ),

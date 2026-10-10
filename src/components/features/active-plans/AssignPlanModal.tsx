@@ -1,5 +1,6 @@
 'use client'
 
+import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Loader2 } from '@/components/reusable/Loader2'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -136,7 +137,7 @@ const AssignPlanModal = ({ isOpen, onClose, editingSubscription }: AssignPlanMod
                       </div>
                       <div className="text-right">
                         <span className="text-sm font-bold text-primary">
-                          {plan.currency || "USD"} {plan.amount}
+                          {CURRENCY_SYMBOL}{plan.amount}
                         </span>
                       </div>
                     </div>
