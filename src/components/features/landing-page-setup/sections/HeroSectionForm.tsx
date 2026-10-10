@@ -38,7 +38,7 @@ export const HeroSectionForm: React.FC<HeroSectionFormProps> = ({ t }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           <TextInput name="hero.cta_primary_text" label={t("primary_cta_button_text")} placeholder="Let's Talk" />
           <TextInput name="hero.cta_secondary_text" label={t("secondary_cta_button_text")} placeholder={t('view_documentation')} />
-          <TextInput name="hero.cta_secondary_link" label={t("secondary_cta_button_link")} placeholder="https://docs.pixelstrap.net/autocall" />
+          <TextInput name="hero.cta_secondary_link" label={t("secondary_cta_button_link")} placeholder="https://example.com/docs" />
         </div>
         <TextInput name="hero.image" label={t("hero_image_url")} placeholder={t('e.g. /uploads/landing-page/hero-image.png')} />
         <ImageDropzone

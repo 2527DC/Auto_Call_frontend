@@ -73,9 +73,9 @@ export function Hero({ heroData }: HeroProps) {
               {heroData.content?.cta_text || "Let's Talk"}
               <ArrowUpRight className="w-4 h-4" />
             </motion.a>
-            {heroData.content?.docs_text && (
+            {heroData.content?.docs_text && heroData.content?.cta_secondary_link && (
               < motion.a
-                href={heroData.content?.cta_secondary_link || "https://docs.pixelstrap.net/autocall"}
+                href={heroData.content.cta_secondary_link}
                 target="_blank"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
