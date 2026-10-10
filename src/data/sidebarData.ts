@@ -400,7 +400,7 @@ export const sidebarMenuData: MenuSection[] = [
         label: 'transaction',
         icon: 'receipt',
         path: ROUTES.TRANSACTIONS,
-        requiredPermission: PERMISSIONS.VIEW_TRANSACTIONS,
+        requiredRole: "admin",
       },
       {
         id: 'cost-report',

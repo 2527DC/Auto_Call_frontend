@@ -11,6 +11,8 @@ export interface UsageCost {
 export interface UsageReportClient {
   user: { id: string; name: string; email: string; is_admin: boolean }
   plan: { name: string; price_per_credit: number } | null
+  credits_left: number | null
+  paid: number
   calls: number
   minutes: number
   credits_used: number
@@ -28,7 +30,7 @@ export interface UsageReport {
   from: string
   to: string
   clients: UsageReportClient[]
-  totals: Omit<UsageReportClient, 'user' | 'plan' | 'usage'>
+  totals: Omit<UsageReportClient, 'user' | 'plan' | 'usage' | 'credits_left'>
 }
 
 export interface VoiceCreditCost {

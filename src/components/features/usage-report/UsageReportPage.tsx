@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import { useGetUsageReportQuery } from '@/redux/api/usageReportApi'
 import { Column } from '@/types/table'
 import { UsageReportClient } from '@/types/usageReport'
-import { IndianRupee, Percent, TrendingDown, TrendingUp } from 'lucide-react'
+import { IndianRupee, Percent, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import CreditCostCard from './CreditCostCard'
@@ -27,6 +27,7 @@ const UsageReportPage = () => {
   const totals = data?.totals
 
   const cards = [
+    { label: t('payments_received', 'Payments received'), value: totals ? money(totals.paid) : '—', icon: Wallet, tone: 'text-indigo-600' },
     { label: t('revenue', 'Revenue'), value: totals ? money(totals.revenue) : '—', icon: IndianRupee, tone: 'text-primary' },
     { label: t('provider_cost', 'Provider cost'), value: totals ? money(totals.cost.total) : '—', icon: TrendingDown, tone: 'text-amber-600' },
     { label: t('profit', 'Profit'), value: totals ? money(totals.profit) : '—', icon: TrendingUp, tone: totals && totals.profit < 0 ? 'text-destructive' : 'text-emerald-600' },
@@ -50,9 +51,18 @@ const UsageReportPage = () => {
     {
       header: t('plan', 'Plan'),
       className: 'min-w-[130px]',
-      cell: (row) => row.plan
-        ? <div className="flex flex-col"><span className="font-medium">{row.plan.name}</span><span className="text-xs text-subtitle-color">{money(row.plan.price_per_credit)} / {t('credit', 'credit')}</span></div>
-        : <span className="text-xs text-subtitle-color">{t('no_plan', 'No plan')}</span>,
+      cell: (row) => (
+        <div className="flex flex-col">
+          {row.plan
+            ? <><span className="font-medium">{row.plan.name}</span><span className="text-xs text-subtitle-color">{money(row.plan.price_per_credit)} / {t('credit', 'credit')}</span></>
+            : <span className="text-xs text-subtitle-color">{t('no_plan', 'No plan')}</span>}
+          {row.credits_left !== null && (
+            <span className={cn('text-xs', row.credits_left <= 0 ? 'text-destructive' : 'text-subtitle-color')}>
+              {row.credits_left.toLocaleString('en-IN')} {t('credits_left', 'credits left')}
+            </span>
+          )}
+        </div>
+      ),
     },
     {
       header: t('usage', 'Usage'),
@@ -71,7 +81,12 @@ const UsageReportPage = () => {
     {
       header: t('revenue', 'Revenue'),
       className: 'min-w-[110px]',
-      cell: (row) => <span className="font-semibold">{money(row.revenue)}</span>,
+      cell: (row) => (
+        <div className="flex flex-col">
+          <span className="font-semibold">{money(row.revenue)}</span>
+          {!row.user.is_admin && <span className="text-xs text-subtitle-color">{money(row.paid)} {t('paid_lower', 'paid')}</span>}
+        </div>
+      ),
     },
     {
       header: t('provider_cost', 'Provider cost'),
@@ -119,7 +134,7 @@ const UsageReportPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {cards.map((card) => (
           <div key={card.label} className="p-4 rounded-lg border border-input-border-color bg-bg-card">
             <div className="flex items-center gap-2 text-sm text-subtitle-color">
@@ -141,7 +156,7 @@ const UsageReportPage = () => {
       />
 
       <p className="text-xs text-subtitle-color">
-        {t('cost_report_note', 'Revenue is credits used × the client\'s plan price per credit. Costs use the provider rates in Settings → Credits. Speech, voice and AI usage per call is recorded from 10 Oct 2026 onwards; WhatsApp and ElevenLabs SIP calls only count phone minutes.')}
+        {t('cost_report_note', 'Every client with a plan is listed, even with no usage. Payments received are plan purchases and top-ups paid in this period; revenue is what their used credits earned (credits used × the plan\'s price per credit). Costs use the provider rates in Settings → Credits. Speech, voice and AI usage per call is recorded from 10 Oct 2026 onwards; WhatsApp and ElevenLabs SIP calls only count phone minutes.')}
       </p>
     </div>
   )
