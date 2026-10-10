@@ -42,8 +42,18 @@ export interface Plan {
   features?: Record<string, unknown>;
   validity_days?: number | null;
   status?: 'active' | 'inactive';
+  visibility?: 'public' | 'private';
+  // Ids from the form, or populated users when an admin loads the plan.
+  allowed_user_ids?: Array<string | PlanClient>;
   created_at: string;
   updated_at: string;
+}
+
+// A client a private plan is offered to.
+export interface PlanClient {
+  _id: string;
+  name?: string;
+  email?: string;
 }
 
 export interface PlanResponse {

@@ -1,5 +1,6 @@
 'use client'
 
+import PrivatePlanBadge from './components/PrivatePlanBadge'
 import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -171,6 +172,7 @@ const AdminPlanCard = ({
         <div className="flex justify-between items-start mb-6 mt-1">
           <div className="pr-4">
             <h3 className="text-xl font-bold text-title tracking-tight break-all line-clamp-1">{plan.name}</h3>
+            <PrivatePlanBadge plan={plan} admin />
             {plan.description ? (
               <p className="text-md text-subtitle-color mt-1.5 line-clamp-2 break-all whitespace-normal">{plan.description}</p>
             ) : (
@@ -289,6 +291,7 @@ const AdminPlanCard = ({
             <h3 className="text-2xl font-bold text-title tracking-tight break-all whitespace-normal line-clamp-2">
               {plan.name}
             </h3>
+            <PrivatePlanBadge plan={plan} admin />
             <p className="text-md text-subtitle-color mt-1 line-clamp-2">
               {plan.description || t('plan_description_fallback')}
             </p>
@@ -383,6 +386,7 @@ const AdminPlanCard = ({
       {/* Title & Description */}
       <div className="mb-4">
         <h3 className="text-2xl font-bold text-title tracking-tight break-all whitespace-normal line-clamp-2">{plan.name}</h3>
+        <PrivatePlanBadge plan={plan} admin />
         <p className="text-md text-subtitle-color mt-1 line-clamp-2">{plan.description || t("plan_description_fallback")}</p>
       </div>
 

@@ -27,6 +27,8 @@ const DEFAULT_FORM: Partial<Plan> = {
   knowledgebase_limit: 0,
   storage_limit: 0,
   contact_limit: 0,
+  visibility: 'public',
+  allowed_user_ids: [],
 }
 
 const PlanForm = ({ plan, onSave, isLoading = false }: PlanFormProps) => {
@@ -39,7 +41,9 @@ const PlanForm = ({ plan, onSave, isLoading = false }: PlanFormProps) => {
   })
 
   const handleSubmit = async (values: Partial<Plan>) => {
-    await onSave(values)
+    // The form keeps client names for display; the API only needs their ids.
+    const allowed_user_ids = (values.allowed_user_ids || []).map((c) => (typeof c === 'string' ? c : c._id))
+    await onSave({ ...values, allowed_user_ids })
   }
 
   return (

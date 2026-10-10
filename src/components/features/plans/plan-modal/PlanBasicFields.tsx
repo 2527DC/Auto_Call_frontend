@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch'
 import { currencies, limitFields, switchFields } from '@/data/setting'
 import { PlanBasicFieldsProps } from '@/types/plans'
 import { useTranslation } from 'react-i18next'
+import PlanClientPicker from './PlanClientPicker'
 
 const PlanBasicFields = ({ formData, onChange }: PlanBasicFieldsProps) => {
   const { t } = useTranslation()
@@ -228,6 +229,28 @@ const PlanBasicFields = ({ formData, onChange }: PlanBasicFieldsProps) => {
           />
         </div>
       ))}
+
+      <div className="sm:col-span-2 space-y-4 p-4 rounded-lg bg-card-color border border-input-border-color">
+        <div className="flex items-center justify-between gap-4">
+          <div className="space-y-0.5">
+            <Label className="font-bold">{t('private_plan', 'Private plan')}</Label>
+            <p className="text-md text-subtitle-color">
+              {t('private_plan_desc', 'Hidden from the public and the landing page. Only the clients you add can see and buy it.')}
+            </p>
+          </div>
+          <Switch
+            checked={formData.visibility === 'private'}
+            onCheckedChange={(val: boolean) => onChange('visibility', val ? 'private' : 'public')}
+          />
+        </div>
+
+        {formData.visibility === 'private' && (
+          <PlanClientPicker
+            value={(formData.allowed_user_ids || []).map((c) => (typeof c === 'string' ? { _id: c } : c))}
+            onChange={(clients) => onChange('allowed_user_ids', clients)}
+          />
+        )}
+      </div>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import PrivatePlanBadge from './PrivatePlanBadge'
 import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -179,6 +180,7 @@ export const PlanCard = ({
         <div className="flex justify-between items-start mb-6 mt-1">
           <div className="pr-4">
             <h3 className="text-xl font-bold text-title tracking-tight break-all line-clamp-1">{plan.name}</h3>
+            <PrivatePlanBadge plan={plan} />
             {plan.description ? (
               <p className="text-md text-subtitle-color mt-1.5 line-clamp-2 break-all whitespace-normal">{plan.description}</p>
             ) : (
@@ -313,6 +315,7 @@ export const PlanCard = ({
             <h3 className="text-2xl font-bold text-title tracking-tight break-all whitespace-normal line-clamp-2">
               {plan.name}
             </h3>
+            <PrivatePlanBadge plan={plan} />
             <p className="text-md text-subtitle-color mt-1 line-clamp-2  ">
               {plan.description || translate('plan_description_fallback', { defaultValue: 'Unlock powerful features to accelerate your workflow.' })}
             </p>
@@ -430,6 +433,7 @@ export const PlanCard = ({
       {/* Title & Description */}
       <div className="mb-4">
         <h3 className="text-2xl font-bold text-title tracking-tight break-all whitespace-normal line-clamp-2">{plan.name}</h3>
+        <PrivatePlanBadge plan={plan} />
         <p className="text-md text-subtitle-color mt-1 line-clamp-2">{plan.description || translate("plan_description_fallback", { defaultValue: "Unlock powerful features to accelerate your workflow." })}</p>
       </div>
 

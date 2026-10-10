@@ -77,7 +77,10 @@ export default function LandingPageSetup() {
   // Map option arrays for selects
   const planOptions = useMemo(() => {
     if (!plansData?.data) return []
-    return plansData.data.map((p: any) => ({ label: p.name, value: p.id }))
+    // Private plans are for specific clients and never go on the public landing page.
+    return plansData.data
+      .filter((p: any) => p.visibility !== 'private')
+      .map((p: any) => ({ label: p.name, value: p.id }))
   }, [plansData])
 
   const blogOptions = useMemo(() => {
