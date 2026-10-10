@@ -8,7 +8,6 @@ import {
   Send,
   Sparkles,
   RotateCcw,
-  ChevronDown,
   Layers,
   ArrowUpRight,
   BookOpen,
@@ -139,12 +138,12 @@ export const FloatingAssistantBot: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-full bg-primary text-primary-foreground shadow-2xl hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all duration-200 group border border-primary-foreground/20"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-full bg-primary text-white shadow-2xl hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all duration-200 group border border-white/20"
           aria-label="Open AI Assistant Guide"
         >
           <div className="relative flex items-center justify-center">
             <Bot className="w-5 h-5 transition-transform group-hover:rotate-12" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2 ring-background animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2 ring-white animate-pulse" />
           </div>
           <span className="font-semibold text-xs tracking-wide">
             {config?.bot_name || 'AI Guide'}
@@ -158,24 +157,25 @@ export const FloatingAssistantBot: React.FC = () => {
           className={cn(
             'fixed bottom-6 right-6 z-50 flex flex-col',
             'w-[420px] max-w-[calc(100vw-32px)] h-[620px] max-h-[calc(100vh-80px)]',
-            'bg-card text-card-foreground border rounded-2xl shadow-2xl',
-            'overflow-hidden transition-all duration-300 animate-in fade-in zoom-in-95'
+            'bg-white dark:bg-[#120724] text-title dark:text-[#f5f3ff]',
+            'border border-input-border-color dark:border-white/10 rounded-2xl shadow-2xl',
+            'overflow-hidden transition-all duration-300'
           )}
         >
           {/* HEADER */}
-          <div className="flex items-center justify-between px-4 py-3.5 bg-muted/50 border-b shrink-0">
+          <div className="flex items-center justify-between px-4 py-3.5 bg-slate-50 dark:bg-[#19092B] border-b border-input-border-color dark:border-white/10 shrink-0">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
                 <Bot className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h3 className="font-bold text-sm tracking-tight">
+                  <h3 className="font-bold text-sm tracking-tight text-title dark:text-[#f5f3ff]">
                     {config?.bot_name || 'Voxeno Assistant'}
                   </h3>
                   <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
                 </div>
-                <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                <div className="flex items-center gap-1 text-[11px] text-subtitle-color dark:text-[#c4b5fd]">
                   <Layers className="w-3 h-3 text-primary" />
                   <span>{activeContext}</span>
                 </div>
@@ -186,7 +186,7 @@ export const FloatingAssistantBot: React.FC = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                className="h-8 w-8 text-subtitle-color hover:text-title hover:bg-slate-200/50 dark:hover:bg-white/10"
                 onClick={handleResetChat}
                 title="Restart conversation"
               >
@@ -195,7 +195,7 @@ export const FloatingAssistantBot: React.FC = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                className="h-8 w-8 text-subtitle-color hover:text-title hover:bg-slate-200/50 dark:hover:bg-white/10"
                 onClick={() => setIsOpen(false)}
                 title="Close Assistant"
               >
@@ -207,21 +207,21 @@ export const FloatingAssistantBot: React.FC = () => {
           {/* CHAT MESSAGES BODY */}
           <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-background/50"
+            className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-white dark:bg-[#120724]"
           >
             {/* WELCOME BANNER (IF NO MESSAGES) */}
             {messages.length === 0 && (
               <div className="space-y-4 py-2">
-                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-muted/60 border border-muted">
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-[#19092B] border border-input-border-color dark:border-white/10">
                   <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
                     <Sparkles className="w-4 h-4" />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-xs font-medium text-foreground leading-relaxed">
+                    <p className="text-xs font-medium text-title dark:text-[#f5f3ff] leading-relaxed">
                       {config?.welcome_message ||
                         'Hi there! I am your Voxeno guide. How can I help you build workflows, import contacts, configure nodes, or set up phone agents?'}
                     </p>
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-[10px] text-subtitle-color dark:text-[#c4b5fd]">
                       Ask any question about using the platform.
                     </p>
                   </div>
@@ -230,7 +230,7 @@ export const FloatingAssistantBot: React.FC = () => {
                 {/* SUGGESTED QUICK PROMPT CHIPS */}
                 {config?.suggested_prompts && config.suggested_prompts.length > 0 && (
                   <div className="space-y-2">
-                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider px-1">
+                    <p className="text-[11px] font-semibold text-subtitle-color dark:text-[#c4b5fd] uppercase tracking-wider px-1">
                       Quick Questions
                     </p>
                     <div className="flex flex-col gap-1.5">
@@ -239,10 +239,10 @@ export const FloatingAssistantBot: React.FC = () => {
                           key={idx}
                           type="button"
                           onClick={() => handleSend(prompt)}
-                          className="flex items-center justify-between text-left text-xs px-3 py-2 rounded-lg bg-card border hover:border-primary/50 hover:bg-muted/70 transition-colors text-foreground/90 group"
+                          className="flex items-center justify-between text-left text-xs px-3 py-2.5 rounded-lg bg-white dark:bg-[#19092B] border border-input-border-color dark:border-white/10 hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-[#240c3d] transition-colors text-title dark:text-[#f5f3ff] group shadow-xs"
                         >
                           <span className="line-clamp-1">{prompt}</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          <ArrowUpRight className="w-3.5 h-3.5 text-subtitle-color group-hover:text-primary shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </button>
                       ))}
                     </div>
@@ -262,10 +262,10 @@ export const FloatingAssistantBot: React.FC = () => {
               >
                 <div
                   className={cn(
-                    'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs',
+                    'max-w-[88%] rounded-2xl px-3.5 py-2.5 text-xs',
                     msg.role === 'user'
-                      ? 'bg-primary text-primary-foreground rounded-br-xs'
-                      : 'bg-card border shadow-xs rounded-bl-xs'
+                      ? 'bg-primary text-white rounded-br-xs shadow-xs'
+                      : 'bg-slate-50 dark:bg-[#19092B] text-title dark:text-[#f5f3ff] border border-input-border-color dark:border-white/10 shadow-sm rounded-bl-xs'
                   )}
                 >
                   {msg.role === 'user' ? (
@@ -274,11 +274,14 @@ export const FloatingAssistantBot: React.FC = () => {
                     <div>
                       <MarkdownRenderer content={msg.content} />
                       {msg.sources && msg.sources.length > 0 && (
-                        <div className="mt-2 pt-2 border-t border-border/50 flex flex-wrap items-center gap-1 text-[10px] text-muted-foreground">
+                        <div className="mt-2 pt-2 border-t border-input-border-color dark:border-white/10 flex flex-wrap items-center gap-1 text-[10px] text-subtitle-color dark:text-[#c4b5fd]">
                           <BookOpen className="w-3 h-3 text-primary inline" />
                           <span>Sources:</span>
                           {msg.sources.map((src, i) => (
-                            <span key={i} className="bg-muted px-1.5 py-0.5 rounded font-medium text-foreground">
+                            <span
+                              key={i}
+                              className="bg-slate-200/60 dark:bg-white/10 px-1.5 py-0.5 rounded font-medium text-title dark:text-[#f5f3ff]"
+                            >
                               {src}
                             </span>
                           ))}
@@ -287,7 +290,7 @@ export const FloatingAssistantBot: React.FC = () => {
                     </div>
                   )}
                 </div>
-                <span className="text-[9px] text-muted-foreground mt-1 px-1">
+                <span className="text-[9px] text-subtitle-color dark:text-[#c4b5fd] mt-1 px-1">
                   {msg.timestamp}
                 </span>
               </div>
@@ -295,7 +298,7 @@ export const FloatingAssistantBot: React.FC = () => {
 
             {/* TYPING INDICATOR */}
             {isSending && (
-              <div className="flex items-center gap-2 text-xs text-muted-foreground bg-card border rounded-2xl px-3 py-2 w-fit">
+              <div className="flex items-center gap-2 text-xs text-subtitle-color dark:text-[#c4b5fd] bg-slate-50 dark:bg-[#19092B] border border-input-border-color dark:border-white/10 rounded-2xl px-3 py-2 w-fit">
                 <Bot className="w-3.5 h-3.5 text-primary animate-spin" />
                 <span className="text-[11px]">Consulting system knowledge...</span>
               </div>
@@ -303,8 +306,8 @@ export const FloatingAssistantBot: React.FC = () => {
           </div>
 
           {/* INPUT BAR FOOTER */}
-          <div className="p-3 bg-muted/30 border-t shrink-0">
-            <div className="relative flex items-center bg-card rounded-xl border focus-within:border-primary/60 focus-within:ring-1 focus-within:ring-primary/20 transition-all">
+          <div className="p-3 bg-slate-50 dark:bg-[#19092B] border-t border-input-border-color dark:border-white/10 shrink-0">
+            <div className="relative flex items-center bg-white dark:bg-[#120724] rounded-xl border border-input-border-color dark:border-white/10 focus-within:border-primary/60 focus-within:ring-1 focus-within:ring-primary/20 transition-all shadow-xs">
               <textarea
                 ref={textareaRef}
                 rows={1}
@@ -312,7 +315,7 @@ export const FloatingAssistantBot: React.FC = () => {
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Ask how to use a feature or node..."
-                className="w-full resize-none bg-transparent px-3 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none max-h-24 custom-scrollbar"
+                className="w-full resize-none bg-transparent px-3 py-2.5 text-xs text-title dark:text-[#f5f3ff] placeholder:text-subtitle-color dark:placeholder:text-[#c4b5fd]/60 focus:outline-none max-h-24 custom-scrollbar"
                 disabled={isSending}
               />
               <Button
@@ -320,12 +323,12 @@ export const FloatingAssistantBot: React.FC = () => {
                 size="icon"
                 disabled={!inputMessage.trim() || isSending}
                 onClick={() => handleSend()}
-                className="h-7 w-7 rounded-lg mr-2 shrink-0"
+                className="h-7 w-7 rounded-lg mr-2 shrink-0 bg-primary hover:bg-primary/90 text-white"
               >
                 <Send className="w-3.5 h-3.5" />
               </Button>
             </div>
-            <div className="flex items-center justify-between text-[10px] text-muted-foreground px-1 mt-1.5">
+            <div className="flex items-center justify-between text-[10px] text-subtitle-color dark:text-[#c4b5fd] px-1 mt-1.5">
               <span>Enter to send · Shift+Enter for new line</span>
               <span className="text-primary font-medium">AutoCall Guide</span>
             </div>

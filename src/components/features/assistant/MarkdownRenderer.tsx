@@ -54,7 +54,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
       // Heading 3
       if (trimmed.startsWith('### ')) {
         return (
-          <h4 key={lineIdx} className="font-bold text-sm text-foreground mt-3 mb-1">
+          <h4 key={lineIdx} className="font-bold text-sm text-title dark:text-[#f5f3ff] mt-3 mb-1">
             {renderInlineMarkdown(trimmed.substring(4))}
           </h4>
         );
@@ -62,7 +62,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
       // Heading 2
       if (trimmed.startsWith('## ')) {
         return (
-          <h3 key={lineIdx} className="font-bold text-base text-foreground mt-3 mb-1.5 border-b pb-1">
+          <h3 key={lineIdx} className="font-bold text-base text-title dark:text-[#f5f3ff] mt-3 mb-1.5 border-b border-input-border-color dark:border-white/10 pb-1">
             {renderInlineMarkdown(trimmed.substring(3))}
           </h3>
         );
@@ -70,7 +70,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
       // Heading 1
       if (trimmed.startsWith('# ')) {
         return (
-          <h2 key={lineIdx} className="font-extrabold text-base text-foreground mt-4 mb-2">
+          <h2 key={lineIdx} className="font-extrabold text-base text-title dark:text-[#f5f3ff] mt-4 mb-2">
             {renderInlineMarkdown(trimmed.substring(2))}
           </h2>
         );
@@ -79,7 +79,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
       // Bullet List item
       if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
         return (
-          <li key={lineIdx} className="ml-4 list-disc text-xs text-foreground/90 my-0.5 leading-relaxed">
+          <li key={lineIdx} className="ml-4 list-disc text-xs text-slate-700 dark:text-[#c4b5fd] my-0.5 leading-relaxed">
             {renderInlineMarkdown(trimmed.substring(2))}
           </li>
         );
@@ -89,7 +89,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
       const numMatch = trimmed.match(/^(\d+)\.\s+(.*)/);
       if (numMatch) {
         return (
-          <div key={lineIdx} className="flex items-start gap-1.5 ml-1 text-xs text-foreground/90 my-1 leading-relaxed">
+          <div key={lineIdx} className="flex items-start gap-1.5 ml-1 text-xs text-slate-700 dark:text-[#c4b5fd] my-1 leading-relaxed">
             <span className="font-semibold text-primary shrink-0">{numMatch[1]}.</span>
             <span>{renderInlineMarkdown(numMatch[2])}</span>
           </div>
@@ -103,7 +103,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
 
       // Regular text paragraph
       return (
-        <p key={lineIdx} className="text-xs text-foreground/90 leading-relaxed my-1">
+        <p key={lineIdx} className="text-xs text-slate-700 dark:text-[#c4b5fd] leading-relaxed my-1">
           {renderInlineMarkdown(line)}
         </p>
       );
@@ -120,7 +120,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
         return (
           <code
             key={tokenIdx}
-            className="bg-muted text-primary px-1 py-0.5 rounded font-mono text-[11px] border"
+            className="bg-slate-200/70 dark:bg-white/10 text-primary px-1 py-0.5 rounded font-mono text-[11px] border border-input-border-color dark:border-white/10"
           >
             {token.slice(1, -1)}
           </code>
@@ -128,7 +128,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
       }
       if (token.startsWith('**') && token.endsWith('**') && token.length > 4) {
         return (
-          <strong key={tokenIdx} className="font-bold text-foreground">
+          <strong key={tokenIdx} className="font-bold text-title dark:text-[#f5f3ff]">
             {token.slice(2, -2)}
           </strong>
         );
@@ -144,7 +144,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
             href={linkMatch[2]}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-primary underline hover:text-primary/80"
+            className="text-primary underline hover:text-primary/80 font-medium"
           >
             {linkMatch[1]}
           </a>
