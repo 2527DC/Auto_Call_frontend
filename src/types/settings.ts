@@ -146,6 +146,21 @@ export interface CreditSettingsFormValues {
   credits_per_minute: number
   credits_per_sms: number
   free_credits_on_registration: number
+  credit_multiplier_deepgram: number
+  credit_multiplier_sarvam_ai: number
+  credit_multiplier_elevenlabs: number
+  credits_per_whatsapp_message: number
+  cost_telephony_per_minute: number
+  cost_stt_per_minute_deepgram: number
+  cost_stt_per_minute_sarvam_ai: number
+  cost_stt_per_minute_elevenlabs: number
+  cost_tts_per_1k_chars_deepgram: number
+  cost_tts_per_1k_chars_sarvam_ai: number
+  cost_tts_per_1k_chars_elevenlabs: number
+  cost_llm_input_per_1m_tokens: number
+  cost_llm_output_per_1m_tokens: number
+  cost_sms_per_message: number
+  cost_whatsapp_per_message: number
 }
 
 export interface SignupCustomizationFormValues {

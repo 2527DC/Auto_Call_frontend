@@ -37,6 +37,7 @@ import {
   ShieldAlert,
   ShieldCheck,
   ShoppingCart,
+  TrendingUp,
   SlidersHorizontal,
   Smartphone,
   Store,
@@ -92,7 +93,8 @@ export const iconMap = {
   mailOpen: MailOpen,
   store: Store,
   shoppingCart: ShoppingCart,
-  history: History
+  history: History,
+  trendingUp: TrendingUp
 };
 
 export const sidebarMenuData: MenuSection[] = [
@@ -398,6 +400,13 @@ export const sidebarMenuData: MenuSection[] = [
         label: 'transaction',
         icon: 'receipt',
         path: ROUTES.TRANSACTIONS,
+        requiredPermission: PERMISSIONS.VIEW_TRANSACTIONS,
+      },
+      {
+        id: 'cost-report',
+        label: 'Cost & Profit',
+        icon: 'trendingUp',
+        path: ROUTES.COST_REPORT,
         requiredPermission: PERMISSIONS.VIEW_TRANSACTIONS,
       },
       {

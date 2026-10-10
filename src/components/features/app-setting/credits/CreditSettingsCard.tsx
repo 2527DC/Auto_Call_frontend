@@ -46,6 +46,34 @@ const CreditSettingsCard = () => {
       color: 'text-emerald-500',
       alwaysVisible: true,
     },
+    {
+      name: 'credits_per_whatsapp_message',
+      label: 'Credits Per WhatsApp Message',
+      helper: 'Optional platform fee per WhatsApp message. Meta bills the client\'s own WhatsApp account, so 0 costs you nothing.',
+      color: 'text-green-600',
+      alwaysVisible: true,
+    },
+    {
+      name: 'credit_multiplier_deepgram',
+      label: 'Deepgram Voice Multiplier',
+      helper: 'Call credits are multiplied by this for agents using a Deepgram voice.',
+      color: 'text-orange-500',
+      alwaysVisible: true,
+    },
+    {
+      name: 'credit_multiplier_sarvam_ai',
+      label: 'Sarvam Voice Multiplier',
+      helper: 'Call credits are multiplied by this for agents using a Sarvam voice.',
+      color: 'text-orange-500',
+      alwaysVisible: true,
+    },
+    {
+      name: 'credit_multiplier_elevenlabs',
+      label: 'ElevenLabs Voice Multiplier',
+      helper: 'ElevenLabs voices cost about 2.5× Deepgram, so calls use more credits.',
+      color: 'text-orange-500',
+      alwaysVisible: true,
+    },
   ] as const
   const visibleCreditFields = creditFields.filter((field) => {
     if (field.alwaysVisible) return true

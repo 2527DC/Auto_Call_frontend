@@ -11,6 +11,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import CreditSettingsCard from './credits/CreditSettingsCard'
+import ProviderCostsCard from './credits/ProviderCostsCard'
 
 const FormikStateConnector = ({
   setSaveState,
@@ -41,12 +42,28 @@ const CreditSettings = ({ setSaveState }: { setSaveState: (state: any) => void }
   const { data: settingsData, isLoading: isFetching } = useGetAdminSettingsQuery(undefined)
   const [updateSettings, { isLoading: isUpdating }] = useUpdateAdminSettingsMutation()
 
+  // Same defaults as the backend, for settings saved before these fields existed.
   const initialValues = {
-    credit_deduction_type: 'per_call',
+    credit_deduction_type: 'per_minute',
     credits_per_call: 1,
     credits_per_minute: 1,
     credits_per_sms: 1,
     free_credits_on_registration: 0,
+    credit_multiplier_deepgram: 1,
+    credit_multiplier_sarvam_ai: 1,
+    credit_multiplier_elevenlabs: 2,
+    credits_per_whatsapp_message: 0,
+    cost_telephony_per_minute: 0.38,
+    cost_stt_per_minute_deepgram: 0.42,
+    cost_stt_per_minute_sarvam_ai: 0.5,
+    cost_stt_per_minute_elevenlabs: 0.36,
+    cost_tts_per_1k_chars_deepgram: 1.46,
+    cost_tts_per_1k_chars_sarvam_ai: 3,
+    cost_tts_per_1k_chars_elevenlabs: 3.88,
+    cost_llm_input_per_1m_tokens: 14.55,
+    cost_llm_output_per_1m_tokens: 58.2,
+    cost_sms_per_message: 0,
+    cost_whatsapp_per_message: 0,
   }
 
   const onSubmit = async (values: typeof initialValues) => {
@@ -87,6 +104,7 @@ const CreditSettings = ({ setSaveState }: { setSaveState: (state: any) => void }
           />
           <div className="grid grid-cols-1 gap-6">
             <CreditSettingsCard />
+            <ProviderCostsCard />
           </div>
         </Form>
       )}
