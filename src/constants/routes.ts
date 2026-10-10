@@ -86,4 +86,5 @@ export const ROUTES = {
   PURCHASE_REQUESTS: "/purchase-requests",
   KYC_UPLOAD: "/kyc-upload",
   VIRTUAL_PHONE: "/virtual-phone",
+  SYSTEM_ASSISTANT_KNOWLEDGE: "/system-assistant-knowledge",
 };

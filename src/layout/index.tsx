@@ -15,6 +15,7 @@ import { sidebarMenuData } from '@/data/sidebarData'
 import { ROUTES } from '@/constants/routes'
 import DataLoader from '@/components/reusable/DataLoader'
 import { useGetProfileQuery, useGetTeamMemberProfileQuery } from '@/redux/api/authApi'
+import { FloatingAssistantBot } from '@/components/features/assistant/FloatingAssistantBot'
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -186,6 +187,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </div>
         </main>
       </div>
+
+      {/* In-App Floating AI Assistant Guide */}
+      <FloatingAssistantBot />
     </div>
   )
 }

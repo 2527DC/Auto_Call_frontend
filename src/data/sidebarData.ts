@@ -477,6 +477,13 @@ export const sidebarMenuData: MenuSection[] = [
         requiredPermission: PERMISSIONS.VIEW_TENANT_GUIDE,
         requiredRole: "admin",
       },
+      {
+        id: "system_assistant_knowledge",
+        label: "AI Guide Knowledge",
+        icon: "bot",
+        path: ROUTES.SYSTEM_ASSISTANT_KNOWLEDGE,
+        requiredRole: "admin",
+      },
     ],
   },
 ];
