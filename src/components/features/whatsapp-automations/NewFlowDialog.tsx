@@ -72,7 +72,7 @@ const NewFlowDialog = ({ open, onClose, templates }: { open: boolean; onClose: (
         </div>
         <DialogFooter>
           <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-          <Button type="button" onClick={submit} disabled={isLoading} className="gap-1.5">
+          <Button type="button" onClick={submit} disabled={isLoading} className="text-white gap-1.5">
             {isLoading && <Loader2 className="w-4 h-4 animate-spin" />} Create and open
           </Button>
         </DialogFooter>

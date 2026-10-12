@@ -88,7 +88,7 @@ const FlowList = ({ flows, onNew, loading }: { flows: WhatsappFlowSummary[]; onN
         <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary"><Workflow className="w-6 h-6" /></span>
         <h3 className="mt-4 text-lg font-semibold text-title">No automations yet</h3>
         <p className="mx-auto mt-1 max-w-md text-sm text-subtitle-color">Build a chatbot that greets customers, answers with buttons and menus, collects their details and books appointments on WhatsApp.</p>
-        {canCreate && <Button type="button" onClick={onNew} className="mt-5 gap-1.5"><Plus className="w-4 h-4" /> Create your first automation</Button>}
+        {canCreate && <Button type="button" onClick={onNew} className="text-white mt-5 gap-1.5"><Plus className="w-4 h-4" /> Create your first automation</Button>}
       </div>
     )
   }
@@ -184,7 +184,7 @@ const FlowList = ({ flows, onNew, loading }: { flows: WhatsappFlowSummary[]; onN
           </ul>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setBlocked(null)}>Close</Button>
-            <Button type="button" onClick={() => blocked && open(blocked.flow.id)}>Open builder</Button>
+            <Button className="text-white" type="button" onClick={() => blocked && open(blocked.flow.id)}>Open builder</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

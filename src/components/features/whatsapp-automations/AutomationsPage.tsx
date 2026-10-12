@@ -44,15 +44,15 @@ const AutomationsPage = () => {
           </p>
         </div>
         {tab === 'automations' && canCreate && (
-          <Button type="button" onClick={() => setCreating(true)} className="gap-1.5 shrink-0"><Plus className="w-4 h-4" /> New automation</Button>
+          <Button type="button" onClick={() => setCreating(true)} className="text-white gap-1.5 shrink-0"><Plus className="w-4 h-4" /> New automation</Button>
         )}
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList>
-          <TabsTrigger value="automations">Automations{flows.length ? ` (${flows.length})` : ''}</TabsTrigger>
-          <TabsTrigger value="ai">AI auto-reply</TabsTrigger>
-          <TabsTrigger value="help">How it works</TabsTrigger>
+          <TabsTrigger className="data-[state=active]:text-white" value="automations">Automations{flows.length ? ` (${flows.length})` : ''}</TabsTrigger>
+          <TabsTrigger className="data-[state=active]:text-white" value="ai">AI auto-reply</TabsTrigger>
+          <TabsTrigger className="data-[state=active]:text-white" value="help">How it works</TabsTrigger>
         </TabsList>
         <TabsContent value="automations" className="mt-6">
           <FlowList flows={flows} loading={isLoading} onNew={() => setCreating(true)} />

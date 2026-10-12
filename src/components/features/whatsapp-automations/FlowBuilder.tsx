@@ -264,8 +264,8 @@ const Editor = ({ flow, options, initialPanel }: { flow: WhatsappFlow; options?:
 
   return (
     <BuilderContext.Provider value={{ variables, options, errorsByNode, warningsByNode, activeNodeId, trigger: meta.trigger }}>
-      <div className="h-[calc(100dvh-99px)] min-h-[560px] flex flex-col rounded-lg overflow-hidden border border-input-border-color bg-bg-card">
-        <header className="flex flex-wrap items-center gap-3 border-b border-input-border-color px-3 py-2.5">
+      <div className="h-full min-h-[560px] flex flex-col overflow-hidden bg-bg-card">
+        <header className="flex flex-wrap items-center gap-3 border-b border-input-border-color pl-6 pr-3 py-2.5">
           <Button type="button" variant="ghost" size="icon" onClick={back} aria-label="Back to automations" className="bg-primary/10 text-primary hover:bg-primary/20">
             <ArrowLeft className="w-4 h-4" />
           </Button>
@@ -289,7 +289,7 @@ const Editor = ({ flow, options, initialPanel }: { flow: WhatsappFlow; options?:
             <Button type="button" variant="outline" onClick={() => save()} disabled={saving || !dirty} className="gap-1.5" title="Save (Ctrl/⌘ + S)">
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Save
             </Button>
-            <Button type="button" onClick={toggleLive} disabled={switching || saving} className={cn('gap-1.5', status === 'active' && 'bg-amber-500 hover:bg-amber-600 text-white')}>
+            <Button type="button" onClick={toggleLive} disabled={switching || saving} className={cn('text-white gap-1.5', status === 'active' && 'bg-amber-500 hover:bg-amber-600')}>
               {switching ? <Loader2 className="w-4 h-4 animate-spin" /> : status === 'active' ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
               {status === 'active' ? 'Pause' : 'Go live'}
             </Button>
@@ -406,8 +406,8 @@ const FlowBuilder = ({ id }: { id: string }) => {
     }
   }, [dispatch])
 
-  if (isLoading) return <div className="flex h-[60vh] items-center justify-center"><Spinner /></div>
-  if (isError || !data?.data) return <div className="p-10 text-center text-subtitle-color">This automation could not be found.</div>
+  if (isLoading) return <div className="flex h-full items-center justify-center bg-bg-card"><Spinner /></div>
+  if (isError || !data?.data) return <div className="h-full bg-bg-card p-10 text-center text-subtitle-color">This automation could not be found.</div>
 
   return (
     <ReactFlowProvider>

@@ -43,7 +43,7 @@ const SetupBanners = () => {
           <b className="block text-title">Connect a WhatsApp Business number to start</b>
           Connect it in Toolbox → WhatsApp, then set the webhook in your Meta app to <code className="rounded bg-input-color px-1 text-xs">{backend}{setup.webhook_path}</code>.
         </p>
-        <Button asChild size="sm" className="gap-1.5">
+        <Button asChild size="sm" className="text-white gap-1.5">
           <Link href={ROUTES.WHATSAPP_CONNECT}>Connect WhatsApp <ArrowUpRight /></Link>
         </Button>
       </div>
@@ -67,7 +67,7 @@ const SetupBanners = () => {
           <b className="block text-title">WhatsApp isn&apos;t sending new messages to Voxeno yet</b>
           Connect the webhook so customers&apos; messages arrive in this inbox.
         </p>
-        <Button type="button" size="sm" onClick={connect} disabled={isLoading} className="gap-1.5">
+        <Button type="button" size="sm" onClick={connect} disabled={isLoading} className="text-white gap-1.5">
           {isLoading ? <Loader2 className="animate-spin" /> : <Plug />} Connect webhook
         </Button>
       </div>

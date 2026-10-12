@@ -119,6 +119,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   const dispatch = useAppDispatch()
   const { isSidebarCollapsed } = useAppSelector((state) => state.layout)
+  const isFullScreenEditor = /^\/whatsapp-automations\/[^/]+$/.test(pathname)
 
   // Handle responsive sidebar
   useEffect(() => {
@@ -181,9 +182,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <Sidebar />
         </div>
 
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar p-4 sm:px-6 sm:pt-6 sm:pb-2 bg-bg-body">
-          <div>
+        {/* Main Content Area. Full-screen editors fill it edge to edge and scroll inside themselves. */}
+        <main className={cn(
+          'flex-1 overflow-x-hidden custom-scrollbar bg-bg-body',
+          isFullScreenEditor ? 'overflow-y-hidden' : 'overflow-y-auto p-4 sm:px-6 sm:pt-6 sm:pb-2'
+        )}>
+          <div className={cn(isFullScreenEditor && 'h-full')}>
             {children}
           </div>
         </main>

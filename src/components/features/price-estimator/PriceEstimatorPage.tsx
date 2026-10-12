@@ -181,7 +181,7 @@ const PriceEstimatorPage = () => {
             <Button className="gap-1.5" type="button" variant="outline" onClick={() => save(true)} disabled={saving}><CopyPlus className="w-4 h-4" /> Save as new</Button>
           )}
           {canManage && (
-            <Button className="gap-1.5" type="button" onClick={() => save()} disabled={saving}>
+            <Button className="text-white gap-1.5" type="button" onClick={() => save()} disabled={saving}>
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} {quoteId ? 'Save changes' : 'Save quote'}
             </Button>
           )}
@@ -190,9 +190,9 @@ const PriceEstimatorPage = () => {
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)}>
         <TabsList>
-          <TabsTrigger value="estimate">Estimate</TabsTrigger>
-          <TabsTrigger value="sheet">Price calculation</TabsTrigger>
-          <TabsTrigger value="quotes">Saved quotes{quoteList?.data?.length ? ` (${quoteList.data.length})` : ''}</TabsTrigger>
+          <TabsTrigger className="data-[state=active]:text-white" value="estimate">Estimate</TabsTrigger>
+          <TabsTrigger className="data-[state=active]:text-white" value="sheet">Price calculation</TabsTrigger>
+          <TabsTrigger className="data-[state=active]:text-white" value="quotes">Saved quotes{quoteList?.data?.length ? ` (${quoteList.data.length})` : ''}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="estimate" className="mt-6">

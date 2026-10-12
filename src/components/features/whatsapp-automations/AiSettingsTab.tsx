@@ -154,7 +154,7 @@ const AiForm = ({ initial, model }: { initial: Form; model: WaAiSettings['model'
           {canEdit && (
             <div className="flex items-center justify-end gap-3 border-t border-input-border-color px-5 py-3">
               {dirty && <span className="text-xs text-amber-600">Unsaved changes</span>}
-              <Button type="button" onClick={submit} disabled={isLoading || !dirty} className="gap-1.5">
+              <Button type="button" onClick={submit} disabled={isLoading || !dirty} className="text-white gap-1.5">
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Save
               </Button>
             </div>

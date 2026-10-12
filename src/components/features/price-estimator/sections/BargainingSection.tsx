@@ -149,7 +149,7 @@ const BargainingSection = ({ inputs, est, offers, onInputs, onOffers }: {
               <Label htmlFor="offer-note" className="text-xs font-semibold text-subtitle-color">Note</Label>
               <Input id="offer-note" value={note} onChange={(e) => setNote(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && submit()} placeholder="e.g. Competitor quoted lower" className="h-10 bg-input-color border-input-border-color text-sm" />
             </div>
-            <Button type="button" onClick={submit} disabled={amount === ''} className="gap-1.5 h-10">
+            <Button type="button" onClick={submit} disabled={amount === ''} className="text-white gap-1.5 h-10">
               <Plus className="w-4 h-4" /> Log offer
             </Button>
           </div>
@@ -188,7 +188,7 @@ const BargainingSection = ({ inputs, est, offers, onInputs, onOffers }: {
                     <span className="hidden sm:block text-xs tabular-nums">Profit <b className={profitAt(o.amount, est.monthlyCost, inputs) < 0 ? 'text-destructive' : 'text-emerald-600'}>{rupees(profitAt(o.amount, est.monthlyCost, inputs))}</b></span>
                     <span className={cn('hidden sm:inline-flex justify-self-start whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-semibold', v.pill)}>{pct(margin)} · {v.label}</span>
                     <span className="flex items-center gap-1 justify-self-end">
-                      <Button type="button" size="sm" variant={isAgreed ? 'default' : 'outline'} onClick={() => accept(isAgreed ? null : o.amount)} className="h-8 px-2.5 text-xs">
+                      <Button type="button" size="sm" variant={isAgreed ? 'default' : 'outline'} onClick={() => accept(isAgreed ? null : o.amount)} className={cn('h-8 px-2.5 text-xs', isAgreed && 'text-white')}>
                         <Check className="w-3.5 h-3.5" /> {isAgreed ? 'Agreed' : 'Accept'}
                       </Button>
                       <Button type="button" size="sm" variant="ghost" onClick={() => onOffers(offers.filter((_, j) => j !== i))} aria-label="Remove offer" className="h-8 w-8 p-0 text-subtitle-color hover:text-destructive">

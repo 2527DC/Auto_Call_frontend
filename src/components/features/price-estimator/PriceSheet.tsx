@@ -310,7 +310,7 @@ const PriceSheet = ({ client, inputs, est, quoteId, onInputs }: {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="outline" onClick={copy} className="gap-1.5"><Copy className="w-4 h-4" /> Copy as text</Button>
-          <Button type="button" onClick={print} className="gap-1.5"><Printer className="w-4 h-4" /> Print / Save PDF</Button>
+          <Button type="button" onClick={print} className="text-white gap-1.5"><Printer className="w-4 h-4" /> Print / Save PDF</Button>
         </div>
       </div>
       {showCosts && (

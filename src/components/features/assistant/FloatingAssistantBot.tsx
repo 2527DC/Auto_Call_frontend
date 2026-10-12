@@ -11,6 +11,7 @@ import {
   Layers,
   ArrowUpRight,
   BookOpen,
+  GripHorizontal,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MarkdownRenderer } from './MarkdownRenderer';
@@ -28,6 +29,153 @@ export const FloatingAssistantBot: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Floating Position & Drag States
+  const [buttonPos, setButtonPos] = useState<{ x: number; y: number } | null>(null);
+  const [chatPos, setChatPos] = useState<{ x: number; y: number } | null>(null);
+  const [isDraggingButton, setIsDraggingButton] = useState(false);
+  const [isDraggingChat, setIsDraggingChat] = useState(false);
+
+  const buttonDragRef = useRef<{
+    startX: number;
+    startY: number;
+    startPointerX: number;
+    startPointerY: number;
+  } | null>(null);
+  const buttonMovedRef = useRef(false);
+
+  const chatDragRef = useRef<{
+    startX: number;
+    startY: number;
+    startPointerX: number;
+    startPointerY: number;
+  } | null>(null);
+
+  const clampPosition = (pos: { x: number; y: number }, width: number, height: number, padding = 16) => {
+    if (typeof window === 'undefined') return pos;
+    const maxX = Math.max(padding, window.innerWidth - width - padding);
+    const maxY = Math.max(padding, window.innerHeight - height - padding);
+    return {
+      x: Math.min(Math.max(padding, pos.x), maxX),
+      y: Math.min(Math.max(padding, pos.y), maxY),
+    };
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setButtonPos((prev) => (prev ? clampPosition(prev, 140, 50) : null));
+      setChatPos((prev) => {
+        if (!prev) return null;
+        const chatW = Math.min(420, window.innerWidth - 32);
+        const chatH = Math.min(620, window.innerHeight - 80);
+        return clampPosition(prev, chatW, chatH);
+      });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleOpenChat = () => {
+    if (!chatPos && typeof window !== 'undefined') {
+      const chatW = Math.min(420, window.innerWidth - 32);
+      const chatH = Math.min(620, window.innerHeight - 80);
+      if (buttonPos) {
+        let targetX = buttonPos.x + 140 - chatW;
+        let targetY = buttonPos.y - chatH;
+        if (targetY < 16) targetY = buttonPos.y + 56;
+        setChatPos(clampPosition({ x: targetX, y: targetY }, chatW, chatH));
+      } else {
+        setChatPos({
+          x: Math.max(16, window.innerWidth - chatW - 24),
+          y: Math.max(16, window.innerHeight - chatH - 24),
+        });
+      }
+    }
+    setIsOpen(true);
+  };
+
+  const handleButtonPointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    buttonDragRef.current = {
+      startX: buttonPos?.x ?? rect.left,
+      startY: buttonPos?.y ?? rect.top,
+      startPointerX: e.clientX,
+      startPointerY: e.clientY,
+    };
+    buttonMovedRef.current = false;
+    setIsDraggingButton(true);
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch (_) {}
+  };
+
+  const handleButtonPointerMove = (e: React.PointerEvent) => {
+    if (!buttonDragRef.current) return;
+    const dx = e.clientX - buttonDragRef.current.startPointerX;
+    const dy = e.clientY - buttonDragRef.current.startPointerY;
+    if (Math.hypot(dx, dy) > 5) {
+      buttonMovedRef.current = true;
+    }
+    const newX = buttonDragRef.current.startX + dx;
+    const newY = buttonDragRef.current.startY + dy;
+    setButtonPos(clampPosition({ x: newX, y: newY }, 140, 50));
+  };
+
+  const handleButtonPointerUp = (e: React.PointerEvent) => {
+    if (!buttonDragRef.current) return;
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch (_) {}
+    const wasMoved = buttonMovedRef.current;
+    buttonDragRef.current = null;
+    setIsDraggingButton(false);
+    if (!wasMoved) {
+      handleOpenChat();
+    }
+  };
+
+  const handleChatPointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('input') || target.closest('textarea')) return;
+
+    const chatContainer = (e.currentTarget as HTMLElement).parentElement;
+    const rect = chatContainer ? chatContainer.getBoundingClientRect() : null;
+    const currentX = chatPos?.x ?? (rect ? rect.left : 0);
+    const currentY = chatPos?.y ?? (rect ? rect.top : 0);
+
+    chatDragRef.current = {
+      startX: currentX,
+      startY: currentY,
+      startPointerX: e.clientX,
+      startPointerY: e.clientY,
+    };
+    setIsDraggingChat(true);
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch (_) {}
+  };
+
+  const handleChatPointerMove = (e: React.PointerEvent) => {
+    if (!chatDragRef.current) return;
+    const dx = e.clientX - chatDragRef.current.startPointerX;
+    const dy = e.clientY - chatDragRef.current.startPointerY;
+    const chatW = Math.min(420, typeof window !== 'undefined' ? window.innerWidth - 32 : 420);
+    const chatH = Math.min(620, typeof window !== 'undefined' ? window.innerHeight - 80 : 620);
+    const newX = chatDragRef.current.startX + dx;
+    const newY = chatDragRef.current.startY + dy;
+    setChatPos(clampPosition({ x: newX, y: newY }, chatW, chatH));
+  };
+
+  const handleChatPointerUp = (e: React.PointerEvent) => {
+    if (!chatDragRef.current) return;
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch (_) {}
+    chatDragRef.current = null;
+    setIsDraggingChat(false);
+  };
 
   // Assistant Configuration
   const { data: configRes, isLoading: isLoadingConfig } = useGetAssistantConfigQuery();
@@ -134,12 +282,23 @@ export const FloatingAssistantBot: React.FC = () => {
 
   return (
     <>
-      {/* 1. FLOATING BUBBLE BUTTON */}
+      {/* 1. FLOATING BUBBLE BUTTON (DRAGGABLE) */}
       {!isOpen && (
         <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-full bg-primary text-white shadow-2xl hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all duration-200 group border border-white/20"
+          onPointerDown={handleButtonPointerDown}
+          onPointerMove={handleButtonPointerMove}
+          onPointerUp={handleButtonPointerUp}
+          style={buttonPos ? { left: `${buttonPos.x}px`, top: `${buttonPos.y}px` } : undefined}
+          className={cn(
+            'fixed z-50 flex items-center gap-2.5 px-4 py-3 rounded-full bg-primary text-white shadow-2xl',
+            'border border-white/20 select-none touch-none cursor-grab active:cursor-grabbing',
+            !buttonPos && 'bottom-6 right-6',
+            isDraggingButton
+              ? 'scale-105 shadow-primary/40 transition-none'
+              : 'hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all duration-200'
+          )}
           aria-label="Open AI Assistant Guide"
+          title="Drag to reposition anywhere · Click to open"
         >
           <div className="relative flex items-center justify-center">
             <Bot className="w-5 h-5 transition-transform group-hover:rotate-12" />
@@ -148,24 +307,37 @@ export const FloatingAssistantBot: React.FC = () => {
           <span className="font-semibold text-xs tracking-wide">
             {config?.bot_name || 'AI Guide'}
           </span>
+          <GripHorizontal className="w-3.5 h-3.5 opacity-60 ml-0.5" />
         </button>
       )}
 
-      {/* 2. CHAT DRAWER / WINDOW */}
+      {/* 2. CHAT DRAWER / WINDOW (DRAGGABLE) */}
       {isOpen && (
         <div
+          style={chatPos ? { left: `${chatPos.x}px`, top: `${chatPos.y}px` } : undefined}
           className={cn(
-            'fixed bottom-6 right-6 z-50 flex flex-col',
+            'fixed z-50 flex flex-col',
             'w-[420px] max-w-[calc(100vw-32px)] h-[620px] max-h-[calc(100vh-80px)]',
             'bg-white dark:bg-[#120724] text-title dark:text-[#f5f3ff]',
             'border border-input-border-color dark:border-white/10 rounded-2xl shadow-2xl',
-            'overflow-hidden transition-all duration-300'
+            'overflow-hidden',
+            !chatPos && 'bottom-6 right-6',
+            isDraggingChat
+              ? 'transition-none select-none shadow-primary/30 ring-2 ring-primary/40'
+              : 'transition-all duration-200'
           )}
         >
-          {/* HEADER */}
-          <div className="flex items-center justify-between px-4 py-3.5 bg-slate-50 dark:bg-[#19092B] border-b border-input-border-color dark:border-white/10 shrink-0">
+          {/* HEADER (DRAG HANDLE) */}
+          <div
+            onPointerDown={handleChatPointerDown}
+            onPointerMove={handleChatPointerMove}
+            onPointerUp={handleChatPointerUp}
+            onDoubleClick={() => setChatPos(null)}
+            title="Click and drag to move window anywhere (Double-click to reset to bottom-right)"
+            className="flex items-center justify-between px-4 py-3.5 bg-slate-50 dark:bg-[#19092B] border-b border-input-border-color dark:border-white/10 shrink-0 cursor-grab active:cursor-grabbing select-none touch-none group"
+          >
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
+              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shrink-0">
                 <Bot className="w-4 h-4" />
               </div>
               <div>
@@ -182,7 +354,13 @@ export const FloatingAssistantBot: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
+              <div
+                className="flex items-center px-1 py-0.5 rounded text-subtitle-color/50 group-hover:text-subtitle-color dark:text-[#c4b5fd]/50 dark:group-hover:text-[#c4b5fd] transition-colors"
+                title="Drag handle"
+              >
+                <GripHorizontal className="w-4 h-4" />
+              </div>
               <Button
                 variant="ghost"
                 size="icon"

@@ -125,7 +125,7 @@ const ThreadHeader = ({ conversation: c, canReply, canAssign, onBack, onTogglePa
               <RotateCcw /> <span className="hidden md:inline">Reopen</span>
             </Button>
           ) : (
-            <Button type="button" size="sm" onClick={() => changeStatus('resolved')} className="gap-1.5" aria-label="Resolve chat">
+            <Button type="button" size="sm" onClick={() => changeStatus('resolved')} className="text-white gap-1.5" aria-label="Resolve chat">
               <CheckCircle2 /> <span className="hidden md:inline">Resolve</span>
             </Button>
           ))}

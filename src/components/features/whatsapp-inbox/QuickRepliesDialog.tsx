@@ -48,7 +48,7 @@ const QuickRepliesDialog = ({ open, onClose }: { open: boolean; onClose: () => v
             <Textarea value={editing.text} onChange={(e) => setEditing({ ...editing, text: e.target.value })} placeholder="The message to insert" rows={5} maxLength={1024} className="text-sm" />
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
-              <Button type="button" onClick={submit} disabled={saving || !editing.title.trim() || !editing.text.trim()} className="gap-1.5">
+              <Button type="button" onClick={submit} disabled={saving || !editing.title.trim() || !editing.text.trim()} className="text-white gap-1.5">
                 {saving && <Loader2 className="animate-spin" />} Save
               </Button>
             </div>

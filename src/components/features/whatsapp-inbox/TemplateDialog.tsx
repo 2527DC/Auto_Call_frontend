@@ -136,7 +136,7 @@ const TemplateDialog = ({ open, onClose, conversationId, wabaId, customerName }:
             ))}
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={close}>Cancel</Button>
-              <Button type="button" onClick={submit} disabled={missing || sending} className="gap-1.5">
+              <Button type="button" onClick={submit} disabled={missing || sending} className="text-white gap-1.5">
                 {sending ? <Loader2 className="animate-spin" /> : <Send />} Send template
               </Button>
             </div>

@@ -151,7 +151,7 @@ const Composer = ({ conversationId, windowOpen, canReply, replyTo, onClearReply,
           </p>
           <div className="flex gap-2">
             <Button type="button" variant="outline" size="sm" onClick={() => setNote(true)} className="gap-1"><StickyNote /> Note</Button>
-            <Button type="button" size="sm" onClick={() => setShowTemplates(true)} className="gap-1"><ScrollText /> Send template</Button>
+            <Button type="button" size="sm" onClick={() => setShowTemplates(true)} className="text-white gap-1"><ScrollText /> Send template</Button>
           </div>
         </div>
       ) : (
@@ -218,7 +218,7 @@ const Composer = ({ conversationId, windowOpen, canReply, replyTo, onClearReply,
               aria-label={note ? 'Internal note' : 'Message'}
               className="max-h-40 min-h-9 flex-1 resize-none bg-transparent py-2 text-sm text-title outline-none placeholder:text-subtitle-color/70"
             />
-            <Button type="submit" size="icon" onClick={submit} disabled={sending || (!text.trim() && !(file && !note))} aria-label={note ? 'Save note' : 'Send'} className={cn('mb-0.5 rounded-full', note && 'bg-amber-500 hover:bg-amber-500/90')}>
+            <Button type="submit" size="icon" onClick={submit} disabled={sending || (!text.trim() && !(file && !note))} aria-label={note ? 'Save note' : 'Send'} className={cn('text-white mb-0.5 rounded-full', note && 'bg-amber-500 hover:bg-amber-500/90')}>
               {sending ? <Loader2 className="animate-spin" /> : note ? <StickyNote /> : <Send />}
             </Button>
           </div>
