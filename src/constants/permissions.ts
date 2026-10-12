@@ -69,6 +69,10 @@ export const PERMISSIONS = {
   // Payment History
   VIEW_PAYMENT_HISTORY: 'view.payment_history',
 
+  // Price Estimator
+  VIEW_PRICE_ESTIMATOR: 'view.price_estimator',
+  MANAGE_PRICE_ESTIMATOR: 'manage.price_estimator',
+
   // Testimonials
   VIEW_TESTIMONIALS: 'view.testimonials',
   CREATE_TESTIMONIALS: 'create.testimonials',

@@ -33,6 +33,7 @@ export const ROUTES = {
   PLANS: "/plans",
   TRANSACTIONS: "/transactions",
   COST_REPORT: "/cost-report",
+  PRICE_ESTIMATOR: "/price-estimator",
   PAYMENT_SETUP: "/payment-setup",
   CONTACT_HUB: "/contact-hub",
   CONTACT_GROUP: "/contact-group",

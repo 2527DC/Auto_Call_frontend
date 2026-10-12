@@ -8,6 +8,7 @@ import {
   BrainCircuit,
   Building2,
   Cable,
+  Calculator,
   CircleHelp,
   Contact,
   Cpu,
@@ -94,7 +95,8 @@ export const iconMap = {
   store: Store,
   shoppingCart: ShoppingCart,
   history: History,
-  trendingUp: TrendingUp
+  trendingUp: TrendingUp,
+  calculator: Calculator
 };
 
 export const sidebarMenuData: MenuSection[] = [
@@ -408,6 +410,13 @@ export const sidebarMenuData: MenuSection[] = [
         icon: 'trendingUp',
         path: ROUTES.COST_REPORT,
         requiredRole: "admin",
+      },
+      {
+        id: 'price-estimator',
+        label: 'Price Estimator',
+        icon: 'calculator',
+        path: ROUTES.PRICE_ESTIMATOR,
+        requiredPermission: PERMISSIONS.VIEW_PRICE_ESTIMATOR,
       },
       {
         id: 'payment-gateway',
