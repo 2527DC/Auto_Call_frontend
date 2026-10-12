@@ -330,7 +330,7 @@ export const FloatingAssistantBot: React.FC = () => {
             </div>
             <div className="flex items-center justify-between text-[10px] text-subtitle-color dark:text-[#c4b5fd] px-1 mt-1.5">
               <span>Enter to send · Shift+Enter for new line</span>
-              <span className="text-primary font-medium">AutoCall Guide</span>
+              <span className="text-primary font-medium"> Voxeno Guide</span>
             </div>
           </div>
         </div>

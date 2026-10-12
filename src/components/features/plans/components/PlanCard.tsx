@@ -16,6 +16,7 @@ export const PlanCard = ({
   plan,
   price,
   billingCycleLabel,
+  billingCycle,
   isPro,
   isActive,
   isDisabled,
@@ -32,7 +33,13 @@ export const PlanCard = ({
 
   const currencySymbol = CURRENCY_SYMBOL
 
-  const formattedCycle = billingCycleLabel === 'yr' ? 'Year' : billingCycleLabel === 'mo' ? 'Year' : billingCycleLabel
+  const cycle = billingCycleLabel || (billingCycle === 'yearly' ? 'yr' : billingCycle === 'monthly' ? 'mo' : billingCycle)
+  const formattedCycle =
+    cycle === 'yr' || cycle === 'yearly'
+      ? 'year'
+      : cycle === 'mo' || cycle === 'monthly'
+      ? 'month'
+      : cycle
 
   // Determine icon based on plan name/index
   const getPlanIcon = () => {
@@ -334,7 +341,7 @@ export const PlanCard = ({
                 </span>
                 {plan.plan_type !== 'top_up' && (
                   <span className="text-sm font-medium text-subtitle-color ml-1.5">
-                    /{formattedCycle}
+                    / {formattedCycle}
                   </span>
                 )}
               </>
@@ -448,7 +455,7 @@ export const PlanCard = ({
               {price}
             </span>
             {plan.plan_type !== 'top_up' && (
-              <span className="text-sm font-medium text-subtitle-color ml-1.5">/{formattedCycle}</span>
+              <span className="text-sm font-medium text-subtitle-color ml-1.5">/ {formattedCycle}</span>
             )}
           </>
         )}

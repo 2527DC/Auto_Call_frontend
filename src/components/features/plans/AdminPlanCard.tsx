@@ -24,7 +24,7 @@ const AdminPlanCard = ({
 
   const currencySymbol = CURRENCY_SYMBOL
   const billingCycle = plan.billing_cycle || 'monthly'
-  const formattedCycle = billingCycle === 'yearly' ? 'Year' : billingCycle === 'monthly' ? 'Month' : billingCycle
+  const formattedCycle = billingCycle === 'yearly' ? 'year' : billingCycle === 'monthly' ? 'month' : billingCycle
 
   const isActive = plan.status === 'active' || plan.is_active
 
@@ -308,7 +308,7 @@ const AdminPlanCard = ({
                 </span>
                 {plan.plan_type !== 'top_up' && (
                   <span className="text-sm font-medium text-subtitle-color ml-1.5">
-                    /{formattedCycle}
+                    / {formattedCycle}
                   </span>
                 )}
               </>
@@ -401,7 +401,7 @@ const AdminPlanCard = ({
               {plan.amount || plan.price}
             </span>
             {plan.plan_type !== 'top_up' && (
-              <span className="text-sm font-medium text-subtitle-color ml-1.5">/{formattedCycle}</span>
+              <span className="text-sm font-medium text-subtitle-color ml-1.5">/ {formattedCycle}</span>
             )}
           </>
         )}
