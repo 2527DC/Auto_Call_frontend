@@ -4,8 +4,9 @@ import {
   ProviderRates,
   QuoteSummary,
   RequirementAnswer,
-  UsageProfileKey,
+  UsageProfile,
   VoiceProvider,
+  VoiceUnitCosts,
 } from '@/types/priceEstimator'
 
 export const VOICE_LABELS: Record<VoiceProvider, string> = { deepgram: 'Deepgram', sarvam_ai: 'Sarvam AI', elevenlabs: 'ElevenLabs' }
@@ -47,8 +48,25 @@ export const DEFAULT_QUESTIONS: { group: string; question: string }[] = [
 
 export const defaultRequirements = (): RequirementAnswer[] => DEFAULT_QUESTIONS.map((q) => ({ question: q.question, answer: '' }))
 
+const n = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? Math.max(0, v) : 0)
+
+// What one minute of talk costs with this voice at the provider rates in Settings:
+// how long the caller speaks, how many characters the agent says and how many
+// tokens the AI model reads and writes in a minute.
+export const settingsUnitCosts = (rates: ProviderRates, provider: VoiceProvider, usage: UsageProfile): VoiceUnitCosts => ({
+  stt: (usage.stt_seconds / 60) * n(rates.stt_per_minute[provider]),
+  tts: (usage.tts_characters / 1000) * n(rates.tts_per_1k_chars[provider]),
+  llm: (usage.llm_input_tokens / 1e6) * n(rates.llm_input_per_1m_tokens) + (usage.llm_output_tokens / 1e6) * n(rates.llm_output_per_1m_tokens),
+})
+
+export const unitCostsFor = (inputs: EstimateInputs, data: EstimatorRates): VoiceUnitCosts =>
+  inputs.voice.unit_costs || settingsUnitCosts(inputs.rates || data.rates, inputs.voice.provider, data.usage_profiles.typical)
+
+// Plivo bills each call in 30-second steps.
+export const billedMinutesPerCall = (avgMinutes: number) => Math.ceil(n(avgMinutes) * 2) / 2
+
 export const defaultInputs = (rates: ProviderRates | null): EstimateInputs => ({
-  voice: { enabled: true, direction: 'outbound', calls_per_month: 3000, avg_minutes: 1, provider: 'deepgram', profile: 'typical', price_per_minute: 5 },
+  voice: { enabled: true, direction: 'outbound', calls_per_month: 3000, avg_minutes: 1, provider: 'deepgram', unit_costs: null, price_per_minute: 5 },
   numbers: { enabled: true, count: 1, price_per_number: 499 },
   sms: { enabled: false, messages_per_month: 1000, price_per_message: 0.5 },
   whatsapp: { enabled: false, messages_per_month: 1000, price_per_message: 0.5, client_pays_meta: true },
@@ -64,6 +82,7 @@ export const defaultInputs = (rates: ProviderRates | null): EstimateInputs => ({
     discount_percent: 0,
     agreed_price: null,
     gst_percent: 18,
+    interstate: false,
     gateway_fee_percent: 2,
     target_margin_percent: 60,
     min_margin_percent: 35,
@@ -73,11 +92,19 @@ export const defaultInputs = (rates: ProviderRates | null): EstimateInputs => ({
 })
 
 // Fills in anything a quote saved by an older version of the screen doesn't have.
-export const withDefaults = (saved: Partial<EstimateInputs> | undefined, rates: ProviderRates | null): EstimateInputs => {
-  const base = defaultInputs(rates)
+export const withDefaults = (saved: Partial<EstimateInputs> | undefined, data: EstimatorRates): EstimateInputs => {
+  const base = defaultInputs(data.rates)
   if (!saved) return base
+  const rates = saved.rates || data.rates
+  const voice = { ...base.voice, ...saved.voice }
+  voice.unit_costs = voice.unit_costs ?? null
+  // Older quotes picked a light / heavy talk profile; keep their cost as it was.
+  if (saved.voice && saved.voice.unit_costs === undefined && (saved.voice.profile === 'light' || saved.voice.profile === 'heavy')) {
+    voice.unit_costs = settingsUnitCosts(rates, voice.provider, data.usage_profiles[saved.voice.profile])
+  }
+  delete voice.profile
   return {
-    voice: { ...base.voice, ...saved.voice },
+    voice,
     numbers: { ...base.numbers, ...saved.numbers },
     sms: { ...base.sms, ...saved.sms },
     whatsapp: { ...base.whatsapp, ...saved.whatsapp },
@@ -86,14 +113,26 @@ export const withDefaults = (saved: Partial<EstimateInputs> | undefined, rates: 
     setup: { ...base.setup, ...saved.setup },
     overhead: { ...base.overhead, ...saved.overhead },
     pricing: { ...base.pricing, ...saved.pricing },
-    rates: saved.rates || rates,
+    rates,
   }
 }
 
-const n = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? Math.max(0, v) : 0)
+export type ModuleKey = 'voice' | 'numbers' | 'sms' | 'whatsapp' | 'platform' | 'overhead'
+
+// One row of the price calculation: quantity × rate = amount.
+export interface SheetItem {
+  key: string
+  module: ModuleKey
+  label: string
+  qty: number
+  unit: string
+  rate: number
+  amount: number
+  note?: string
+}
 
 export interface ModuleLine {
-  key: string
+  key: ModuleKey
   label: string
   detail: string
   cost: number
@@ -102,12 +141,17 @@ export interface ModuleLine {
 
 export interface Estimate {
   minutes: number
+  unitCosts: VoiceUnitCosts
+  priceItems: SheetItem[]
+  costItems: SheetItem[]
+  setupCostItems: SheetItem[]
   lines: ModuleLine[]
-  voiceCost: { telephony: number; stt: number; tts: number; llm: number; measured: number }
   costPerMinute: number
   listPrice: number
   discountedPrice: number
   dealPrice: number
+  adjustment: number
+  gatewayRate: number
   gatewayFee: number
   monthlyCost: number
   monthlyProfit: number
@@ -119,36 +163,23 @@ export interface Estimate {
   pricePerMinute: number | null
   setup: { fee: number; hours: number; cost: number; profit: number }
   contract: { months: number; value: number; profit: number; paybackMonths: number | null }
+  gst: { monthly: number; setup: number }
   invoice: { monthly: number; setup: number }
   credits: { total: number; pricePerCredit: number | null; costPerCredit: number | null }
   warnings: string[]
 }
 
-// Voice cost for a month at a given usage profile and volume.
-const voiceCost = (inputs: EstimateInputs, data: EstimatorRates, profileOverride?: UsageProfileKey, volumeFactor = 1) => {
-  const v = inputs.voice
-  const rates = inputs.rates || data.rates
-  const calls = n(v.calls_per_month) * volumeFactor
-  const minutes = calls * n(v.avg_minutes)
-  const empty = { telephony: 0, stt: 0, tts: 0, llm: 0, measured: 0 }
-  if (!v.enabled || minutes === 0) return { minutes: 0, ...empty }
-
-  const profile = profileOverride || v.profile
-  const measured = data.measured[v.provider]?.cost_per_minute
-  if (profile === 'measured' && measured != null) return { minutes, ...empty, measured: minutes * measured }
-
-  const usage = data.usage_profiles[profile === 'measured' ? 'typical' : profile]
-  // Plivo bills each call in 30-second steps.
-  const billedPerCall = Math.ceil(n(v.avg_minutes) * 2) / 2
-  return {
-    minutes,
-    telephony: calls * billedPerCall * n(rates.telephony_per_minute),
-    stt: minutes * (usage.stt_seconds / 60) * n(rates.stt_per_minute[v.provider]),
-    tts: minutes * (usage.tts_characters / 1000) * n(rates.tts_per_1k_chars[v.provider]),
-    llm: minutes * ((usage.llm_input_tokens / 1e6) * n(rates.llm_input_per_1m_tokens) + (usage.llm_output_tokens / 1e6) * n(rates.llm_output_per_1m_tokens)),
-    measured: 0,
-  }
+const MODULE_LABELS: Record<ModuleKey, string> = {
+  voice: 'AI voice calls',
+  numbers: 'Phone numbers',
+  sms: 'SMS',
+  whatsapp: 'WhatsApp messages',
+  platform: 'Platform & modules',
+  overhead: 'Server, support & other',
 }
+
+const item = (key: string, module: ModuleKey, label: string, qty: number, unit: string, rate: number, note?: string): SheetItem =>
+  ({ key, module, label, qty, unit, rate, amount: qty * rate, note })
 
 // Profit after the payment gateway's cut, which it takes on the GST-inclusive amount.
 export const profitAt = (price: number, monthlyCost: number, inputs: EstimateInputs) => {
@@ -159,77 +190,69 @@ export const profitAt = (price: number, monthlyCost: number, inputs: EstimateInp
 export const marginAt = (price: number, monthlyCost: number, inputs: EstimateInputs) =>
   price > 0 ? (profitAt(price, monthlyCost, inputs) / price) * 100 : null
 
-// Monthly profit if usage turns out different from the estimate, with the deal price unchanged.
-export const scenarioProfit = (inputs: EstimateInputs, data: EstimatorRates, est: Estimate, profile?: UsageProfileKey, volumeFactor = 1) => {
-  const base = voiceCost(inputs, data)
-  const alt = voiceCost(inputs, data, profile, volumeFactor)
-  const extraCost = (alt.telephony + alt.stt + alt.tts + alt.llm + alt.measured) - (base.telephony + base.stt + base.tts + base.llm + base.measured)
-  const cost = est.monthlyCost + extraCost
-  return { cost, profit: profitAt(est.dealPrice, cost, inputs), margin: marginAt(est.dealPrice, cost, inputs) }
-}
-
 export const estimate = (inputs: EstimateInputs, data: EstimatorRates): Estimate => {
   const rates = inputs.rates || data.rates
   const p = inputs.pricing
+  const v = inputs.voice
   const warnings: string[] = []
-  const lines: ModuleLine[] = []
+  const priceItems: SheetItem[] = []
+  const costItems: SheetItem[] = []
 
-  const vc = voiceCost(inputs, data)
-  const voiceTotal = vc.telephony + vc.stt + vc.tts + vc.llm + vc.measured
-  if (inputs.voice.enabled) {
-    lines.push({
-      key: 'voice',
-      label: 'AI voice calls',
-      detail: `${Math.round(vc.minutes).toLocaleString('en-IN')} min · ${VOICE_LABELS[inputs.voice.provider]}`,
-      cost: voiceTotal,
-      price: vc.minutes * n(inputs.voice.price_per_minute),
-    })
-    if (inputs.voice.profile === 'measured' && data.measured[inputs.voice.provider]?.cost_per_minute == null) {
-      warnings.push(`Not enough real ${VOICE_LABELS[inputs.voice.provider]} calls yet to measure cost; using the typical estimate.`)
-    }
+  const unitCosts = unitCostsFor(inputs, data)
+  const calls = v.enabled ? n(v.calls_per_month) : 0
+  const minutes = calls * n(v.avg_minutes)
+  if (v.enabled) {
+    const voice = VOICE_LABELS[v.provider]
+    priceItems.push(item('voice', 'voice', 'AI voice calls', minutes, 'min', n(v.price_per_minute)))
+    costItems.push(
+      item('telephony', 'voice', 'Phone line (Plivo, billed per 30 s)', calls * billedMinutesPerCall(v.avg_minutes), 'billed min', n(rates.telephony_per_minute)),
+      item('stt', 'voice', `Speech-to-text (${voice})`, minutes, 'min', n(unitCosts.stt)),
+      item('tts', 'voice', `AI voice (${voice})`, minutes, 'min', n(unitCosts.tts)),
+      item('llm', 'voice', 'AI model', minutes, 'min', n(unitCosts.llm)),
+    )
   }
 
   if (inputs.numbers.enabled) {
     const count = n(inputs.numbers.count)
-    lines.push({
-      key: 'numbers',
-      label: 'Phone numbers',
-      detail: `${count} × +91 number`,
-      cost: count * n(rates.number_rental_per_month),
-      price: count * n(inputs.numbers.price_per_number),
-    })
+    priceItems.push(item('numbers', 'numbers', 'Dedicated +91 phone number', count, 'number', n(inputs.numbers.price_per_number)))
+    costItems.push(item('numbers', 'numbers', 'Number rental (Plivo)', count, 'number', n(rates.number_rental_per_month)))
   }
 
   if (inputs.sms.enabled) {
     const msgs = n(inputs.sms.messages_per_month)
-    lines.push({ key: 'sms', label: 'SMS', detail: `${msgs.toLocaleString('en-IN')} messages`, cost: msgs * n(rates.sms_per_message), price: msgs * n(inputs.sms.price_per_message) })
+    priceItems.push(item('sms', 'sms', 'SMS', msgs, 'SMS', n(inputs.sms.price_per_message)))
+    costItems.push(item('sms', 'sms', 'SMS (provider + DLT)', msgs, 'SMS', n(rates.sms_per_message)))
     if (msgs > 0 && n(rates.sms_per_message) === 0) warnings.push('Your SMS cost is ₹0. Enter the real per-SMS rate (incl. DLT scrubbing) under "Provider rates" or SMS profit will look higher than it is.')
   }
 
   if (inputs.whatsapp.enabled) {
     const msgs = n(inputs.whatsapp.messages_per_month)
-    const cost = inputs.whatsapp.client_pays_meta ? 0 : msgs * n(rates.whatsapp_per_message)
-    lines.push({ key: 'whatsapp', label: 'WhatsApp messages', detail: `${msgs.toLocaleString('en-IN')} messages${inputs.whatsapp.client_pays_meta ? ' · client pays Meta' : ''}`, cost, price: msgs * n(inputs.whatsapp.price_per_message) })
-    if (!inputs.whatsapp.client_pays_meta && msgs > 0 && n(rates.whatsapp_per_message) === 0) warnings.push('Your WhatsApp cost is ₹0 but you pay Meta for this client. Enter Meta\'s per-message rate under "Provider rates".')
+    const clientPays = inputs.whatsapp.client_pays_meta
+    priceItems.push(item('whatsapp', 'whatsapp', 'WhatsApp messages', msgs, 'message', n(inputs.whatsapp.price_per_message)))
+    costItems.push(item('whatsapp', 'whatsapp', 'WhatsApp (Meta)', msgs, 'message', clientPays ? 0 : n(rates.whatsapp_per_message), clientPays ? 'Client pays Meta' : undefined))
+    if (!clientPays && msgs > 0 && n(rates.whatsapp_per_message) === 0) warnings.push('Your WhatsApp cost is ₹0 but you pay Meta for this client. Enter Meta\'s per-message rate under "Provider rates".')
   }
 
   const enabledAddons = ADDONS.filter((a) => inputs.addons[a.key]?.enabled)
-  const addonPrice = enabledAddons.reduce((s, a) => s + n(inputs.addons[a.key].monthly_price), 0)
-  const platformPrice = n(inputs.platform.monthly_fee) + addonPrice
-  if (platformPrice > 0 || enabledAddons.length > 0) {
-    lines.push({ key: 'platform', label: 'Platform & modules', detail: `${enabledAddons.length} modules`, cost: 0, price: platformPrice })
+  if (n(inputs.platform.monthly_fee) > 0) priceItems.push(item('platform', 'platform', 'Platform fee', 1, 'month', n(inputs.platform.monthly_fee)))
+  for (const a of enabledAddons) {
+    const price = n(inputs.addons[a.key].monthly_price)
+    priceItems.push(item(`addon-${a.key}`, 'platform', a.label, 1, 'month', price, price === 0 ? 'Included' : undefined))
   }
 
   const o = inputs.overhead
-  const overheadCost = n(o.server_share) + n(o.support_hours) * n(o.support_hourly_cost) + n(o.other)
-  lines.push({ key: 'overhead', label: 'Server, support & other', detail: `${n(o.support_hours)} h support / month`, cost: overheadCost, price: 0 })
+  if (n(o.server_share) > 0) costItems.push(item('server', 'overhead', 'Server & database share', 1, 'month', n(o.server_share)))
+  if (n(o.support_hours) > 0) costItems.push(item('support', 'overhead', 'Support', n(o.support_hours), 'h', n(o.support_hourly_cost)))
+  if (n(o.other) > 0) costItems.push(item('other', 'overhead', 'Other monthly costs', 1, 'month', n(o.other)))
 
-  const monthlyCost = lines.reduce((s, l) => s + l.cost, 0)
-  const listPrice = lines.reduce((s, l) => s + l.price, 0)
+  const sum = (items: SheetItem[]) => items.reduce((s, i) => s + i.amount, 0)
+  const monthlyCost = sum(costItems)
+  const listPrice = sum(priceItems)
   const discountedPrice = listPrice * (1 - Math.min(n(p.discount_percent), 100) / 100)
   const dealPrice = p.agreed_price != null && p.agreed_price >= 0 ? p.agreed_price : discountedPrice
 
-  const gatewayRate = (1 + n(p.gst_percent) / 100) * (n(p.gateway_fee_percent) / 100)
+  const gstRate = n(p.gst_percent) / 100
+  const gatewayRate = (1 + gstRate) * (n(p.gateway_fee_percent) / 100)
   const gatewayFee = dealPrice * gatewayRate
   const monthlyProfit = dealPrice - gatewayFee - monthlyCost
   const marginPercent = dealPrice > 0 ? (monthlyProfit / dealPrice) * 100 : null
@@ -244,8 +267,15 @@ export const estimate = (inputs: EstimateInputs, data: EstimatorRates): Estimate
   const targetPrice = priceForMargin(n(p.target_margin_percent))
   const maxDiscountPercent = listPrice > 0 ? Math.max(0, ((listPrice - floorPrice) / listPrice) * 100) : 0
 
-  const setupHours = enabledAddons.reduce((s, a) => s + n(inputs.addons[a.key].setup_hours), 0) + n(inputs.setup.extra_hours)
-  const setupCost = setupHours * n(inputs.setup.hourly_cost) + n(inputs.setup.extra_cost)
+  const hourly = n(inputs.setup.hourly_cost)
+  const setupCostItems: SheetItem[] = [
+    ...enabledAddons.filter((a) => n(inputs.addons[a.key].setup_hours) > 0)
+      .map((a) => item(`setup-${a.key}`, 'platform', `${a.label} set-up`, n(inputs.addons[a.key].setup_hours), 'h', hourly)),
+    ...(n(inputs.setup.extra_hours) > 0 ? [item('setup-extra', 'platform', 'Custom work', n(inputs.setup.extra_hours), 'h', hourly)] : []),
+    ...(n(inputs.setup.extra_cost) > 0 ? [item('setup-other', 'platform', 'Other one-time costs', 1, 'lot', n(inputs.setup.extra_cost))] : []),
+  ]
+  const setupHours = setupCostItems.filter((i) => i.unit === 'h').reduce((s, i) => s + i.qty, 0)
+  const setupCost = sum(setupCostItems)
   const setupFee = n(inputs.setup.fee)
   const setupProfit = setupFee - setupFee * gatewayRate - setupCost
 
@@ -253,28 +283,54 @@ export const estimate = (inputs: EstimateInputs, data: EstimatorRates): Estimate
   const contractProfit = setupProfit + months * monthlyProfit
   const paybackMonths = setupProfit >= 0 ? 0 : monthlyProfit > 0 ? Math.ceil(-setupProfit / monthlyProfit) : null
 
+  const details: Record<ModuleKey, string> = {
+    voice: `${Math.round(minutes).toLocaleString('en-IN')} min · ${VOICE_LABELS[v.provider]}`,
+    numbers: `${n(inputs.numbers.count)} × +91 number`,
+    sms: `${n(inputs.sms.messages_per_month).toLocaleString('en-IN')} messages`,
+    whatsapp: `${n(inputs.whatsapp.messages_per_month).toLocaleString('en-IN')} messages`,
+    platform: `${enabledAddons.length} modules`,
+    overhead: `${n(o.support_hours)} h support / month`,
+  }
+  const allItems = [...priceItems, ...costItems]
+  const lines: ModuleLine[] = (Object.keys(MODULE_LABELS) as ModuleKey[])
+    .filter((key) => allItems.some((i) => i.module === key))
+    .map((key) => ({
+      key,
+      label: MODULE_LABELS[key],
+      detail: details[key],
+      price: sum(priceItems.filter((i) => i.module === key)),
+      cost: sum(costItems.filter((i) => i.module === key)),
+    }))
+
   // The same deal sold as a private credit plan.
   const c = data.credits
-  const multiplier = n(c.multipliers[inputs.voice.provider]) || 1
-  const voiceCredits = !inputs.voice.enabled ? 0 : c.deduction_type === 'per_minute'
-    ? n(inputs.voice.calls_per_month) * Math.ceil(Math.ceil(n(inputs.voice.avg_minutes)) * (c.credits_per_minute || 1) * multiplier)
-    : n(inputs.voice.calls_per_month) * Math.ceil((c.credits_per_call || 1) * multiplier)
+  const multiplier = n(c.multipliers[v.provider]) || 1
+  const voiceCredits = !v.enabled ? 0 : c.deduction_type === 'per_minute'
+    ? calls * Math.ceil(Math.ceil(n(v.avg_minutes)) * (c.credits_per_minute || 1) * multiplier)
+    : calls * Math.ceil((c.credits_per_call || 1) * multiplier)
   const smsCredits = inputs.sms.enabled ? n(inputs.sms.messages_per_month) * n(c.credits_per_sms) : 0
   const waCredits = inputs.whatsapp.enabled ? n(inputs.whatsapp.messages_per_month) * n(c.credits_per_whatsapp_message) : 0
   const totalCredits = voiceCredits + smsCredits + waCredits
+  const usageCost = sum(costItems.filter((i) => i.module !== 'overhead'))
 
   if (listPrice === 0) warnings.push('Nothing is priced yet. Set a price per minute or a monthly platform fee.')
   if (dealPrice > 0 && dealPrice < breakEvenPrice) warnings.push('At this price you lose money every month.')
-  if (vc.minutes > 0 && dealPrice / vc.minutes < 3) warnings.push('Below ₹3 a minute all-in. Indian AI calling sells at about ₹4–6 a minute.')
+  if (minutes > 0 && dealPrice / minutes < 3) warnings.push('Below ₹3 a minute all-in. Indian AI calling sells at about ₹4–6 a minute.')
 
+  const voiceCost = sum(costItems.filter((i) => i.module === 'voice'))
   return {
-    minutes: vc.minutes,
+    minutes,
+    unitCosts,
+    priceItems,
+    costItems,
+    setupCostItems,
     lines,
-    voiceCost: { telephony: vc.telephony, stt: vc.stt, tts: vc.tts, llm: vc.llm, measured: vc.measured },
-    costPerMinute: vc.minutes > 0 ? voiceTotal / vc.minutes : 0,
+    costPerMinute: minutes > 0 ? voiceCost / minutes : 0,
     listPrice,
     discountedPrice,
     dealPrice,
+    adjustment: dealPrice - listPrice,
+    gatewayRate,
     gatewayFee,
     monthlyCost,
     monthlyProfit,
@@ -283,14 +339,15 @@ export const estimate = (inputs: EstimateInputs, data: EstimatorRates): Estimate
     floorPrice,
     targetPrice,
     maxDiscountPercent,
-    pricePerMinute: vc.minutes > 0 ? dealPrice / vc.minutes : null,
+    pricePerMinute: minutes > 0 ? dealPrice / minutes : null,
     setup: { fee: setupFee, hours: setupHours, cost: setupCost, profit: setupProfit },
     contract: { months, value: setupFee + months * dealPrice, profit: contractProfit, paybackMonths },
-    invoice: { monthly: dealPrice * (1 + n(p.gst_percent) / 100), setup: setupFee * (1 + n(p.gst_percent) / 100) },
+    gst: { monthly: dealPrice * gstRate, setup: setupFee * gstRate },
+    invoice: { monthly: dealPrice * (1 + gstRate), setup: setupFee * (1 + gstRate) },
     credits: {
       total: totalCredits,
       pricePerCredit: totalCredits > 0 ? dealPrice / totalCredits : null,
-      costPerCredit: totalCredits > 0 ? (monthlyCost - overheadCost) / totalCredits : null,
+      costPerCredit: totalCredits > 0 ? usageCost / totalCredits : null,
     },
     warnings,
   }

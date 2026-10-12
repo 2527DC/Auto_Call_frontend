@@ -1,20 +1,14 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { cn } from '@/lib/utils'
-import { EstimateInputs, EstimatorRates, VoiceProvider } from '@/types/priceEstimator'
-import { Blocks, Hash, MessageCircle, MessageSquareText, PhoneCall } from 'lucide-react'
-import { ADDONS, Estimate, VOICE_LABELS } from '../estimate'
+import { EstimateInputs, EstimatorRates, VoiceProvider, VoiceUnitCosts } from '@/types/priceEstimator'
+import { Blocks, Hash, MessageCircle, MessageSquareText, PhoneCall, RotateCcw } from 'lucide-react'
+import { ADDONS, billedMinutesPerCall, Estimate, settingsUnitCosts, VOICE_LABELS } from '../estimate'
 import { ModuleCard, money, NumberField, rupees, Section, Segmented } from '../fields'
-
-const PROFILE_LABELS = {
-  light: 'Light: short replies, small prompt',
-  typical: 'Typical: ~450 chars spoken a minute',
-  heavy: 'Heavy: chatty agent, big knowledge base',
-  measured: 'Measured from your real calls',
-}
 
 const ModulesSection = ({ inputs, data, est, onChange }: {
   inputs: EstimateInputs
@@ -28,8 +22,24 @@ const ModulesSection = ({ inputs, data, est, onChange }: {
     onChange({ ...inputs, [key]: { ...(inputs[key] as object), ...patch } })
 
   const v = inputs.voice
-  const measured = data.measured[v.provider]
-  const minuteMargin = v.price_per_minute > 0 ? ((v.price_per_minute - est.costPerMinute) / v.price_per_minute) * 100 : null
+  const measured = data.measured[v.provider]?.cost_per_minute ?? null
+  const typical = data.usage_profiles.typical
+  const fromSettings = settingsUnitCosts(rates, v.provider, typical)
+  const u = est.unitCosts
+  const setUnit = (k: keyof VoiceUnitCosts, value: number) => set('voice', { unit_costs: { ...u, [k]: value } })
+  // The phone line per minute of talk, after Plivo rounds each call up to 30 seconds.
+  const linePerMinute = v.avg_minutes > 0 ? (rates.telephony_per_minute * billedMinutesPerCall(v.avg_minutes)) / v.avg_minutes : 0
+  // Scale speech, voice and AI so the all-in minute matches what real calls cost.
+  const useMeasured = () => {
+    const base = fromSettings.stt + fromSettings.tts + fromSettings.llm
+    const target = (measured ?? 0) - linePerMinute
+    if (base <= 0 || target <= 0) return
+    const f = target / base
+    const r2 = (x: number) => Math.round(x * f * 100) / 100
+    set('voice', { unit_costs: { stt: r2(fromSettings.stt), tts: r2(fromSettings.tts), llm: r2(fromSettings.llm) } })
+  }
+  const perMinuteProfit = v.price_per_minute - est.costPerMinute
+  const minuteMargin = v.price_per_minute > 0 ? (perMinuteProfit / v.price_per_minute) * 100 : null
   const voiceLine = line('voice')
   const platformLine = line('platform')
 
@@ -45,62 +55,93 @@ const ModulesSection = ({ inputs, data, est, onChange }: {
           cost={voiceLine?.cost}
           price={voiceLine?.price}
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-            <Segmented
-              label="Direction"
-              value={v.direction}
-              onChange={(direction) => set('voice', { direction })}
-              options={[{ value: 'outbound', label: 'Outbound' }, { value: 'inbound', label: 'Inbound' }, { value: 'both', label: 'Both' }]}
-            />
-            <NumberField
-              label="Connected calls / month"
-              value={v.calls_per_month}
-              step="1"
-              onChange={(calls_per_month) => set('voice', { calls_per_month })}
-              hint={`≈ ${Math.round(v.calls_per_month / 30).toLocaleString('en-IN')} a day`}
-            />
-            <NumberField label="Average call length" suffix="min" value={v.avg_minutes} onChange={(avg_minutes) => set('voice', { avg_minutes })} hint={`${Math.round(est.minutes).toLocaleString('en-IN')} minutes a month`} />
-            <NumberField
-              label="Your price per minute"
-              prefix="₹"
-              value={v.price_per_minute}
-              onChange={(price_per_minute) => set('voice', { price_per_minute })}
-              hint={<>Market ₹4–6 · margin <b className={cn(minuteMargin !== null && minuteMargin < 0 ? 'text-destructive' : 'text-emerald-600')}>{minuteMargin === null ? '—' : `${minuteMargin.toFixed(0)}%`}</b></>}
-            />
-            <div className="space-y-1.5">
-              <Label className="text-xs font-semibold text-subtitle-color">Voice</Label>
-              <Select value={v.provider} onValueChange={(p) => set('voice', { provider: p as VoiceProvider })}>
-                <SelectTrigger className="h-10 w-full shadow-none bg-input-color border-input-border-color text-sm"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-bg-card border-input-border-color">
-                  {(Object.keys(VOICE_LABELS) as VoiceProvider[]).map((p) => (
-                    <SelectItem key={p} value={p}>
-                      {VOICE_LABELS[p]}{p === 'elevenlabs' ? ' (premium)' : p === 'sarvam_ai' ? ' (Indian languages)' : ''}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+              <Segmented
+                label="Direction"
+                value={v.direction}
+                onChange={(direction) => set('voice', { direction })}
+                options={[{ value: 'outbound', label: 'Outbound' }, { value: 'inbound', label: 'Inbound' }, { value: 'both', label: 'Both' }]}
+              />
+              <NumberField
+                label="Connected calls / month"
+                value={v.calls_per_month}
+                step="1"
+                onChange={(calls_per_month) => set('voice', { calls_per_month })}
+                hint={`≈ ${Math.round(v.calls_per_month / 30).toLocaleString('en-IN')} a day`}
+              />
+              <NumberField label="Average call length" suffix="min" value={v.avg_minutes} onChange={(avg_minutes) => set('voice', { avg_minutes })} hint={`= ${Math.round(est.minutes).toLocaleString('en-IN')} minutes a month`} />
+              <div className="space-y-1.5">
+                <Label className="text-xs font-semibold text-subtitle-color">Voice</Label>
+                <Select value={v.provider} onValueChange={(p) => set('voice', { provider: p as VoiceProvider, unit_costs: null })}>
+                  <SelectTrigger className="h-10 w-full shadow-none bg-input-color border-input-border-color text-sm"><SelectValue /></SelectTrigger>
+                  <SelectContent className="bg-bg-card border-input-border-color">
+                    {(Object.keys(VOICE_LABELS) as VoiceProvider[]).map((p) => (
+                      <SelectItem key={p} value={p}>
+                        {VOICE_LABELS[p]}{p === 'elevenlabs' ? ' (premium)' : p === 'sarvam_ai' ? ' (Indian languages)' : ''}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div className="space-y-1.5 sm:col-span-1 xl:col-span-2">
-              <Label className="text-xs font-semibold text-subtitle-color">How much the agent talks</Label>
-              <Select value={v.profile} onValueChange={(profile) => set('voice', { profile: profile as EstimateInputs['voice']['profile'] })}>
-                <SelectTrigger className="h-10 w-full shadow-none bg-input-color border-input-border-color text-sm"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-bg-card border-input-border-color">
-                  {(Object.keys(PROFILE_LABELS) as (keyof typeof PROFILE_LABELS)[]).map((k) => (
-                    <SelectItem key={k} value={k} disabled={k === 'measured' && measured?.cost_per_minute == null}>
-                      {PROFILE_LABELS[k]}{k === 'measured' && (measured?.cost_per_minute != null ? ` (${money(measured.cost_per_minute)}/min)` : ` (needs ${data.min_measured_calls} calls)`)}
-                    </SelectItem>
+
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_260px] gap-4 items-start">
+              <div className="rounded-lg border border-input-border-color overflow-hidden">
+                <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-amber-500/5 border-b border-input-border-color">
+                  <span className="text-xs font-bold uppercase tracking-wider text-subtitle-color">Your cost per minute of talk</span>
+                  <span className="flex flex-wrap gap-2">
+                    {measured !== null && (
+                      <Button type="button" size="sm" variant="outline" onClick={useMeasured} className="h-7 text-[11px]">
+                        Use real calls ({money(measured)}/min)
+                      </Button>
+                    )}
+                    {v.unit_costs && (
+                      <Button type="button" size="sm" variant="outline" onClick={() => set('voice', { unit_costs: null })} className="h-7 text-[11px]">
+                        <RotateCcw className="w-3 h-3" /> Settings rates
+                      </Button>
+                    )}
+                  </span>
+                </div>
+                <div className="divide-y divide-input-border-color">
+                  {[
+                    { key: null, label: 'Phone line', formula: `${money(rates.telephony_per_minute)} × ${billedMinutesPerCall(v.avg_minutes)} billed min per ${v.avg_minutes || 0}-min call`, value: linePerMinute },
+                    { key: 'stt' as const, label: 'Speech-to-text', formula: `${typical.stt_seconds} s of caller speech × ${money(rates.stt_per_minute[v.provider])}/min`, value: u.stt, auto: fromSettings.stt },
+                    { key: 'tts' as const, label: 'AI voice', formula: `${typical.tts_characters} characters × ${money(rates.tts_per_1k_chars[v.provider])}/1K`, value: u.tts, auto: fromSettings.tts },
+                    { key: 'llm' as const, label: 'AI model', formula: `${(typical.llm_input_tokens / 1000).toFixed(1)}K in + ${typical.llm_output_tokens} out tokens`, value: u.llm, auto: fromSettings.llm },
+                  ].map((row) => (
+                    <div key={row.label} className="grid grid-cols-[minmax(0,1fr)_150px] gap-3 items-center px-3 py-2">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-title">{row.label}</p>
+                        <p className="text-[11px] text-subtitle-color truncate" title={row.formula}>
+                          {row.key && v.unit_costs ? `From Settings: ${money(row.auto ?? 0)}` : row.formula}
+                        </p>
+                      </div>
+                      {row.key ? (
+                        <NumberField label={`${row.label} cost per minute`} prefix="₹" suffix="/ min" value={Math.round(row.value * 100) / 100} onChange={(val) => setUnit(row.key, val)} className="[&>label]:sr-only" />
+                      ) : (
+                        <span className="text-right text-sm tabular-nums text-title pr-3">{money(row.value)} <span className="text-[11px] text-subtitle-color">/ min</span></span>
+                      )}
+                    </div>
                   ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="rounded-lg bg-amber-500/5 border border-amber-500/20 px-3 py-2 text-xs space-y-0.5 tabular-nums">
-              <p className="text-subtitle-color">Your cost per minute</p>
-              <p className="text-lg font-bold text-amber-600">{money(est.costPerMinute)}</p>
-              {est.voiceCost.measured === 0 && est.minutes > 0 && (
-                <p className="text-[11px] text-subtitle-color leading-snug">
-                  Line {rupees(est.voiceCost.telephony)} · STT {rupees(est.voiceCost.stt)} · Voice {rupees(est.voiceCost.tts)} · AI {rupees(est.voiceCost.llm)}
-                </p>
-              )}
+                  <div className="grid grid-cols-[minmax(0,1fr)_150px] gap-3 items-center px-3 py-2 bg-amber-500/5">
+                    <span className="text-sm font-bold text-title">Total cost per minute</span>
+                    <span className="text-right text-base font-bold tabular-nums text-amber-600 pr-3">{money(est.costPerMinute)}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-primary/25 bg-primary/[0.04] p-3 space-y-3">
+                <NumberField label="Your price per minute" prefix="₹" value={v.price_per_minute} onChange={(price_per_minute) => set('voice', { price_per_minute })} hint="Market ₹4–6 a minute all-in" />
+                <div className="space-y-1 text-sm tabular-nums">
+                  <div className="flex justify-between"><span className="text-subtitle-color">Price</span><span className="text-title">{money(v.price_per_minute)}</span></div>
+                  <div className="flex justify-between"><span className="text-subtitle-color">− Cost</span><span className="text-amber-600">{money(est.costPerMinute)}</span></div>
+                  <div className="flex justify-between border-t border-input-border-color pt-1 font-bold">
+                    <span className="text-title">Profit / min</span>
+                    <span className={cn(perMinuteProfit < 0 ? 'text-destructive' : 'text-emerald-600')}>{money(perMinuteProfit)}{minuteMargin !== null && <span className="ml-1 text-xs font-semibold">({minuteMargin.toFixed(0)}%)</span>}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </ModuleCard>

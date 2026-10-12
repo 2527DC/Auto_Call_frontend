@@ -21,7 +21,7 @@ export const Section = ({ step, icon: Icon, title, description, actions, childre
   actions?: ReactNode
   children: ReactNode
 }) => (
-  <section className="rounded-lg border border-input-border-color bg-bg-card">
+  <section id={`pe-step-${step}`} className="scroll-mt-24 rounded-lg border border-input-border-color bg-bg-card">
     <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:px-6 px-4 py-4 border-b border-input-border-color">
       <div className="flex items-start gap-3 min-w-0">
         <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">

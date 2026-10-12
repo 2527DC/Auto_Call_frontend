@@ -49,6 +49,14 @@ export interface EstimatorRates {
   plans: EstimatorPlan[]
 }
 
+// Your cost for one minute of talk, per part of the call (₹ / min). The phone
+// line is priced separately because Plivo bills each call in 30-second steps.
+export interface VoiceUnitCosts {
+  stt: number
+  tts: number
+  llm: number
+}
+
 export interface AddonInput {
   enabled: boolean
   monthly_price: number
@@ -63,8 +71,11 @@ export interface EstimateInputs {
     calls_per_month: number
     avg_minutes: number
     provider: VoiceProvider
-    profile: UsageProfileKey | 'measured'
+    // null: worked out from the provider rates in Settings.
+    unit_costs: VoiceUnitCosts | null
     price_per_minute: number
+    // Quotes saved before unit_costs existed picked a talk profile instead.
+    profile?: UsageProfileKey | 'measured'
   }
   numbers: { enabled: boolean; count: number; price_per_number: number }
   sms: { enabled: boolean; messages_per_month: number; price_per_message: number }
@@ -77,6 +88,8 @@ export interface EstimateInputs {
     discount_percent: number
     agreed_price: number | null
     gst_percent: number
+    // Client registered in another state: IGST instead of CGST + SGST.
+    interstate: boolean
     gateway_fee_percent: number
     target_margin_percent: number
     min_margin_percent: number

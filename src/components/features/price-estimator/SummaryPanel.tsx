@@ -2,10 +2,11 @@
 
 import { ROUTES } from '@/constants/routes'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { EstimateInputs, EstimatorRates } from '@/types/priceEstimator'
-import { AlertTriangle, ArrowUpRight, CircleCheck, CircleX, TrendingUp } from 'lucide-react'
+import { AlertTriangle, ArrowRight, ArrowUpRight, CircleCheck, CircleX, FileText, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
-import { Estimate, scenarioProfit, verdictFor } from './estimate'
+import { Estimate, verdictFor } from './estimate'
 import { money, pct, rupees } from './fields'
 import { VERDICT_STYLES } from './sections/BargainingSection'
 
@@ -30,21 +31,11 @@ const Card = ({ title, children }: { title: string; children: React.ReactNode })
   </div>
 )
 
-const SummaryPanel = ({ inputs, data, est }: { inputs: EstimateInputs; data: EstimatorRates; est: Estimate }) => {
+const SummaryPanel = ({ inputs, data, est, onViewSheet }: { inputs: EstimateInputs; data: EstimatorRates; est: Estimate; onViewSheet: () => void }) => {
   const verdict = verdictFor(est.marginPercent, inputs)
   const style = VERDICT_STYLES[verdict]
   const Icon = verdict === 'loss' ? CircleX : verdict === 'thin' ? AlertTriangle : CircleCheck
   const priced = est.lines.filter((l) => l.cost > 0 || l.price > 0)
-
-  const scenarios = inputs.voice.enabled && est.minutes > 0
-    ? [
-        { label: 'Light talk', ...scenarioProfit(inputs, data, est, 'light') },
-        { label: 'Typical talk', ...scenarioProfit(inputs, data, est, 'typical') },
-        { label: 'Heavy talk', ...scenarioProfit(inputs, data, est, 'heavy') },
-        { label: '+25% minutes', ...scenarioProfit(inputs, data, est, undefined, 1.25) },
-        { label: '+50% minutes', ...scenarioProfit(inputs, data, est, undefined, 1.5) },
-      ]
-    : []
 
   return (
     <div className="space-y-4">
@@ -73,6 +64,11 @@ const SummaryPanel = ({ inputs, data, est }: { inputs: EstimateInputs; data: Est
           )}
         </div>
       </div>
+
+      <Button type="button" variant="outline" onClick={onViewSheet} className="w-full justify-between gap-1.5 h-11">
+        <span className="flex items-center gap-2"><FileText className="w-4 h-4 text-primary" /> View full price calculation</span>
+        <ArrowRight className="w-4 h-4" />
+      </Button>
 
       {est.warnings.length > 0 && (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 space-y-1.5">
@@ -107,21 +103,6 @@ const SummaryPanel = ({ inputs, data, est }: { inputs: EstimateInputs; data: Est
           )}
         </div>
       </Card>
-
-      {scenarios.length > 0 && (
-        <Card title="What if usage differs (same price)">
-          <div className="space-y-1">
-            {scenarios.map((s) => (
-              <div key={s.label} className="grid grid-cols-[1fr_auto_56px] gap-3 items-baseline text-sm tabular-nums">
-                <span className="text-subtitle-color">{s.label}</span>
-                <span className={cn('font-semibold', s.profit < 0 ? 'text-destructive' : 'text-title')}>{rupees(s.profit)}</span>
-                <span className={cn('text-xs text-right', VERDICT_STYLES[verdictFor(s.margin, inputs)].text)}>{pct(s.margin)}</span>
-              </div>
-            ))}
-          </div>
-          <p className="text-[11px] text-subtitle-color mt-2">If heavy use loses money, cap the minutes in the plan or charge per extra minute.</p>
-        </Card>
-      )}
 
       <Card title={`Contract (${est.contract.months} months)`}>
         <Row label={`Set-up fee (${est.setup.hours} h work)`} value={`${rupees(est.setup.fee)} − ${rupees(est.setup.cost)}`} />

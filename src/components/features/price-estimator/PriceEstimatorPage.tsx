@@ -15,11 +15,11 @@ import {
 } from '@/redux/api/priceEstimatorApi'
 import { ApiError } from '@/types/api'
 import { EstimateInputs, PriceQuoteListItem, PriceQuotePayload, QuoteClient, QuoteOffer, QuoteStatus, RequirementAnswer } from '@/types/priceEstimator'
-import { Copy, CopyPlus, FilePlus2, Loader2, Save } from 'lucide-react'
+import { CopyPlus, FilePlus2, FileText, Loader2, Save } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
-import { ADDONS, defaultInputs, defaultRequirements, estimate, Estimate, toSummary, withDefaults } from './estimate'
-import { money } from './fields'
+import { defaultInputs, defaultRequirements, estimate, toSummary, withDefaults } from './estimate'
+import PriceSheet from './PriceSheet'
 import SavedQuotes from './SavedQuotes'
 import BargainingSection from './sections/BargainingSection'
 import ClientSection from './sections/ClientSection'
@@ -30,20 +30,12 @@ import SummaryPanel from './SummaryPanel'
 
 const EMPTY_CLIENT: QuoteClient = { name: '', company: '', phone: '', email: '', industry: '', city: '' }
 
-// The quote as the client should see it: what they get and what they pay, no costs.
-const clientQuoteText = (client: QuoteClient, inputs: EstimateInputs, est: Estimate) => {
-  const lines = [`Voxeno AI calling: quote for ${client.company || client.name}`, '']
-  if (inputs.voice.enabled) lines.push(`• AI voice calls: ~${Math.round(est.minutes).toLocaleString('en-IN')} minutes a month`)
-  if (inputs.numbers.enabled) lines.push(`• ${inputs.numbers.count} dedicated +91 number${inputs.numbers.count === 1 ? '' : 's'}`)
-  if (inputs.sms.enabled) lines.push(`• ${inputs.sms.messages_per_month.toLocaleString('en-IN')} SMS a month`)
-  if (inputs.whatsapp.enabled) lines.push(`• ${inputs.whatsapp.messages_per_month.toLocaleString('en-IN')} WhatsApp messages a month`)
-  const modules = ADDONS.filter((a) => inputs.addons[a.key]?.enabled).map((a) => a.label)
-  if (modules.length) lines.push(`• Includes: ${modules.join(', ')}`)
-  lines.push('', `Monthly: ${money(est.dealPrice)} + ${inputs.pricing.gst_percent}% GST = ${money(est.invoice.monthly)}`)
-  if (est.setup.fee > 0) lines.push(`One-time set-up: ${money(est.setup.fee)} + GST = ${money(est.invoice.setup)}`)
-  if (est.pricePerMinute !== null) lines.push(`Works out to ${money(est.pricePerMinute)} per minute, all-in.`)
-  return lines.join('\n')
-}
+const STEPS = ['Client', 'Requirements', 'Services', 'Costs', 'Bargaining']
+
+// The app scrolls an inner panel, not the window.
+const scrollToTop = () => document.getElementById('pe-top')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+type Tab = 'estimate' | 'sheet' | 'quotes'
 
 const PriceEstimatorPage = () => {
   const { hasPermission, role } = usePermission()
@@ -56,7 +48,7 @@ const PriceEstimatorPage = () => {
   const [updateQuote, { isLoading: isUpdating }] = useUpdatePriceQuoteMutation()
   const [deleteQuote, { isLoading: isDeleting }] = useDeletePriceQuoteMutation()
 
-  const [tab, setTab] = useState<'estimate' | 'quotes'>('estimate')
+  const [tab, setTab] = useState<Tab>('estimate')
   const [quoteId, setQuoteId] = useState<string | null>(null)
   const [client, setClient] = useState<QuoteClient>(EMPTY_CLIENT)
   const [status, setStatus] = useState<QuoteStatus>('draft')
@@ -99,7 +91,7 @@ const PriceEstimatorPage = () => {
       const loaded: PriceQuotePayload = {
         client: { ...EMPTY_CLIENT, ...q.client },
         status: q.status,
-        inputs: withDefaults(q.inputs, data.rates),
+        inputs: withDefaults(q.inputs, data),
         requirements: q.requirements?.length ? q.requirements : defaultRequirements(),
         offers: q.offers || [],
         notes: q.notes || '',
@@ -114,7 +106,7 @@ const PriceEstimatorPage = () => {
       setNotes(loaded.notes)
       setSavedSnapshot(JSON.stringify({ ...loaded, summary: toSummary(estimate(loaded.inputs, data)) }))
       setTab('estimate')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      scrollToTop()
     } catch (err) {
       toast.error((err as ApiError)?.data?.message || 'Could not open the quote')
     }
@@ -125,7 +117,7 @@ const PriceEstimatorPage = () => {
     if (!body) return
     if (!body.client.name.trim()) {
       toast.error('Enter the client\'s name before saving')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      scrollToTop()
       return
     }
     try {
@@ -153,14 +145,9 @@ const PriceEstimatorPage = () => {
     }
   }
 
-  const copyForClient = async () => {
-    if (!inputs || !est) return
-    try {
-      await navigator.clipboard.writeText(clientQuoteText(client, inputs, est))
-      toast.success('Client quote copied. Paste it into WhatsApp or email.')
-    } catch {
-      toast.error('Could not copy to the clipboard')
-    }
+  const showSheet = () => {
+    setTab('sheet')
+    scrollToTop()
   }
 
   if (isLoading) {
@@ -173,7 +160,7 @@ const PriceEstimatorPage = () => {
   const saving = isCreating || isUpdating
 
   return (
-    <div className="space-y-6">
+    <div id="pe-top" className="space-y-6 scroll-mt-24">
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-2xl font-bold text-title">Price Estimator</h1>
@@ -189,7 +176,7 @@ const PriceEstimatorPage = () => {
             </span>
           )}
           <Button className="gap-1.5" type="button" variant="outline" onClick={startNew}><FilePlus2 className="w-4 h-4" /> New</Button>
-          <Button className="gap-1.5" type="button" variant="outline" onClick={copyForClient}><Copy className="w-4 h-4" /> Copy client quote</Button>
+          <Button className="gap-1.5" type="button" variant="outline" onClick={showSheet}><FileText className="w-4 h-4" /> Generate estimate</Button>
           {canManage && quoteId && (
             <Button className="gap-1.5" type="button" variant="outline" onClick={() => save(true)} disabled={saving}><CopyPlus className="w-4 h-4" /> Save as new</Button>
           )}
@@ -201,9 +188,10 @@ const PriceEstimatorPage = () => {
         </div>
       </div>
 
-      <Tabs value={tab} onValueChange={(v) => setTab(v as 'estimate' | 'quotes')}>
+      <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)}>
         <TabsList>
           <TabsTrigger value="estimate">Estimate</TabsTrigger>
+          <TabsTrigger value="sheet">Price calculation</TabsTrigger>
           <TabsTrigger value="quotes">Saved quotes{quoteList?.data?.length ? ` (${quoteList.data.length})` : ''}</TabsTrigger>
         </TabsList>
 
@@ -213,6 +201,22 @@ const PriceEstimatorPage = () => {
           ) : (
             <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start">
               <div className="space-y-6 min-w-0">
+                <nav aria-label="Estimate steps" className="flex gap-1.5 overflow-x-auto rounded-lg border border-input-border-color bg-bg-card p-1.5">
+                  {STEPS.map((label, i) => (
+                    <button
+                      key={label}
+                      type="button"
+                      onClick={() => document.getElementById(`pe-step-${i + 1}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                      className="flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-subtitle-color hover:bg-primary/5 hover:text-title transition-colors"
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">{i + 1}</span>
+                      {label}
+                    </button>
+                  ))}
+                  <button type="button" onClick={showSheet} className="ml-auto flex shrink-0 items-center gap-1.5 rounded-md bg-primary/10 px-2.5 py-1.5 text-sm font-semibold text-primary hover:bg-primary/15 transition-colors">
+                    <FileText className="w-4 h-4" /> Price calculation
+                  </button>
+                </nav>
                 <ClientSection client={client} status={status} onClient={setClient} onStatus={setStatus} />
                 <RequirementsSection requirements={requirements} notes={notes} onChange={setRequirements} onNotes={setNotes} />
                 <ModulesSection inputs={inputs} data={data} est={est} onChange={setInputs} />
@@ -220,10 +224,14 @@ const PriceEstimatorPage = () => {
                 <BargainingSection inputs={inputs} est={est} offers={offers} onInputs={setInputs} onOffers={setOffers} />
               </div>
               <aside className="xl:sticky xl:top-4 xl:max-h-[calc(100vh-2rem)] xl:overflow-y-auto xl:pr-1">
-                <SummaryPanel inputs={inputs} data={data} est={est} />
+                <SummaryPanel inputs={inputs} data={data} est={est} onViewSheet={showSheet} />
               </aside>
             </div>
           )}
+        </TabsContent>
+
+        <TabsContent value="sheet" className="mt-6">
+          <PriceSheet client={client} inputs={inputs} est={est} quoteId={quoteId} onInputs={setInputs} />
         </TabsContent>
 
         <TabsContent value="quotes" className="mt-6">
