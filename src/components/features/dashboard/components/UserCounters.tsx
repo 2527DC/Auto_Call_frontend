@@ -15,6 +15,8 @@ export function UserCounters({ counterCards }: UserCountersProps) {
             icon={card.icon}
             colorClass={card.colorClass}
             glowClass={card.glowClass}
+            delta={card.delta}
+            compareLabel={card.compareLabel}
           />
         </div>
       ))}

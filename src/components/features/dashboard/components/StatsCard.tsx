@@ -4,8 +4,9 @@ import { StatsCardProps } from '@/types/dashboard';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import CountUp from "react-countup";
+import { DeltaBadge } from '../charts/DeltaBadge';
 
-export function StatsCard({ title, value, description, icon: Icon, colorClass, glowClass, prefix = '', href }: StatsCardProps) {
+export function StatsCard({ title, value, description, icon: Icon, colorClass, glowClass, prefix = '', suffix = '', decimals = 0, href, delta, compareLabel }: StatsCardProps) {
   const cardVariants = {
     hidden: { opacity: 0, y: 15 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
@@ -39,11 +40,15 @@ export function StatsCard({ title, value, description, icon: Icon, colorClass, g
 
       <div className="relative z-10 space-y-1">
         <h3 className="text-2xl font-extrabold text-title tracking-tight">
-          {prefix}{typeof value === 'number' ? <CountUp end={value} duration={2} separator="," /> : value}
+          {prefix}{typeof value === 'number' ? <CountUp end={value} duration={2} decimals={decimals} formattingFn={(n) => n.toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })} /> : value}{suffix}
         </h3>
-        <p className="text-md font-medium text-subtitle-color group-hover:text-slate-500 transition-colors">
-          {description}
-        </p>
+        {delta ? (
+          <DeltaBadge {...delta} compareLabel={compareLabel} />
+        ) : (
+          <p className="text-md font-medium text-subtitle-color group-hover:text-slate-500 transition-colors">
+            {description}
+          </p>
+        )}
       </div>
     </motion.div>
   );

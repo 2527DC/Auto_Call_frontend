@@ -76,14 +76,18 @@ export function UserDashboard({ stats }: UserDashboardProps) {
     return pages.filter(p => isWorkspaceOwner || hasPermission(p.permission)).slice(0, 4)
   }, [hasPermission, t, userRole])
 
-  // 10 stats counter definitions
+  // Headline counters; calls and appointments also show the change against the previous period
   const counterCards = useMemo(() => {
     const statistics = stats.statistics
+    const summary = stats.trends?.summary
+    const compareLabel = stats.trends?.compareLabel
     return [
       {
         title: t('total_calls'),
         value: statistics.totalCalls || 0,
         description: t('calls_recorded'),
+        delta: summary?.calls,
+        compareLabel,
         icon: PhoneCall,
         colorClass: 'from-purple-500/10 to-pink-500/10 text-purple-500 border-purple-500/20',
         glowClass: 'shadow-purple-500/5 hover:border-purple-500/30'
@@ -108,6 +112,8 @@ export function UserDashboard({ stats }: UserDashboardProps) {
         title: t('appointments_booked'),
         value: statistics.totalAppointmentsBooked || 0,
         description: t('calendar_bookings'),
+        delta: summary?.appointments,
+        compareLabel,
         icon: CalendarDays,
         colorClass: 'from-emerald-500/10 to-teal-500/10 text-emerald-500 border-emerald-500/20',
         glowClass: 'shadow-emerald-500/5 hover:border-emerald-500/30'
@@ -121,145 +127,7 @@ export function UserDashboard({ stats }: UserDashboardProps) {
         glowClass: 'shadow-sky-500/5 hover:border-sky-500/30'
       }
     ]
-  }, [stats.statistics, t])
-
-  // Weekly call area chart settings
-  const weeklyChartOptions = {
-    chart: {
-      id: 'user-calls-chart',
-      toolbar: { show: false },
-      zoom: { enabled: false },
-      background: 'transparent',
-      animations: { enabled: false }
-    },
-    colors: ['#06b6d4', '#6366f1'],
-    stroke: { curve: 'smooth' as const, width: 3 },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.4,
-        opacityTo: 0.05,
-        stops: [0, 100]
-      }
-    },
-    xaxis: {
-      categories: (stats.charts.currentWeekCallChart || []).map(item => item.day),
-      labels: {
-        style: {
-          colors: '#64748b',
-          fontSize: '11px',
-          fontWeight: 600
-        }
-      },
-      axisBorder: { show: false },
-      axisTicks: { show: false }
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: '#64748b',
-          fontSize: '11px',
-          fontWeight: 600
-        }
-      }
-    },
-    grid: {
-      borderColor: 'rgba(148, 163, 184, 0.08)',
-      strokeDashArray: 5
-    },
-    legend: {
-      labels: {
-        colors: '#64748b'
-      }
-    },
-    tooltip: { theme: 'dark' }
-  }
-
-  const weeklyChartSeries = [
-    {
-      name: t('inbound'),
-      data: (stats.charts.currentWeekCallChart || []).map(item => item.incoming)
-    },
-    {
-      name: t('outbound'),
-      data: (stats.charts.currentWeekCallChart || []).map(item => item.outgoing)
-    }
-  ]
-
-  // Campaign Bar Chart Settings
-  const campaignChartOptions = {
-    chart: {
-      id: 'campaign-bar-chart',
-      toolbar: { show: false },
-      zoom: { enabled: false },
-      background: 'transparent',
-      animations: { enabled: true, easing: 'easeinout', speed: 800 }
-    },
-    colors: ['#8b5cf6', '#f43f5e'],
-    plotOptions: {
-      bar: {
-        borderRadius: 4,
-        columnWidth: '50%',
-        dataLabels: { position: 'top' }
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: { show: true, width: 2, colors: ['transparent'] },
-    xaxis: {
-      categories: (stats.charts.currentWeekCampaignChart || []).map((_, idx) => `Week ${idx + 1}`),
-      labels: {
-        style: {
-          colors: '#94a3b8',
-          fontSize: '12px',
-          fontWeight: 500,
-          fontFamily: 'inherit'
-        }
-      },
-      axisBorder: { show: false },
-      axisTicks: { show: false }
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: '#94a3b8',
-          fontSize: '12px',
-          fontWeight: 500,
-          fontFamily: 'inherit'
-        }
-      }
-    },
-    grid: {
-      borderColor: 'rgba(148, 163, 184, 0.1)',
-      strokeDashArray: 4,
-      xaxis: { lines: { show: false } },
-      yaxis: { lines: { show: true } }
-    },
-    legend: {
-      labels: {
-        colors: '#64748b'
-      }
-    },
-    tooltip: {
-      theme: 'dark',
-      y: {
-        formatter: (val: number) => `${val || 0} Campaigns`
-      }
-    }
-  }
-
-  const campaignChartSeries = [
-    {
-      name: t('ai_campaigns'),
-      data: (stats.charts.currentWeekCampaignChart || []).map(item => item.ai_campaigns || 0)
-    },
-    {
-      name: t('sms_campaigns'),
-      data: (stats.charts.currentWeekCampaignChart || []).map(item => item.sms_campaigns || 0)
-    }
-  ]
+  }, [stats.statistics, stats.trends, t])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -289,15 +157,7 @@ export function UserDashboard({ stats }: UserDashboardProps) {
 
       <UserCounters counterCards={counterCards} />
 
-      <UserChartsAndTables
-        stats={stats}
-        weeklyChartOptions={weeklyChartOptions}
-        weeklyChartSeries={weeklyChartSeries}
-        campaignChartOptions={campaignChartOptions}
-        campaignChartSeries={campaignChartSeries}
-        cardVariants={cardVariants}
-        t={t}
-      />
+      <UserChartsAndTables stats={stats} cardVariants={cardVariants} t={t} />
     </motion.div>
   )
 }

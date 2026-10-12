@@ -1,66 +1,25 @@
 import { ROUTES } from '@/constants/routes';
 import { AdminAdditionalCountersProps } from '@/types/dashboard';
 import { motion } from 'framer-motion';
-import { Bot, Megaphone, MessageSquare, Network, Send } from 'lucide-react';
+import { Bot, Contact2, FileText, GitBranch, Megaphone, MessageSquare, Network, Send } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import CountUp from "react-countup";
 import { useTranslation } from 'react-i18next';
 
+// Counts of what the admin's own workspace holds, as compact tiles.
 export const AdminAdditionalCounters: React.FC<AdminAdditionalCountersProps> = ({ statistics }) => {
   const { t } = useTranslation();
 
   const items = [
-    {
-      title: t('total_ai_agents'),
-      value: statistics.totalAgentOfCurrentUser || 0,
-      description: t('total_ai_agents_desc'),
-      icon: Bot,
-      colorTheme: 'blue',
-      colorClass: 'bg-primary/10 text-primary',
-      dashClass: 'bg-primary',
-      href: ROUTES.AI_ASSISTANTS
-    },
-    {
-      title: t('total_sms_agents'),
-      value: statistics.totalSmsAgentOfCurrentUser || 0,
-      description: t('total_sms_agents_desc'),
-      icon: MessageSquare,
-      colorTheme: 'emerald',
-      colorClass: 'bg-incoming-color/10 text-incoming-color',
-      dashClass: 'bg-incoming',
-      href: ROUTES.SMS_AGENTS
-    },
-    {
-      title: t('total_teams'),
-      value: statistics.totalTeamsAcrossAllUser || 0,
-      description: t('total_teams_desc'),
-      icon: Network,
-      colorTheme: 'purple',
-      colorClass: 'bg-build-color/10 text-build-color',
-      dashClass: 'bg-build',
-      href: ROUTES.TEAMS
-    },
-    {
-      title: t('total_campaigns'),
-      value: statistics.totalCampaignsOfCurrentUser || 0,
-      description: t('total_campaigns_desc'),
-      icon: Megaphone,
-      colorTheme: 'orange',
-      colorClass: 'bg-campaign-color/10 text-campaign-color',
-      dashClass: 'bg-campaign',
-      href: ROUTES.CAMPAIGNS
-    },
-    {
-      title: t('total_sms_campaigns'),
-      value: statistics.totalSmsCampaignOfCurrentUser || 0,
-      description: t('total_sms_campaigns_desc'),
-      icon: Send,
-      colorTheme: 'rose',
-      colorClass: 'bg-outgoing-color/10 text-outgoing-color',
-      dashClass: 'bg-outgoing',
-      href: ROUTES.SMS_CAMPAIGNS
-    }
+    { title: t('total_ai_agents'), value: statistics.totalAgentOfCurrentUser || 0, icon: Bot, colorClass: 'bg-primary/10 text-primary', href: ROUTES.AI_ASSISTANTS },
+    { title: t('total_sms_agents'), value: statistics.totalSmsAgentOfCurrentUser || 0, icon: MessageSquare, colorClass: 'bg-incoming-color/10 text-incoming-color', href: ROUTES.SMS_AGENTS },
+    { title: t('total_flows'), value: statistics.totalFlowsOfCurrentUser || 0, icon: GitBranch, colorClass: 'bg-campaign-color/10 text-campaign-color', href: ROUTES.WORKFLOW_BUILDER },
+    { title: t('total_templates'), value: statistics.totalTemplatesOfCurrentUser || 0, icon: FileText, colorClass: 'bg-outgoing-color/10 text-outgoing-color', href: ROUTES.PROMPT_TEMPLATES },
+    { title: t('saved_contacts'), value: statistics.totalContactOfCurrentUser || 0, icon: Contact2, colorClass: 'bg-primary/10 text-primary', href: ROUTES.CONTACT_HUB },
+    { title: t('total_teams'), value: statistics.totalTeamsAcrossAllUser || 0, icon: Network, colorClass: 'bg-build-color/10 text-build-color', href: ROUTES.TEAMS },
+    { title: t('total_campaigns'), value: statistics.totalCampaignsOfCurrentUser || 0, icon: Megaphone, colorClass: 'bg-campaign-color/10 text-campaign-color', href: ROUTES.CAMPAIGNS },
+    { title: t('total_sms_campaigns'), value: statistics.totalSmsCampaignOfCurrentUser || 0, icon: Send, colorClass: 'bg-outgoing-color/10 text-outgoing-color', href: ROUTES.SMS_CAMPAIGNS },
   ];
 
   const containerVariants = {
@@ -69,38 +28,30 @@ export const AdminAdditionalCounters: React.FC<AdminAdditionalCountersProps> = (
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      className="rounded-radius xl1580:rounded-none overflow-hidden xl1580:overflow-visible shadow-sm xl1580:shadow-none border border-input-border-color xl1580:border-transparent bg-bg-card xl1580:bg-transparent"
-    >
-      <div className="grid grid-cols-5 xl1580:grid-cols-3 lg870:grid-cols-2! md560:grid-cols-1! gap-0 xl1580:gap-6">
-        {items.map((item, index) => {
+    <motion.section variants={containerVariants} className="space-y-3">
+      <h2 className="text-base font-semibold text-title tracking-tight">{t('your_workspace', 'Your workspace')}</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-4 2xl:grid-cols-8 gap-3">
+        {items.map((item) => {
           const Icon = item.icon;
           return (
             <Link
-              key={index}
+              key={item.title}
               href={item.href}
-              className={`relative sm:p-6 p-4 flex flex-col items-start gap-4 transition-colors group bg-transparent xl1580:bg-bg-card xl1580:border xl1580:border-input-border-color xl1580:rounded-radius xl1580:shadow-sm ${item.href !== '#' ? 'cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50' : ''}`}
+              className="group flex items-center gap-3 rounded-radius border border-input-border-color bg-bg-card p-3 transition-colors hover:border-primary/30"
             >
-              <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${item.colorClass} group-hover:scale-110 transition-transform duration-300`}>
-                <Icon className="w-6 h-6" />
+              <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${item.colorClass} transition-transform duration-300 group-hover:scale-110`}>
+                <Icon className="h-4.5 w-4.5" />
               </div>
-              <div className="flex flex-col w-full">
-                <span className="text-base font-bold text-title mb-1">{item.title}</span>
-                <h3 className="text-2xl font-extrabold text-title tracking-tight mb-1">
-                  <CountUp end={item.value} duration={2} separator="," />
-                </h3>
-                <span className="text-md font-medium text-subtitle-color">{item.description}</span>
+              <div className="min-w-0">
+                <div className="text-lg font-bold leading-tight text-title">
+                  <CountUp end={item.value} duration={1.5} formattingFn={(n) => n.toLocaleString('en-IN')} />
+                </div>
+                <div className="truncate text-xs font-medium text-subtitle-color">{item.title}</div>
               </div>
-
-              {/* Custom Divider Lines (Desktop Only) */}
-              {index !== items.length - 1 && (
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-[60%] bg-input-border-color z-10 xl1580:hidden" />
-              )}
             </Link>
           );
         })}
       </div>
-    </motion.div>
+    </motion.section>
   );
 };

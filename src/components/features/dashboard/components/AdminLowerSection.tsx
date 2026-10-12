@@ -6,15 +6,17 @@ import { MessageSquare, PieChart, User } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { CHART_COLORS, mergeOptions, useChartTheme } from '../charts/chartTheme';
 import { DashboardChartCard } from './DashboardChartCard';
 
 export const AdminLowerSection: React.FC<AdminLowerSectionProps> = ({
   recentContacts,
   recentSmsCampaigns,
-  agentPieChart,
+  agentCounts,
   cardVariants,
 }) => {
   const { t } = useTranslation();
+  const { base, isDark } = useChartTheme();
 
   // Agent Pie Chart configuration
   const pieChartLabels = [
@@ -22,64 +24,37 @@ export const AdminLowerSection: React.FC<AdminLowerSectionProps> = ({
     t('sms_agents')
   ];
 
-  const pieChartSeries = [
-    agentPieChart?.agent || 0,
-    agentPieChart?.sms_agent || 0
-  ];
+  const pieChartSeries = [agentCounts.agents, agentCounts.smsAgents];
 
-  const pieChartOptions = {
-    chart: {
-      type: 'donut',
-      background: 'transparent',
-    },
+  const pieChartOptions = mergeOptions(base, {
+    chart: { type: 'donut' },
     labels: pieChartLabels,
-    colors: ['#3b82f6', '#10b981'],
+    colors: [CHART_COLORS.violet, CHART_COLORS.emerald],
+    stroke: { width: 2, colors: [isDark ? '#120724' : '#ffffff'] },
+    legend: { show: true, position: 'bottom', fontSize: '12px', labels: { colors: isDark ? '#94A3B8' : '#64748B' }, markers: { size: 5 } },
     plotOptions: {
       pie: {
+        expandOnClick: false,
         donut: {
-          size: '70%',
+          size: '74%',
           labels: {
             show: true,
-            name: {
-              show: true,
-              color: 'var(--title)'
-            },
-            value: {
-              show: true,
-              color: 'var(--title)',
-              formatter: (val: number) => val.toString(),
-            },
+            name: { show: true, offsetY: 22, fontSize: '12px', fontWeight: 500, color: isDark ? '#94A3B8' : '#64748B' },
+            value: { show: true, offsetY: -10, fontSize: '22px', fontWeight: 700, color: isDark ? '#F8FAFC' : '#1D293D' },
             total: {
               show: true,
               showAlways: true,
+              fontSize: '12px',
+              fontWeight: 500,
               label: t('total'),
-              color: 'var(--title)',
-              formatter: function (w: any) {
-                return w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
-              }
-            }
-          }
-        }
-      }
+              color: isDark ? '#94A3B8' : '#64748B',
+              formatter: () => String(agentCounts.agents + agentCounts.smsAgents),
+            },
+          },
+        },
+      },
     },
-    dataLabels: {
-      enabled: false,
-    },
-    legend: {
-      position: 'bottom',
-      labels: {
-        colors: '#64748b'
-      }
-    },
-    stroke: {
-      show: true,
-      colors: ['transparent'],
-      width: 2
-    },
-    tooltip: {
-      theme: 'dark'
-    }
-  };
+  });
 
   const formatDate = (dateString: string) => {
     try {

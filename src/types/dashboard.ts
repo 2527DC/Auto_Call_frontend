@@ -34,7 +34,69 @@ export interface AdminDashboardProps {
             recentContactOfCurrentUser?: any[]
             recentSmsCampaignsOfCurrentUser?: any[]
         }
+        trends?: AdminTrends
     }
+}
+
+// A total for the chosen period and for the same stretch of the period before it.
+export interface PeriodValue {
+    current: number
+    previous: number
+}
+
+export type TrendBucket = 'hour' | 'day' | 'month'
+
+export interface AdminTrends {
+    bucket: TrendBucket
+    compareLabel: string
+    trend: Array<{
+        label: string
+        revenue: number
+        payments: number
+        signups: number
+        inbound: number
+        outbound: number
+        answered: number
+        minutes: number
+    }>
+    revenueByPlan: Array<{ name: string; revenue: number; payments: number }>
+    summary: {
+        revenue: PeriodValue
+        payments: PeriodValue
+        signups: PeriodValue
+        calls: PeriodValue
+        minutes: PeriodValue
+        answered: PeriodValue
+        mrr: number
+        recurringSubscribers: number
+    }
+}
+
+export interface UserTrends {
+    bucket: TrendBucket
+    compareLabel: string
+    trend: Array<{
+        label: string
+        inbound: number
+        outbound: number
+        answered: number
+        minutes: number
+        aiCampaigns: number
+        smsCampaigns: number
+    }>
+    summary: {
+        calls: PeriodValue
+        minutes: PeriodValue
+        answered: PeriodValue
+        appointments: PeriodValue
+    }
+}
+
+export interface CreditStats {
+    total_credits: number
+    used_credits: number
+    available_credits: number
+    monthly_credits_used?: number
 }
 
 export type AdminDashboardStats = AdminDashboardProps['stats'];
@@ -72,6 +134,8 @@ export interface UserDashboardProps {
             recentTeamMembers: any[]
             recentActivity: any[]
         }
+        credits?: CreditStats
+        trends?: UserTrends
     }
 }
 
@@ -83,13 +147,6 @@ export interface CallItem {
     direction?: string;
     duration?: number;
     status?: string;
-}
-
-export interface CallsAndVolumesProps {
-    recentCallsOfCurrentUser: CallItem[];
-    callsChartOptions: any;
-    callsChartSeries: any[];
-    cardVariants: any;
 }
 
 export interface DashboardChartCardProps {
@@ -115,12 +172,6 @@ export interface UserItem {
     };
 }
 
-export interface RevenueAndRegistrationsProps {
-    revenueChartOptions: any;
-    revenueChartSeries: any[];
-    recentRegisteredUsers: UserItem[];
-    cardVariants: any;
-}
 
 export interface StatsCardProps {
     title: string
@@ -130,15 +181,15 @@ export interface StatsCardProps {
     colorClass: string
     glowClass: string
     prefix?: string
+    suffix?: string
+    decimals?: number
     href?: string
+    delta?: PeriodValue
+    compareLabel?: string
 }
 
 export interface UserChartsAndTablesProps {
     stats: UserDashboardProps['stats']
-    weeklyChartOptions: any
-    weeklyChartSeries: any
-    campaignChartOptions: any
-    campaignChartSeries: any
     cardVariants: any
     t: any
 }
@@ -151,6 +202,8 @@ export interface UserCountersProps {
         icon: any
         colorClass: string
         glowClass: string
+        delta?: PeriodValue
+        compareLabel?: string
     }>
 }
 
@@ -170,6 +223,7 @@ export interface UserHeaderSectionProps {
 }
 
 export interface WelcomeAndCountersProps {
+    trends?: AdminTrends;
     statistics: {
         totalRevenue?: number;
         activeSubscribers?: number;
@@ -259,7 +313,7 @@ export interface TeamMemberDashboardProps {
 export interface AdminLowerSectionProps {
     recentContacts: AdminDashboardStats['tables']['recentContactOfCurrentUser'];
     recentSmsCampaigns: AdminDashboardStats['tables']['recentSmsCampaignsOfCurrentUser'];
-    agentPieChart: AdminDashboardStats['charts']['allTimeAgentPieChart'];
+    agentCounts: { agents: number; smsAgents: number };
     cardVariants: any;
 }
 
