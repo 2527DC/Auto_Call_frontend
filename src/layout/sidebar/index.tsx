@@ -18,13 +18,14 @@ const Sidebar = ({ isMobile, onClose, onLogoClick }: SidebarProps) => {
   const { isSidebarCollapsed } = useAppSelector((state) => state.layout)
   const isExpanded = isMobile || !isSidebarCollapsed
 
-  const { hasPermission, hasAnyPermission, role } = usePermission()
+  const { hasPermission, hasAnyPermission, hasBeta, role } = usePermission()
 
   const filteredMenuData = sidebarMenuData.map(section => ({
     ...section,
     items: section.items.filter(item => {
       if (item.requiredRole === 'super_admin' && role !== 'super_admin') return false
       if (item.requiredRole === 'admin' && role !== 'admin' && role !== 'super_admin') return false
+      if (item.requiredBeta && !hasBeta(item.requiredBeta)) return false
       if (item.hideForAdmin && role === 'super_admin') return false
       if (item.hideForAdmin && role === 'admin') return false
       if (item.hideForAdmin && role === 'admin') return false

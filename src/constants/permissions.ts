@@ -73,6 +73,15 @@ export const PERMISSIONS = {
   VIEW_PRICE_ESTIMATOR: 'view.price_estimator',
   MANAGE_PRICE_ESTIMATOR: 'manage.price_estimator',
 
+  // WhatsApp Inbox & Automation (beta)
+  VIEW_WHATSAPP_INBOX: 'view.whatsapp_inbox',
+  REPLY_WHATSAPP_INBOX: 'reply.whatsapp_inbox',
+  ASSIGN_WHATSAPP_INBOX: 'assign.whatsapp_inbox',
+  VIEW_WHATSAPP_AUTOMATION: 'view.whatsapp_automation',
+  CREATE_WHATSAPP_AUTOMATION: 'create.whatsapp_automation',
+  UPDATE_WHATSAPP_AUTOMATION: 'update.whatsapp_automation',
+  DELETE_WHATSAPP_AUTOMATION: 'delete.whatsapp_automation',
+
   // Testimonials
   VIEW_TESTIMONIALS: 'view.testimonials',
   CREATE_TESTIMONIALS: 'create.testimonials',

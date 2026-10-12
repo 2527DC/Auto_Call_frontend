@@ -1,3 +1,4 @@
+import { authUtils } from '@/utils/auth';
 import { io, Socket } from 'socket.io-client';
 
 class SocketService {
@@ -13,6 +14,8 @@ class SocketService {
         withCredentials: true,
         transports: ['websocket', 'polling'],
         upgrade: true,
+        // Signs the socket in, so the server can put it in this account's rooms.
+        auth: (cb) => cb({ token: authUtils.getToken() }),
       });
 
       this.socket.on('connect', () => {
@@ -33,6 +36,15 @@ class SocketService {
       this.socket.disconnect();
       this.socket = null;
     }
+  }
+
+  // Listens for a server event; returns a function that stops listening.
+  on<T = unknown>(event: string, callback: (data: T) => void) {
+    const socket = this.connect();
+    socket.on(event, callback);
+    return () => {
+      socket.off(event, callback);
+    };
   }
 
   onNotification(callback: (data: any) => void) {

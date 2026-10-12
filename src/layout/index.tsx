@@ -22,7 +22,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const pathname = usePathname()
   const router = useRouter()
   const [isMounted, setIsMounted] = useState(false)
-  const { user, isAuthenticated, isLoading, hasPermission, role } = usePermission()
+  const { user, isAuthenticated, isLoading, hasPermission, hasBeta, role } = usePermission()
 
   // Determine role — fall back to stored user so we know before the first profile fetch
   const isTeamMemberRole = role === 'team_member'
@@ -89,13 +89,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     // Permission visibility logic
     if (matchedItem.requiredRole === 'super_admin' && role !== 'super_admin') return false
     if (matchedItem.requiredRole === 'admin' && role !== 'admin' && role !== 'super_admin') return false
+    if (matchedItem.requiredBeta && !hasBeta(matchedItem.requiredBeta)) return false
     if (matchedItem.hideForAdmin && role === 'super_admin') return false
     if (matchedItem.hideForAdmin && role === 'admin') return false
     if (matchedItem.requiredPermission && !hasPermission(matchedItem.requiredPermission)) return false
     if (matchedItem.requiredPermissions && !matchedItem.requiredPermissions.some((p) => hasPermission(p))) return false
 
     return true
-  }, [pathname, allMenuItems, user, isLoading, hasPermission, role])
+  }, [pathname, allMenuItems, user, isLoading, hasPermission, hasBeta, role])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect

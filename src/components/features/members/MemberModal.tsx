@@ -45,6 +45,7 @@ export function MemberModal({ isOpen, onClose, user }: MemberModalProps) {
     confirmPassword: '',
     roleId: user?.roleId || '',
     isActive: user?.isActive ?? true,
+    betaWhatsapp: !!user?.beta_features?.whatsapp,
     avatar: null as File | null,
     removeAvatar: false,
     isEditing,
@@ -60,6 +61,7 @@ export function MemberModal({ isOpen, onClose, user }: MemberModalProps) {
       values.email !== (user?.email || '') ||
       values.roleId !== (user?.roleId || '') ||
       values.isActive !== (user?.isActive ?? true) ||
+      values.betaWhatsapp !== !!user?.beta_features?.whatsapp ||
       (values.password !== '' && values.password !== undefined)
     )
   }
@@ -94,6 +96,7 @@ export function MemberModal({ isOpen, onClose, user }: MemberModalProps) {
 
       if (isEditing && user) {
         formData.append('id', user.id)
+        formData.append('beta_whatsapp', String(values.betaWhatsapp))
         const res = await updateUser(formData).unwrap()
         toast.success(res.message || t('user_updated_successfully'))
       } else {
@@ -215,6 +218,21 @@ export function MemberModal({ isOpen, onClose, user }: MemberModalProps) {
                 </div>
                 <Switch id="isActive" checked={values.isActive} onCheckedChange={(checked: boolean) => setFieldValue("isActive", checked)} className="data-[state=checked]:bg-primary" />
               </div>
+
+              {isEditing && user?.role !== 'admin' && user?.role !== 'super_admin' && (
+                <div className="flex items-center justify-between gap-4 p-4 mb-4 rounded-lg bg-subcard border border-input-border-color transition-colors">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="betaWhatsapp" className="text-md font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                      {t('whatsapp_beta_access', 'WhatsApp Inbox & Automation')}
+                      <span className="rounded-full bg-primary/10 px-1.5 py-px text-[10px] font-bold uppercase tracking-wide text-primary">Beta</span>
+                    </Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                      {t('whatsapp_beta_access_desc', 'Lets this client chat with customers on WhatsApp and build chatbot automations. Free during the beta.')}
+                    </p>
+                  </div>
+                  <Switch id="betaWhatsapp" checked={values.betaWhatsapp} onCheckedChange={(checked: boolean) => setFieldValue('betaWhatsapp', checked)} className="data-[state=checked]:bg-primary" />
+                </div>
+              )}
 
               <DialogFooter className="pt-2 gap-3 sm:gap-4 mt-2">
                 <Button type="button" variant="outline" onClick={onClose} disabled={isLoading} className="flex-1 p-padding! mr-0! rounded-radius border border-input-border-color bg-subcard dark:bg-subcard text-black dark:text-white text-md font-medium transition-all">

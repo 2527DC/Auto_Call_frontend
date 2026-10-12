@@ -34,6 +34,8 @@ export const ROUTES = {
   TRANSACTIONS: "/transactions",
   COST_REPORT: "/cost-report",
   PRICE_ESTIMATOR: "/price-estimator",
+  WHATSAPP_INBOX: "/whatsapp-inbox",
+  WHATSAPP_AUTOMATIONS: "/whatsapp-automations",
   PAYMENT_SETUP: "/payment-setup",
   CONTACT_HUB: "/contact-hub",
   CONTACT_GROUP: "/contact-group",

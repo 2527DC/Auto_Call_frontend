@@ -47,6 +47,7 @@ import {
   UserCog,
   UserRound,
   Users,
+  Workflow,
   Wrench
 } from "lucide-react";
 
@@ -96,7 +97,8 @@ export const iconMap = {
   shoppingCart: ShoppingCart,
   history: History,
   trendingUp: TrendingUp,
-  calculator: Calculator
+  calculator: Calculator,
+  workflow: Workflow
 };
 
 export const sidebarMenuData: MenuSection[] = [
@@ -248,6 +250,29 @@ export const sidebarMenuData: MenuSection[] = [
         icon: "tags",
         path: ROUTES.ATTRIBUTE,
         requiredPermissions: [PERMISSIONS.VIEW_TEMPLATES, PERMISSIONS.VIEW_CAMPAIGNS],
+      },
+    ],
+  },
+  {
+    title: "WhatsApp",
+    items: [
+      {
+        id: "whatsapp-inbox",
+        label: "WhatsApp Inbox",
+        icon: "messageCircleMore",
+        path: ROUTES.WHATSAPP_INBOX,
+        badge: "Beta",
+        requiredBeta: "whatsapp",
+        requiredPermission: PERMISSIONS.VIEW_WHATSAPP_INBOX,
+      },
+      {
+        id: "whatsapp-automations",
+        label: "WhatsApp Bots",
+        icon: "workflow",
+        path: ROUTES.WHATSAPP_AUTOMATIONS,
+        badge: "Beta",
+        requiredBeta: "whatsapp",
+        requiredPermission: PERMISSIONS.VIEW_WHATSAPP_AUTOMATION,
       },
     ],
   },

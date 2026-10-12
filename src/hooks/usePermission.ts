@@ -27,6 +27,8 @@ export const usePermission = () => {
   }
 
   const isAdmin = () => userRole === 'admin' || userRole === 'super_admin'
+  // Beta features: admins always, clients once an admin has switched the feature on.
+  const hasBeta = (feature: 'whatsapp'): boolean => isAdmin() || !!user?.beta_features?.[feature]
   const isAgent = () => userRole === 'agent'
   const isAssigner = () => userRole === 'assigner'
   const isTeamMember = () => userRole === 'team_member'
@@ -41,6 +43,7 @@ export const usePermission = () => {
     hasAnyPermission,
     hasAllPermissions,
     isAdmin,
+    hasBeta,
     isAgent,
     isAssigner,
     isTeamMember,

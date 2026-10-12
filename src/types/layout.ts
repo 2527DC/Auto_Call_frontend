@@ -13,6 +13,8 @@ export interface MenuItem {
   requiredPermission?: string
   requiredPermissions?: string[]
   requiredRole?: string
+  // A beta feature: shown to admins, and to clients an admin switched it on for.
+  requiredBeta?: 'whatsapp'
   hideForAdmin?: boolean
   children?: MenuItem[]
 }

@@ -94,6 +94,15 @@ const SidebarItem: FC<ExtendedSidebarItemProps> = ({ item, depth = 0, isCollapse
         </span>
       )}
 
+      {item.badge && !isCollapsed && (
+        <span className={cn(
+          'shrink-0 rounded-full px-1.5 py-px text-[10px] font-bold uppercase tracking-wide',
+          isActive && depth === 0 ? 'bg-white/20 text-white' : 'bg-primary/10 text-primary'
+        )}>
+          {item.badge}
+        </span>
+      )}
+
       {hasChildren && !isCollapsed && (
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}

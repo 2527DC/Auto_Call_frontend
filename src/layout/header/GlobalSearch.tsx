@@ -17,7 +17,7 @@ const GlobalSearch = ({ isMobile = false }: GlobalSearchProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const { hasPermission, hasAnyPermission, role } = usePermission()
+  const { hasPermission, hasAnyPermission, hasBeta, role } = usePermission()
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -46,6 +46,7 @@ const GlobalSearch = ({ isMobile = false }: GlobalSearchProps) => {
   const filteredItems = allItems.filter((item: MenuItem) => {
     // Permission check
     if (item.requiredRole === 'super_admin' && role !== 'super_admin') return false
+    if (item.requiredBeta && !hasBeta(item.requiredBeta)) return false
     if (item.hideForAdmin && role === 'super_admin') return false
     if (item.hideForAdmin && role === 'admin') return false
     if (item.requiredPermissions && !hasAnyPermission(item.requiredPermissions)) return false

@@ -25,6 +25,7 @@ export interface User {
   used_credits?: number
   lastLogin?: string
   remaining_credits?: number
+  beta_features?: { whatsapp?: boolean }
 }
 
 export interface CookieOptions {

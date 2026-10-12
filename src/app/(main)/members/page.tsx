@@ -162,7 +162,12 @@ export default function UsersPage() {
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <span className="font-medium text-base text-title">{row.name}</span>
+            <span className="font-medium text-base text-title flex items-center gap-2">
+              {row.name}
+              {row.beta_features?.whatsapp && (
+                <span title={t('whatsapp_beta_on', 'WhatsApp beta is on')} className="rounded-full bg-primary/10 px-1.5 py-px text-[10px] font-bold uppercase tracking-wide text-primary">WA Beta</span>
+              )}
+            </span>
             <CopyEmailCell email={row.email} />
           </div>
         </div>
