@@ -9,9 +9,11 @@ import { PlanBasicFieldsProps } from '@/types/plans'
 import { useTranslation } from 'react-i18next'
 import PlanClientPicker from './PlanClientPicker'
 import PlanCreditMath from './PlanCreditMath'
+import { useCallMinutes } from '@/hooks/useCallMinutes'
 
 const PlanBasicFields = ({ formData, onChange }: PlanBasicFieldsProps) => {
   const { t } = useTranslation()
+  const { describe, allowance, perCall, premiumMultiplier } = useCallMinutes()
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -188,6 +190,16 @@ const PlanBasicFields = ({ formData, onChange }: PlanBasicFieldsProps) => {
           className="h-10 rounded-lg border-input-border-color focus-visible:ring-primary/20 bg-input-color"
         />
         <p className="text-xs text-muted-foreground">{t('total_credits_hint')}</p>
+        {(formData.total_credits || 0) > 0 && (
+          <p className="text-sm font-medium text-foreground">
+            {t('plan_shows_as', 'Shown to clients as')} <span className="font-semibold text-primary">{describe(formData.total_credits)}</span>
+            {!perCall && premiumMultiplier > 1 && (
+              <span className="text-xs font-normal text-muted-foreground">
+                {' '}({allowance((formData.total_credits || 0) / premiumMultiplier).toLocaleString('en-IN')} {t('with_premium_voices', 'with premium ElevenLabs voices')})
+              </span>
+            )}
+          </p>
+        )}
         <PlanCreditMath amount={formData.amount} credits={formData.total_credits} />
       </div>
 

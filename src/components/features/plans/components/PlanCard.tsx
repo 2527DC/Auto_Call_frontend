@@ -1,10 +1,11 @@
 'use client'
 
 import PrivatePlanBadge from './PrivatePlanBadge'
+import { useCallMinutes } from '@/hooks/useCallMinutes'
 import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { BookOpen, Bot, Brain, Calendar, Check, Crown, FileText, Gem, Gift, HardDrive, Info, Megaphone, MessageSquare, Network, Send, Sparkles, Star, Users } from 'lucide-react'
+import { BookOpen, Bot, Brain, Calendar, Check, Crown, FileText, Gem, Gift, HardDrive, Info, Megaphone, MessageSquare, Network, PhoneCall, Send, Sparkles, Star, Users } from 'lucide-react'
 
 const DiamondIcon = () => (
   <svg viewBox="0 0 100 100" className="w-2.5 h-2.5 fill-primary text-primary">
@@ -30,6 +31,7 @@ export const PlanCard = ({
   hasActiveSubscription,
 }: any) => {
   const translate = t || ((key: string, options?: any) => options?.defaultValue || key)
+  const { allowance, unitLabel, shortUnit } = useCallMinutes()
 
   const currencySymbol = CURRENCY_SYMBOL
 
@@ -105,7 +107,23 @@ export const PlanCard = ({
     return <Check className="w-4 h-4 text-foreground/70" />
   }
 
-  const renderFeatures = () => {
+  // Call minutes the plan's credits buy, shown as the first feature row.
+  const renderFeatures = () => (
+    <>
+      {plan.total_credits > 0 && (
+        <li key="call_minutes" className="flex items-center gap-3 mb-3 text-sm text-foreground/80">
+          <span className="flex-shrink-0"><PhoneCall className="w-4 h-4 text-primary" /></span>
+          <span className="flex justify-between w-full">
+            <span className="text-title/90 text-md font-medium">{unitLabel}</span>{' '}
+            <span className="font-bold text-primary">{allowance(plan.total_credits).toLocaleString('en-IN')}</span>
+          </span>
+        </li>
+      )}
+      {renderPlanFeatures()}
+    </>
+  )
+
+  const renderPlanFeatures = () => {
     // If dynamic features are present, render them
     if (plan.plan_type === 'top_up') {
       const topUpFeatures = [
@@ -212,10 +230,13 @@ export const PlanCard = ({
           <div className="flex flex-col">
             <span className="text-md text-subtitle-color font-semibold mb-1 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-primary" />
-              {translate('credits', { defaultValue: 'Credits' })}
+              {unitLabel}
             </span>
             <span className="text-xl font-bold text-title">
-              {plan.total_credits ? plan.total_credits.toLocaleString() : 0}
+              {allowance(plan.total_credits).toLocaleString('en-IN')}
+            </span>
+            <span className="text-xs text-subtitle-color">
+              {(plan.total_credits || 0).toLocaleString('en-IN')} {translate('credits', { defaultValue: 'Credits' }).toLowerCase()}
             </span>
           </div>
 
@@ -300,7 +321,7 @@ export const PlanCard = ({
               {/* Total Credits Badge */}
               {plan.total_credits > 0 && (
                 <span className="text-[10px] font-bold border border-input-border-color text-title bg-subcard rounded-md px-2.5 py-1 uppercase tracking-wider w-full text-center">
-                  {plan.total_credits.toLocaleString()} {translate('credits', { defaultValue: 'CREDITS' })}
+                  {allowance(plan.total_credits).toLocaleString('en-IN')} {shortUnit}
                 </span>
               )}
 
@@ -420,7 +441,7 @@ export const PlanCard = ({
           {/* Total Credits Badge */}
           {plan.total_credits > 0 && (
             <span className="text-[10px] font-bold border border-input-border-color text-title bg-subcard rounded-md px-2.5 py-1 uppercase tracking-wider w-full text-center">
-              {plan.total_credits.toLocaleString()} {translate('credits', { defaultValue: 'CREDITS' })}
+              {allowance(plan.total_credits).toLocaleString('en-IN')} {shortUnit}
             </span>
           )}
 

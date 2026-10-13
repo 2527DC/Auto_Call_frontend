@@ -4,8 +4,9 @@ import PrivatePlanBadge from './components/PrivatePlanBadge'
 import { CURRENCY_SYMBOL } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { BookOpen, Bot, Brain, Calendar, Check, Crown, FileText, Gem, Gift, HardDrive, Megaphone, MessageSquare, Network, Pencil, Send, Sparkles, Star, Trash2, Users } from 'lucide-react'
+import { BookOpen, Bot, Brain, Calendar, Check, Crown, FileText, Gem, Gift, HardDrive, Megaphone, MessageSquare, Network, PhoneCall, Pencil, Send, Sparkles, Star, Trash2, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useCallMinutes } from '@/hooks/useCallMinutes'
 
 const DiamondIcon = () => (
   <svg viewBox="0 0 100 100" className="w-2.5 h-2.5 fill-primary text-primary">
@@ -21,6 +22,7 @@ const AdminPlanCard = ({
   plans = []
 }: any) => {
   const { t } = useTranslation()
+  const { allowance, unitLabel, shortUnit } = useCallMinutes()
 
   const currencySymbol = CURRENCY_SYMBOL
   const billingCycle = plan.billing_cycle || 'monthly'
@@ -92,7 +94,23 @@ const AdminPlanCard = ({
     return <Check className="w-4 h-4 text-foreground/70" />
   }
 
-  const renderFeatures = () => {
+  // Call minutes the plan's credits buy, shown as the first feature row.
+  const renderFeatures = () => (
+    <>
+      {plan.total_credits > 0 && (
+        <li key="call_minutes" className="flex items-center gap-3 mb-3 text-sm text-foreground/80">
+          <span className="flex-shrink-0"><PhoneCall className="w-4 h-4 text-primary" /></span>
+          <span className="flex justify-between w-full">
+            <span className="text-title/90 text-md font-medium">{unitLabel}</span>{' '}
+            <span className="font-bold text-primary">{allowance(plan.total_credits).toLocaleString('en-IN')}</span>
+          </span>
+        </li>
+      )}
+      {renderPlanFeatures()}
+    </>
+  )
+
+  const renderPlanFeatures = () => {
     // If dynamic features are present, render them
     if (plan.plan_type === 'top_up') {
       const topUpFeatures = [
@@ -197,10 +215,13 @@ const AdminPlanCard = ({
           <div className="flex flex-col">
             <span className="text-md text-subtitle-color font-semibold mb-1 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-primary" />
-              {t('credits')}
+              {unitLabel}
             </span>
             <span className="text-xl font-bold text-title">
-              {plan.total_credits ? plan.total_credits.toLocaleString() : 0}
+              {allowance(plan.total_credits).toLocaleString('en-IN')}
+            </span>
+            <span className="text-xs text-subtitle-color">
+              {(plan.total_credits || 0).toLocaleString('en-IN')} {t('credits').toLowerCase()}
             </span>
           </div>
 
@@ -269,7 +290,7 @@ const AdminPlanCard = ({
               {/* Total Credits Badge */}
               {plan.total_credits > 0 && (
                 <span className="text-xs font-bold border border-input-border-color text-slate-600 bg-slate-100 dark:bg-white/5 rounded-lg px-2.5 py-1 uppercase tracking-wider w-full text-center">
-                  {plan.total_credits.toLocaleString()} {t('credits')}
+                  {allowance(plan.total_credits).toLocaleString('en-IN')} {shortUnit}
                 </span>
               )}
 
@@ -366,7 +387,7 @@ const AdminPlanCard = ({
           {/* Total Credits Badge */}
           {plan.total_credits > 0 && (
             <span className="text-xs font-bold border border-input-border-color text-slate-600 bg-slate-100 dark:bg-white/5 rounded-md px-2.5 py-1 uppercase tracking-wider w-full text-center">
-              {plan.total_credits.toLocaleString()} {t('credits')}
+              {allowance(plan.total_credits).toLocaleString('en-IN')} {shortUnit}
             </span>
           )}
 

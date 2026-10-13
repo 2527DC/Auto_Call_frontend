@@ -8,9 +8,11 @@ import { PlanCardProps } from '@/types/plans'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useCallMinutes } from '@/hooks/useCallMinutes'
 
 const PlanCard = ({ plan, index, billingCycle, isCurrent, onSubscribe }: PlanCardProps) => {
   const { t } = useTranslation()
+  const { describe } = useCallMinutes()
   const price = plan.amount
   const isHighlighted = plan.slug === 'pro' || index === 1
 
@@ -50,6 +52,14 @@ const PlanCard = ({ plan, index, billingCycle, isCurrent, onSubscribe }: PlanCar
       </div>
 
       <div className="space-y-4 mb-10 flex-1">
+        {plan.total_credits > 0 && (
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
+              <Check className="w-3 h-3 text-green-600" />
+            </div>
+            <span className="text-sm font-bold text-foreground">{describe(plan.total_credits)}</span>
+          </div>
+        )}
         {Object.entries(plan.features || {}).map(([key, value]) => (
           <div key={key} className="flex items-center gap-3 group/feature">
             <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20 transition-all group-hover/feature:bg-green-500 group-hover/feature:border-green-500">

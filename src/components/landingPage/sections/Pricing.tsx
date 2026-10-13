@@ -7,11 +7,13 @@ import { Check, Crown, Gem, Gift, ShieldCheck, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useCallMinutes } from "@/hooks/useCallMinutes";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export function Pricing({ pricingSection, plansData }: PricingProps) {
   const { t } = useTranslation();
+  const { describe } = useCallMinutes();
   const [isAnnual] = useState(false);
 
   const getPlanIcon = (name: string, index: number) => {
@@ -101,6 +103,12 @@ export function Pricing({ pricingSection, plansData }: PricingProps) {
                     } else {
                       itemsList = fallbackFeatures;
                     }
+                  }
+
+                  // Lead with the call minutes the plan's credits buy, e.g. "300 call minutes / month".
+                  if (plan.total_credits && plan.total_credits > 0) {
+                    const per = plan.billing_cycle === "monthly" ? " / month" : plan.billing_cycle === "yearly" ? " / year" : "";
+                    itemsList = [`${describe(plan.total_credits)}${per}`, ...itemsList];
                   }
 
                   return itemsList.map((feat) => (

@@ -193,6 +193,8 @@ export interface PricingProps {
     description: string;
     amount: number;
     is_popular?: boolean;
+    total_credits?: number;
+    billing_cycle?: string;
     agent_limit?: number;
     campaign_limit_per_day?: number;
     flow_limit?: number;
