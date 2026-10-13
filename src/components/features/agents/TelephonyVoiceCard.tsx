@@ -11,6 +11,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
+import { useGetVoiceModelsQuery } from '@/redux/api/voiceApi'
 import { TelephonyProvider, TelephonyVoiceCardProps, VoiceProvider } from '@/types/agent'
 import { X } from 'lucide-react'
 import React from 'react'
@@ -25,6 +26,9 @@ export function TelephonyVoiceCard({
   voiceId,
   setVoiceId,
   voicesData,
+  ttsModel,
+  setTtsModel,
+  language,
   idleTimeout,
   setIdleTimeout,
   maxCallDuration,
@@ -42,6 +46,14 @@ export function TelephonyVoiceCard({
   memberId,
   setMemberId,
 }: TelephonyVoiceCardProps) {
+  // Only the models the admin allows (and priced) are offered.
+  const { data: modelsData } = useGetVoiceModelsQuery(undefined, { skip: voiceProvider !== VoiceProvider.ELEVENLABS })
+  const models = modelsData?.data?.elevenlabs || []
+  const defaultModel = models.find((m) => m.is_default)
+  const chosenModel = models.find((m) => m.model_id === ttsModel) || defaultModel
+  const languageCode = (language || '').split(/[-_]/)[0].toLowerCase()
+  const modelLacksLanguage = !!chosenModel && chosenModel.languages.length > 0 && !!languageCode &&
+    !chosenModel.languages.some((l) => l.id.toLowerCase().startsWith(languageCode))
   const { t } = useTranslation()
 
   const handleKeywordAdd = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -119,6 +131,29 @@ export function TelephonyVoiceCard({
             </SelectContent>
           </Select>
         </div>
+
+        {/* ── ElevenLabs voice model ── */}
+        {voiceProvider === VoiceProvider.ELEVENLABS && models.length > 0 && (
+          <div className="space-y-3">
+            <Label className="text-md mb-2 font-medium text-title">{t('voice_model')}</Label>
+            <Select value={ttsModel || 'default'} onValueChange={(val) => setTtsModel(val === 'default' ? '' : val)}>
+              <SelectTrigger className="h-10 rounded-radius bg-input-color shadow-none border-input-border-color font-bold dark:bg-white/5 dark:border-white/10">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="rounded-radius border-input-border-color">
+                <SelectItem value="default">{t('default_voice_model_option', { name: defaultModel?.name || '' })}</SelectItem>
+                {models.map((m) => (
+                  <SelectItem key={m.model_id} value={m.model_id}>
+                    {m.name}{m.deprecated ? ` (${t('deprecated')})` : ''}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {modelLacksLanguage && (
+              <p className="text-xs font-medium text-amber-600">{t('voice_model_language_warning')}</p>
+            )}
+          </div>
+        )}
 
         {/* ── Call Settings ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-100 dark:border-white/5">

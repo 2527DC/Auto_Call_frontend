@@ -58,6 +58,7 @@ export interface Agent {
   enable_call_recording?: boolean
   greeting_mode?: GreetingMode
   hello_wait_ms?: number
+  tts_model?: string | null
 
   analytics?: {
     total_calls: number
@@ -142,6 +143,7 @@ export interface CreateAgentPayload {
   enable_call_recording?: boolean
   greeting_mode?: GreetingMode
   hello_wait_ms?: number
+  tts_model?: string | null
 }
 
 export interface UpdateAgentPayload extends Partial<CreateAgentPayload> {
@@ -235,6 +237,11 @@ export interface TelephonyVoiceCardProps {
   voiceId: string
   setVoiceId: (id: string) => void
   voicesData?: import('./voice').VoiceResponse | null
+  // ElevenLabs voice model ('' = the admin's default) and the agent's language,
+  // to warn when the model can't speak it.
+  ttsModel: string
+  setTtsModel: (model: string) => void
+  language: string
   idleTimeout: number
   setIdleTimeout: (timeout: number) => void
   maxCallDuration: number

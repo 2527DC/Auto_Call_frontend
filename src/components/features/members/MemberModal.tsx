@@ -24,6 +24,7 @@ import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { ClientVoiceKeys } from './ClientVoiceKeys'
 
 export function MemberModal({ isOpen, onClose, user }: MemberModalProps) {
   const { t } = useTranslation()
@@ -232,6 +233,10 @@ export function MemberModal({ isOpen, onClose, user }: MemberModalProps) {
                   </div>
                   <Switch id="betaWhatsapp" checked={values.betaWhatsapp} onCheckedChange={(checked: boolean) => setFieldValue('betaWhatsapp', checked)} className="data-[state=checked]:bg-primary" />
                 </div>
+              )}
+
+              {isEditing && user?.id && user?.role !== 'admin' && user?.role !== 'super_admin' && (
+                <ClientVoiceKeys userId={user.id} />
               )}
 
               <DialogFooter className="pt-2 gap-3 sm:gap-4 mt-2">

@@ -25,6 +25,32 @@ export interface VoiceResponse {
 
 export interface VoiceCardProps {
   voice: Voice
+  // Admins get a switch to show or hide the voice for clients.
+  canManage?: boolean
+}
+
+export interface VoiceModel {
+  model_id: string
+  name: string
+  description: string | null
+  languages: { id: string; name: string }[]
+  deprecated: boolean
+  realtime: boolean | null
+  price_per_1k_chars_usd: number | null
+  allowed: boolean
+  is_default: boolean
+}
+
+export interface VoiceModelsResponse {
+  success: boolean
+  data: { elevenlabs: VoiceModel[] }
+}
+
+// Masked except the last 4 characters; '' when the client has no key.
+export interface ClientProviderKeys {
+  elevenlabs_api_key: string
+  deepgram_api_key: string
+  sarvam_ai_api_key: string
 }
 
 export interface AssignAgentModalProps {

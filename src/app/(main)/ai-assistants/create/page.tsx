@@ -45,6 +45,7 @@ export default function CreateAgentPage() {
   const [voiceProvider, setVoiceProvider] = useState<VoiceProvider>(VoiceProvider.ELEVENLABS)
   const [flowId, setFlowId] = useState('')
   const [voiceId, setVoiceId] = useState('')
+  const [ttsModel, setTtsModel] = useState('')
   const [language, setLanguage] = useState('en')
   const [llmModel, setLlmModel] = useState('')
   const [temperature, setTemperature] = useState(0.5)
@@ -102,6 +103,7 @@ export default function CreateAgentPage() {
       setVoiceProvider(agent.voice_provider || VoiceProvider.ELEVENLABS)
       setFlowId(agent.flow_id || '')
       setVoiceId(agent.voice_id || '')
+      setTtsModel(agent.tts_model || '')
       setLanguage(agent.language || 'en')
       setLlmModel(agent.llm_model?._id || agent.llm_model?.id || agent.llm_model || '')
       setTemperature(agent.temperature ?? 0.5)
@@ -159,6 +161,7 @@ export default function CreateAgentPage() {
         telephony_provider: telephonyProvider,
         voice_provider: voiceProvider,
         voice_id: voiceId || null,
+        tts_model: voiceProvider === VoiceProvider.ELEVENLABS ? (ttsModel || null) : null,
         language,
         llm_model: llmModel || null,
         temperature,
@@ -301,6 +304,9 @@ export default function CreateAgentPage() {
               voiceId={voiceId}
               setVoiceId={setVoiceId}
               voicesData={voicesData}
+              ttsModel={ttsModel}
+              setTtsModel={setTtsModel}
+              language={language}
               idleTimeout={idleTimeout}
               setIdleTimeout={setIdleTimeout}
               maxCallDuration={maxCallDuration}

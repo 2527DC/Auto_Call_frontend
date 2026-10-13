@@ -3,11 +3,15 @@
 import SelectField from '@/components/shared/SelectField'
 import TextInput from '@/components/shared/TextInput'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { usePermission } from '@/hooks/usePermission'
 import { AiSettingsProps } from '@/types/settings'
 import { useTranslation } from 'react-i18next'
 
 export default function AiSettings({ aiModelOptions }: AiSettingsProps) {
   const { t } = useTranslation()
+  // Voice-provider keys are set by the admin (Members), so clients only see them.
+  const { isAdmin } = usePermission()
+  const keysManaged = !isAdmin()
 
   return (
     <Card className="bg-bg-card border border-input-border-color rounded-radius overflow-hidden animate-in fade-in duration-300">
@@ -32,23 +36,29 @@ export default function AiSettings({ aiModelOptions }: AiSettingsProps) {
           placeholder="sk-..."
           type="password"
         />
+        {keysManaged && (
+          <p className="text-xs text-zinc-500">{t('voice_keys_managed_note')}</p>
+        )}
         <TextInput
           name="elevenlabs_api_key"
           label={t('elevenlabs_api_key_label')}
-          placeholder={t('enter_elevenlabs_key')}
+          placeholder={keysManaged ? t('managed_by_voxeno') : t('enter_elevenlabs_key')}
           type="password"
+          disabled={keysManaged}
         />
         <TextInput
           name="deepgram_api_key"
           label={t('deepgram_api_key_label')}
-          placeholder={t('enter_deepgram_key')}
+          placeholder={keysManaged ? t('managed_by_voxeno') : t('enter_deepgram_key')}
           type="password"
+          disabled={keysManaged}
         />
         <TextInput
           name="sarvam_ai_api_key"
           label={t('sarvam_ai_api_key_label')}
-          placeholder={t('enter_sarvam_ai_key')}
+          placeholder={keysManaged ? t('managed_by_voxeno') : t('enter_sarvam_ai_key')}
           type="password"
+          disabled={keysManaged}
         />
 
       </CardContent>

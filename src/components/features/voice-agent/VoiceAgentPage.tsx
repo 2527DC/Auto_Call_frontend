@@ -19,14 +19,16 @@ export const VoiceAgentPage = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState("")
   const [providerFilter, setProviderFilter] = useState("all")
+  const [visibilityFilter, setVisibilityFilter] = useState("all")
   const debouncedSearch = useDebounce(search, 500)
   const { hasPermission } = usePermission()
 
-  const { data: response, isLoading } = useGetVoicesQuery()
+  const canSync = hasPermission(PERMISSIONS.SYNC_VOICES)
+  // Admins also see hidden voices, to choose which ones clients can pick.
+  const { data: response, isLoading } = useGetVoicesQuery(canSync ? { scope: 'all' } : undefined)
   const [syncVoices, { isLoading: isSyncing }] = useSyncVoicesMutation()
 
   const allVoices = response?.data || []
-  const canSync = hasPermission(PERMISSIONS.SYNC_VOICES)
 
   const handleSync = async () => {
     try {
@@ -52,8 +54,9 @@ export const VoiceAgentPage = () => {
     )
 
     const matchesProvider = providerFilter === "all" || voice.provider?.toLowerCase() === providerFilter.toLowerCase()
+    const matchesVisibility = visibilityFilter === "all" || voice.status === visibilityFilter
 
-    return matchesSearch && matchesProvider
+    return matchesSearch && matchesProvider && matchesVisibility
   })
 
   return (
@@ -97,6 +100,21 @@ export const VoiceAgentPage = () => {
           emptyStateActionLabel={t('sync_voice')}
           onEmptyStateAction={canSync ? handleSync : undefined}
           filterContent={
+            <div className="flex gap-3">
+            {canSync && (
+              <div className="w-[180px]">
+                <Select value={visibilityFilter} onValueChange={setVisibilityFilter}>
+                  <SelectTrigger className="h-11 bg-input-color border-transparent focus:border-primary">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{t("all")}</SelectItem>
+                    <SelectItem value="active">{t("voices_shown_to_customers")}</SelectItem>
+                    <SelectItem value="inactive">{t("voices_hidden_from_customers")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="w-[180px]">
               <Select value={providerFilter} onValueChange={setProviderFilter}>
                 <SelectTrigger className="h-11 bg-input-color border-transparent focus:border-primary">
@@ -111,9 +129,10 @@ export const VoiceAgentPage = () => {
                 </SelectContent>
               </Select>
             </div>
+            </div>
           }
           renderCard={(voice) => (
-            <VoiceCard voice={voice} />
+            <VoiceCard voice={voice} canManage={canSync} />
           )}
         />
       </div>

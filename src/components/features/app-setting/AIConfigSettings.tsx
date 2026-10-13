@@ -13,6 +13,7 @@ import { Form, Formik } from 'formik'
 import { Cpu, Key } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { ElevenLabsModelChoices } from './ElevenLabsModelChoices'
 
 const AIConfigSettings = () => {
   const { t } = useTranslation()
@@ -25,6 +26,10 @@ const AIConfigSettings = () => {
   const initialValues = {
     openai_api_key: '',
     elevenlabs_api_key: '',
+    deepgram_api_key: '',
+    sarvam_ai_api_key: '',
+    elevenlabs_allowed_models: ['eleven_v4_turbo'] as string[],
+    elevenlabs_default_model: 'eleven_v4_turbo',
     gemini_api_key: '',
     anthropic_api_key: '',
     twilio_account_sid: '',
@@ -104,6 +109,32 @@ const AIConfigSettings = () => {
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">
                     <Key className="w-3 h-3" />
+                    {t('deepgram')}
+                  </div>
+                  <TextInput
+                    name="deepgram_api_key"
+                    label={t('deepgram_api_key_label')}
+                    placeholder={t('enter_api_key')}
+                    type="password"
+                  />
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">
+                    <Key className="w-3 h-3" />
+                    {t('sarvam_ai')}
+                  </div>
+                  <TextInput
+                    name="sarvam_ai_api_key"
+                    label={t('sarvam_ai_api_key_label')}
+                    placeholder={t('enter_api_key')}
+                    type="password"
+                  />
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">
+                    <Key className="w-3 h-3" />
                     {t('gemini')}
                   </div>
                   <TextInput
@@ -127,6 +158,10 @@ const AIConfigSettings = () => {
                   />
                 </div>
               </div>
+
+              <p className="text-xs text-zinc-500">{t('voice_provider_keys_platform_desc')}</p>
+
+              <ElevenLabsModelChoices />
 
               <div className="pt-4 border-t border-zinc-200 dark:border-white/10">
                 <div className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">

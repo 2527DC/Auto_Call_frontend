@@ -3,13 +3,25 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Switch } from "@/components/ui/switch"
+import { useUpdateVoiceStatusMutation } from "@/redux/api/voiceApi"
 import { VoiceCardProps } from "@/types/voice"
 import { AudioWaveform, Globe, Pause, Play, Sparkles, User } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
 
-export const VoiceCard = ({ voice }: VoiceCardProps) => {
+export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
   const { t } = useTranslation()
+  const [updateVoiceStatus, { isLoading: isUpdatingStatus }] = useUpdateVoiceStatusMutation()
+
+  const toggleShown = async (shown: boolean) => {
+    try {
+      await updateVoiceStatus({ voice_id: voice.voice_id, status: shown ? 'active' : 'inactive' }).unwrap()
+    } catch (err: any) {
+      toast.error(err?.data?.message || t("failed_to_update_voice"))
+    }
+  }
   const [isPlaying, setIsPlaying] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
@@ -133,6 +145,20 @@ export const VoiceCard = ({ voice }: VoiceCardProps) => {
             )
           )}
         </div>
+
+        {canManage && (
+          <div className="flex items-center justify-between gap-3 rounded-lg border border-input-border-color bg-subcard px-3 py-2">
+            <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">
+              {t("show_voice_to_customers")}
+            </span>
+            <Switch
+              checked={voice.status === 'active'}
+              disabled={isUpdatingStatus}
+              onCheckedChange={toggleShown}
+              className="data-[state=checked]:bg-primary"
+            />
+          </div>
+        )}
       </CardContent>
     </Card>
   )
