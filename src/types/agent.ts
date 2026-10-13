@@ -56,6 +56,8 @@ export interface Agent {
   }
   max_call_duration?: number
   enable_call_recording?: boolean
+  greeting_mode?: GreetingMode
+  hello_wait_ms?: number
 
   analytics?: {
     total_calls: number
@@ -138,6 +140,8 @@ export interface CreateAgentPayload {
   }
   max_call_duration?: number
   enable_call_recording?: boolean
+  greeting_mode?: GreetingMode
+  hello_wait_ms?: number
 }
 
 export interface UpdateAgentPayload extends Partial<CreateAgentPayload> {
@@ -267,6 +271,9 @@ export interface BehavioralConfigCardProps {
   setResponseLength: (len: 'concise' | 'balanced' | 'verbose') => void
 }
 
+// Outgoing calls: wait for the customer's "Hello?" before greeting, or greet at once.
+export type GreetingMode = 'wait_for_hello' | 'immediate'
+
 export interface VoiceAudioSettingsCardProps {
   responseDelay: number
   setResponseDelay: (delay: number) => void
@@ -274,6 +281,10 @@ export interface VoiceAudioSettingsCardProps {
   setSpeechSpeed: (speed: number) => void
   pitch: number
   setPitch: (pitch: number) => void
+  greetingMode: GreetingMode
+  setGreetingMode: (mode: GreetingMode) => void
+  helloWaitMs: number
+  setHelloWaitMs: (ms: number) => void
 }
 
 

@@ -21,7 +21,7 @@ import {
 import { useGetFlowsQuery } from '@/redux/api/flowApi'
 import { useGetKnowledgeBaseQuery } from '@/redux/api/knowledgeBaseApi'
 import { useGetVoicesQuery } from '@/redux/api/voiceApi'
-import { TelephonyProvider, VoiceProvider } from '@/types/agent'
+import { GreetingMode, TelephonyProvider, VoiceProvider } from '@/types/agent'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -71,6 +71,8 @@ export default function CreateAgentPage() {
   const [maxCallDuration, setMaxCallDuration] = useState(3600)
   const [enableCallTranscription, setEnableCallTranscription] = useState(true)
   const [enableCallRecording, setEnableCallRecording] = useState(false)
+  const [greetingMode, setGreetingMode] = useState<GreetingMode>('wait_for_hello')
+  const [helloWaitMs, setHelloWaitMs] = useState(1000)
 
   // Transfer to Human
   const [transferEnabled, setTransferEnabled] = useState(false)
@@ -124,6 +126,8 @@ export default function CreateAgentPage() {
       setMaxCallDuration(agent.max_call_duration ?? 3600)
       setEnableCallTranscription(agent.enable_call_transcription ?? true)
       setEnableCallRecording(agent.enable_call_recording ?? false)
+      setGreetingMode(agent.greeting_mode || 'wait_for_hello')
+      setHelloWaitMs(agent.hello_wait_ms ?? 1000)
 
       if (agent.transfer_to_human) {
         setTransferEnabled(agent.transfer_to_human.enabled || false)
@@ -179,6 +183,8 @@ export default function CreateAgentPage() {
         max_call_duration: maxCallDuration,
         enable_call_transcription: enableCallTranscription,
         enable_call_recording: enableCallRecording,
+        greeting_mode: greetingMode,
+        hello_wait_ms: helloWaitMs,
 
         transfer_to_human: {
           enabled: transferEnabled,
@@ -267,6 +273,10 @@ export default function CreateAgentPage() {
               setSpeechSpeed={setSpeechSpeed}
               pitch={pitch}
               setPitch={setPitch}
+              greetingMode={greetingMode}
+              setGreetingMode={setGreetingMode}
+              helloWaitMs={helloWaitMs}
+              setHelloWaitMs={setHelloWaitMs}
             />
 
             <BehavioralConfigCard

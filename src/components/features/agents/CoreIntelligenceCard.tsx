@@ -16,6 +16,9 @@ import { CoreIntelligenceCardProps } from '@/types/agent'
 import { User } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+// Older agents may still be set to a language no longer offered; keep showing it.
+const LEGACY_LANGUAGES: Record<string, string> = { es: 'lang_spanish', fr: 'lang_french', de: 'lang_german' }
+
 export function CoreIntelligenceCard({
   name,
   setName,
@@ -87,10 +90,11 @@ export function CoreIntelligenceCard({
               </SelectTrigger>
               <SelectContent className="rounded-2xl shadow-2xl border-white/10">
                 <SelectItem value="en" className="font-bold">{t('lang_english')}</SelectItem>
-                <SelectItem value="es" className="font-bold">{t('lang_spanish')}</SelectItem>
-                <SelectItem value="fr" className="font-bold">{t('lang_french')}</SelectItem>
-                <SelectItem value="de" className="font-bold">{t('lang_german')}</SelectItem>
                 <SelectItem value="hi" className="font-bold">{t('lang_hindi')}</SelectItem>
+                <SelectItem value="kn" className="font-bold">{t('lang_kannada')}</SelectItem>
+                {LEGACY_LANGUAGES[language] && (
+                  <SelectItem value={language} className="font-bold">{t(LEGACY_LANGUAGES[language])}</SelectItem>
+                )}
               </SelectContent>
             </Select>
           </div>

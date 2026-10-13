@@ -1,8 +1,15 @@
 'use client'
 
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
-import { VoiceAudioSettingsCardProps } from '@/types/agent'
+import { GreetingMode, VoiceAudioSettingsCardProps } from '@/types/agent'
 import { useTranslation } from 'react-i18next'
 
 export function VoiceAudioSettingsCard({
@@ -12,6 +19,10 @@ export function VoiceAudioSettingsCard({
   setSpeechSpeed,
   pitch,
   setPitch,
+  greetingMode,
+  setGreetingMode,
+  helloWaitMs,
+  setHelloWaitMs,
 }: VoiceAudioSettingsCardProps) {
   const { t } = useTranslation()
 
@@ -23,6 +34,34 @@ export function VoiceAudioSettingsCard({
       <p className="text-sm text-muted-foreground mb-6">{t("voice_audio_settings_desc")}</p>
 
       <div className="space-y-6 bg-input-color sm:p-6 p-4 rounded-radius border border-input-border-color">
+        {/* Greeting on pickup (outgoing calls) */}
+        <div className="space-y-3">
+          <Label className="text-md font-semibold text-subtitle-color">{t("greeting_on_pickup")}</Label>
+          <p className="text-xs text-muted-foreground">{t("greeting_on_pickup_desc")}</p>
+          <Select value={greetingMode} onValueChange={(v) => setGreetingMode(v as GreetingMode)}>
+            <SelectTrigger className="h-10 rounded-radius bg-white dark:bg-zinc-900 border-input-border-color dark:border-white/10 font-bold shadow-none">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-2xl shadow-2xl border-white/10">
+              <SelectItem value="wait_for_hello" className="font-bold">{t("greeting_wait_for_hello")}</SelectItem>
+              <SelectItem value="immediate" className="font-bold">{t("greeting_immediate")}</SelectItem>
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground">
+            {t(greetingMode === 'immediate' ? "greeting_immediate_hint" : "greeting_wait_for_hello_hint")}
+          </p>
+        </div>
+
+        {greetingMode === 'wait_for_hello' && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-md font-semibold text-subtitle-color">{t("greet_anyway_after")}</Label>
+              <span className="bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary/95 px-3 py-1 rounded-radius text-xs font-black">{(helloWaitMs / 1000).toFixed(1)}s</span>
+            </div>
+            <Slider value={[helloWaitMs]} onValueChange={(v) => setHelloWaitMs(v[0])} min={300} max={3000} step={100} className="py-2" />
+          </div>
+        )}
+
         {/* Latency Delay */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
