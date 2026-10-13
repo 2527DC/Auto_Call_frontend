@@ -58,6 +58,8 @@ export interface Agent {
   enable_call_recording?: boolean
   greeting_mode?: GreetingMode
   hello_wait_ms?: number
+  allow_interruptions?: boolean
+  interruption_sensitivity?: InterruptionSensitivity
   tts_model?: string | null
 
   analytics?: {
@@ -143,6 +145,8 @@ export interface CreateAgentPayload {
   enable_call_recording?: boolean
   greeting_mode?: GreetingMode
   hello_wait_ms?: number
+  allow_interruptions?: boolean
+  interruption_sensitivity?: InterruptionSensitivity
   tts_model?: string | null
 }
 
@@ -281,6 +285,9 @@ export interface BehavioralConfigCardProps {
 // Outgoing calls: wait for the customer's "Hello?" before greeting, or greet at once.
 export type GreetingMode = 'wait_for_hello' | 'immediate'
 
+// How readily the agent stops talking when the caller speaks over it.
+export type InterruptionSensitivity = 'low' | 'medium' | 'high'
+
 export interface VoiceAudioSettingsCardProps {
   responseDelay: number
   setResponseDelay: (delay: number) => void
@@ -292,6 +299,10 @@ export interface VoiceAudioSettingsCardProps {
   setGreetingMode: (mode: GreetingMode) => void
   helloWaitMs: number
   setHelloWaitMs: (ms: number) => void
+  allowInterruptions: boolean
+  setAllowInterruptions: (allow: boolean) => void
+  interruptionSensitivity: InterruptionSensitivity
+  setInterruptionSensitivity: (level: InterruptionSensitivity) => void
 }
 
 

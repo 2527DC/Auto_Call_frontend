@@ -9,7 +9,8 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
-import { GreetingMode, VoiceAudioSettingsCardProps } from '@/types/agent'
+import { Switch } from '@/components/ui/switch'
+import { GreetingMode, InterruptionSensitivity, VoiceAudioSettingsCardProps } from '@/types/agent'
 import { useTranslation } from 'react-i18next'
 
 export function VoiceAudioSettingsCard({
@@ -23,6 +24,10 @@ export function VoiceAudioSettingsCard({
   setGreetingMode,
   helloWaitMs,
   setHelloWaitMs,
+  allowInterruptions,
+  setAllowInterruptions,
+  interruptionSensitivity,
+  setInterruptionSensitivity,
 }: VoiceAudioSettingsCardProps) {
   const { t } = useTranslation()
 
@@ -61,6 +66,36 @@ export function VoiceAudioSettingsCard({
             <Slider value={[helloWaitMs]} onValueChange={(v) => setHelloWaitMs(v[0])} min={300} max={3000} step={100} className="py-2" />
           </div>
         )}
+
+        {/* Caller may talk over the agent */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between gap-4">
+            <div className="space-y-0.5">
+              <Label className="text-md font-semibold text-subtitle-color">{t("allow_interruptions")}</Label>
+              <p className="text-xs text-muted-foreground">{t("allow_interruptions_desc")}</p>
+            </div>
+            <Switch
+              checked={allowInterruptions}
+              onCheckedChange={setAllowInterruptions}
+              className="data-[state=checked]:bg-primary shadow-sm"
+            />
+          </div>
+          {allowInterruptions && (
+            <>
+              <Select value={interruptionSensitivity} onValueChange={(v) => setInterruptionSensitivity(v as InterruptionSensitivity)}>
+                <SelectTrigger className="h-10 rounded-radius bg-white dark:bg-zinc-900 border-input-border-color dark:border-white/10 font-bold shadow-none">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl shadow-2xl border-white/10">
+                  <SelectItem value="low" className="font-bold">{t("interruption_sensitivity_low")}</SelectItem>
+                  <SelectItem value="medium" className="font-bold">{t("interruption_sensitivity_medium")}</SelectItem>
+                  <SelectItem value="high" className="font-bold">{t("interruption_sensitivity_high")}</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">{t(`interruption_sensitivity_${interruptionSensitivity}_hint`)}</p>
+            </>
+          )}
+        </div>
 
         {/* Latency Delay */}
         <div className="space-y-3">

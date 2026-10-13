@@ -21,7 +21,7 @@ import {
 import { useGetFlowsQuery } from '@/redux/api/flowApi'
 import { useGetKnowledgeBaseQuery } from '@/redux/api/knowledgeBaseApi'
 import { useGetVoicesQuery } from '@/redux/api/voiceApi'
-import { GreetingMode, TelephonyProvider, VoiceProvider } from '@/types/agent'
+import { GreetingMode, InterruptionSensitivity, TelephonyProvider, VoiceProvider } from '@/types/agent'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -74,6 +74,8 @@ export default function CreateAgentPage() {
   const [enableCallRecording, setEnableCallRecording] = useState(false)
   const [greetingMode, setGreetingMode] = useState<GreetingMode>('wait_for_hello')
   const [helloWaitMs, setHelloWaitMs] = useState(1000)
+  const [allowInterruptions, setAllowInterruptions] = useState(true)
+  const [interruptionSensitivity, setInterruptionSensitivity] = useState<InterruptionSensitivity>('medium')
 
   // Transfer to Human
   const [transferEnabled, setTransferEnabled] = useState(false)
@@ -130,6 +132,8 @@ export default function CreateAgentPage() {
       setEnableCallRecording(agent.enable_call_recording ?? false)
       setGreetingMode(agent.greeting_mode || 'wait_for_hello')
       setHelloWaitMs(agent.hello_wait_ms ?? 1000)
+      setAllowInterruptions(agent.allow_interruptions ?? true)
+      setInterruptionSensitivity(agent.interruption_sensitivity || 'medium')
 
       if (agent.transfer_to_human) {
         setTransferEnabled(agent.transfer_to_human.enabled || false)
@@ -188,6 +192,8 @@ export default function CreateAgentPage() {
         enable_call_recording: enableCallRecording,
         greeting_mode: greetingMode,
         hello_wait_ms: helloWaitMs,
+        allow_interruptions: allowInterruptions,
+        interruption_sensitivity: interruptionSensitivity,
 
         transfer_to_human: {
           enabled: transferEnabled,
@@ -280,6 +286,10 @@ export default function CreateAgentPage() {
               setGreetingMode={setGreetingMode}
               helloWaitMs={helloWaitMs}
               setHelloWaitMs={setHelloWaitMs}
+              allowInterruptions={allowInterruptions}
+              setAllowInterruptions={setAllowInterruptions}
+              interruptionSensitivity={interruptionSensitivity}
+              setInterruptionSensitivity={setInterruptionSensitivity}
             />
 
             <BehavioralConfigCard
