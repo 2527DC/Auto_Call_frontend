@@ -17,6 +17,7 @@ import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import * as Yup from 'yup'
+import WebhookSecretField from './WebhookSecretField'
 
 export default function EventWebhookModal({ isOpen, onClose, webhookToEdit }: EventWebhookModalProps) {
   const { t } = useTranslation()
@@ -36,12 +37,15 @@ export default function EventWebhookModal({ isOpen, onClose, webhookToEdit }: Ev
     endpoint_url: webhookToEdit?.endpoint_url || '',
     events: webhookToEdit?.events || [],
     is_active: webhookToEdit !== undefined ? webhookToEdit.is_active : true,
+    include_transcript: webhookToEdit?.include_transcript === true,
   }
+
+  const webhookId = webhookToEdit ? webhookToEdit.id || (webhookToEdit as any)._id : undefined
 
   const handleSubmit = async (values: any) => {
     try {
       if (webhookToEdit) {
-        await updateWebhook({ id: webhookToEdit.id || (webhookToEdit as any)._id, body: values }).unwrap()
+        await updateWebhook({ id: webhookId, body: values }).unwrap()
         toast.success(t('webhook_updated_successfully', 'Webhook updated successfully'))
       } else {
         await createWebhook(values).unwrap()
@@ -105,6 +109,24 @@ export default function EventWebhookModal({ isOpen, onClose, webhookToEdit }: Ev
                     onCheckedChange={(val) => setFieldValue('is_active', val)}
                   />
                 </div>
+
+                <div className="flex items-center justify-between gap-4 p-4 rounded-lg bg-subcard border border-input-border-color">
+                  <div className="space-y-1">
+                    <Label htmlFor="include_transcript" className="text-md font-bold text-title">
+                      {t('include_call_transcripts', 'Include call transcripts')}
+                    </Label>
+                    <p className="text-md text-subtitle-color font-medium">
+                      {t('include_call_transcripts_hint', 'Transcripts contain personal data; only turn on for systems you trust')}
+                    </p>
+                  </div>
+                  <Switch
+                    id="include_transcript"
+                    checked={values.include_transcript}
+                    onCheckedChange={(val) => setFieldValue('include_transcript', val)}
+                  />
+                </div>
+
+                {webhookId && <WebhookSecretField webhookId={webhookId} secret={webhookToEdit?.secret} />}
               </div>
 
               <div className="sm:p-6 p-4 pt-4 border-t border-input-border-color flex justify-end gap-3 bg-bg-card mt-auto rounded-b-lg">

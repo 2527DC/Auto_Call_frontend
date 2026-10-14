@@ -34,6 +34,14 @@ export const eventWebhooksApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['EventWebhook'],
     }),
+    // New signing secret: the old one stops working at once.
+    rotateWebhookSecret: builder.mutation<{ success: boolean; message?: string; data: { secret: string } }, string>({
+      query: (id) => ({
+        url: `/event-webhooks/${id}/secret`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['EventWebhook'],
+    }),
   }),
   overrideExisting: false,
 });
@@ -43,4 +51,5 @@ export const {
   useCreateWebhookMutation,
   useUpdateWebhookMutation,
   useDeleteWebhookMutation,
+  useRotateWebhookSecretMutation,
 } = eventWebhooksApi;

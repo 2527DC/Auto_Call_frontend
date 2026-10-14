@@ -20,5 +20,8 @@ export const EVENT_OPTIONS = [
     'Campaign Aborted',
     'Flow Initiated',
     'Flow Finished',
-    'Flow Errored'
+    'Flow Errored',
+    'Call Analyzed',
+    'Lead Status Changed',
+    'Follow-up Due'
 ]

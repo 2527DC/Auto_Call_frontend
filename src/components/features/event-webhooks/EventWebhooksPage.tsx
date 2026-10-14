@@ -132,7 +132,7 @@ export default function EventWebhooksPage() {
       cell: (row) => (
         <div className="flex items-center gap-2">
           {canUpdate && (
-            <Button variant="ghost" size="icon" onClick={() => handleEdit(row)} className="h-9 w-9 rounded-lg bg-edit/10 text-edit hover:bg-edit hover:text-white transition-all">
+            <Button variant="ghost" size="icon" aria-label={t('edit_webhook', 'Edit Webhook')} onClick={() => handleEdit(row)} className="h-9 w-9 rounded-lg bg-edit/10 text-edit hover:bg-edit hover:text-white transition-all">
               <Edit2 className="h-4 w-4" />
             </Button>
           )}
