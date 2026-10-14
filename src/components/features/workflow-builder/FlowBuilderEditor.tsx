@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import { useCreateFlowMutation, useGetFlowByIdQuery, useUpdateFlowMutation } from '@/redux/api/flowApi'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { setSidebarCollapsed } from '@/redux/slices/layoutSlice'
-import { FlowBuilderEditorProps, NodeType } from '@/types/flow'
+import { FlowBuilderEditorProps, FlowSettings, NodeType } from '@/types/flow'
 import {
   Connection,
   ConnectionLineType,
@@ -33,6 +33,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { AddNodesSidebar } from './AddNodesSidebar'
+import { CallHandlingDialog } from './CallHandlingDialog'
 import { FlowBuilderEdge } from './FlowBuilderEdge'
 import { FlowBuilderNode } from './FlowBuilderNode'
 
@@ -64,6 +65,7 @@ function FlowBuilderEditorContent({ id }: FlowBuilderEditorProps) {
 
   const [name, setName] = useState(t('untitled_flow') || t('untitled_flow'))
   const [description, setDescription] = useState('')
+  const [settings, setSettings] = useState<FlowSettings>({ understand_caller: true, max_reasks: 2 })
   const [showNodesSidebar, setShowNodesSidebar] = useState(true)
 
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
@@ -77,6 +79,7 @@ function FlowBuilderEditorContent({ id }: FlowBuilderEditorProps) {
       setTimeout(() => {
         setName(flow.name)
         setDescription(flow.description || '')
+        setSettings({ understand_caller: flow.settings?.understand_caller ?? true, max_reasks: flow.settings?.max_reasks ?? 2 })
         setNodes(flow.nodes.map(n => ({
           id: n.id,
           type: 'flowNode',
@@ -177,6 +180,7 @@ function FlowBuilderEditorContent({ id }: FlowBuilderEditorProps) {
     const payload = {
       name,
       description,
+      settings,
       nodes: nodes.map(n => {
         const type = n.data?.type || n.type
         const restData = { ...n.data }
@@ -263,6 +267,7 @@ function FlowBuilderEditorContent({ id }: FlowBuilderEditorProps) {
           <div className="flex items-center gap-3">
             {!isViewOnly && (
               <>
+                <CallHandlingDialog settings={settings} onChange={setSettings} />
                 <Button
                   onClick={handleSave}
                   disabled={isUpdating || isCreating}

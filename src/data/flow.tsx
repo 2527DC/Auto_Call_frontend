@@ -11,7 +11,8 @@ import {
   Shuffle,
   Sliders,
   Mail,
-  PhoneForwarded
+  PhoneForwarded,
+  ListChecks
 } from 'lucide-react'
 
 // Logically rearranged node configuration with completely fresh icons and colors
@@ -34,6 +35,7 @@ export const COLOR_MAP: Record<NodeType, string> = {
   // 5. Call & Routing Operations
   redirect_call: 'bg-purple-700',
   terminate_call: 'bg-red-700',
+  set_outcome: 'bg-indigo-700',
 }
 
 export const ICON_MAP: Record<NodeType, React.ElementType> = {
@@ -52,6 +54,7 @@ export const ICON_MAP: Record<NodeType, React.ElementType> = {
   book_slot: CalendarCheck,
   redirect_call: PhoneForwarded,
   terminate_call: PhoneOff,
+  set_outcome: ListChecks,
 }
 
 export const LABEL_MAP: Record<NodeType, string> = {
@@ -67,6 +70,7 @@ export const LABEL_MAP: Record<NodeType, string> = {
   book_slot: 'Book Slot',
   redirect_call: 'Redirect Call',
   terminate_call: 'Terminate Call',
+  set_outcome: 'Set Outcome',
 }
 
 export const NODES: NodeItem[] = (Object.keys(COLOR_MAP) as NodeType[]).map((type) => ({

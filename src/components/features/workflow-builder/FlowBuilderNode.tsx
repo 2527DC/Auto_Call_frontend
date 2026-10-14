@@ -10,6 +10,7 @@ import { COLOR_MAP, ICON_MAP, LABEL_MAP } from '@/data/flow'
 import { cn } from '@/lib/utils'
 import { useUploadAudioMutation } from '@/redux/api/flowApi'
 import { useGetFormsQuery } from '@/redux/api/formApi'
+import { useGetOutcomeSettingsQuery } from '@/redux/api/outcomeApi'
 import { useGetGoogleCalendarsQuery } from '@/redux/api/googleCalendarsApi'
 import { useGetGoogleSheetsQuery } from '@/redux/api/googleSheetsApi'
 import { useGetConnectionsQuery } from '@/redux/api/whatsappApi'
@@ -55,6 +56,10 @@ export function FlowBuilderNode({ id, data, selected }: NodeProps<any>) {
 
   const { data: emailTemplatesResponse } = useGetEmailLibraryTemplatesQuery({ limit: 100 }, { skip: type !== 'email_notice' })
   const emailTemplates = emailTemplatesResponse?.data || []
+
+  const { data: outcomeSettings } = useGetOutcomeSettingsQuery(undefined, { skip: type !== 'set_outcome' })
+  // Outcomes a workflow may set (rule-set ones like "No answer" come from the call status).
+  const settableOutcomes = (outcomeSettings?.data?.settings?.outcomes || []).filter((o) => !o.archived && !o.system)
 
   const { data: teamMembersResponse } = useGetAllTeamMembersQuery(undefined, { skip: type !== 'redirect_call' })
   const members = teamMembersResponse?.data || []
@@ -331,6 +336,23 @@ export function FlowBuilderNode({ id, data, selected }: NodeProps<any>) {
               </>
             )}
 
+            {type === 'set_outcome' && (
+              <div className="space-y-1.5 border-t border-input-border-color pt-4">
+                <Label className="text-md font-bold text-title">{t('outcome', 'Outcome')}</Label>
+                <Select value={(data.outcome_key as string) || ''} onValueChange={(val) => handleUpdate('outcome_key', val)}>
+                  <SelectTrigger className="h-8 text-xs rounded-lg bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10">
+                    <SelectValue placeholder={t('choose_outcome', 'Choose an outcome')} />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-gray-200 dark:border-white/10 bg-bg-card">
+                    {settableOutcomes.map((o) => (
+                      <SelectItem key={o.key} value={o.key} className="rounded-lg text-xs">{o.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <span className="text-xs text-subtitle-color">{t('set_outcome_hint', 'When the call reaches this step, this is its outcome (instead of the AI deciding). Says nothing.')}</span>
+              </div>
+            )}
+
             {type === 'variable_map' && (
               <div className="space-y-1.5 border-t border-input-border-color pt-4">
                 <div className="flex items-center justify-between mb-2">
@@ -588,6 +610,15 @@ export function FlowBuilderNode({ id, data, selected }: NodeProps<any>) {
                       </span>
                     </div>
                   )}
+                </div>
+              )}
+
+              {type === 'set_outcome' && (
+                <div className="flex items-center justify-between pt-1.5">
+                  <span className="text-[10px] font-bold text-muted-foreground/60 uppercase">{t('outcome', 'Outcome')}</span>
+                  <span className="text-[9px] font-black text-primary truncate max-w-[150px]">
+                    {settableOutcomes.find((o) => o.key === data.outcome_key)?.label || (data.outcome_key as string) || t('none')}
+                  </span>
                 </div>
               )}
 
