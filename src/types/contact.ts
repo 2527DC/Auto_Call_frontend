@@ -8,6 +8,9 @@ export interface Contact {
   email: string;
   created_at: string;
   updated_at: string;
+  // Where the person stands across calls (set by call outcomes).
+  source?: string | null;
+  lead?: import('./outcomes').LeadInfo | null;
 }
 
 export interface ContactListResponse {

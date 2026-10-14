@@ -161,6 +161,8 @@ export const PERMISSIONS = {
 
   // Call Activity
   VIEW_CALL_ACTIVITY: 'activity.calls',
+  VIEW_LEADS: 'view.leads',
+  UPDATE_LEADS: 'update.leads',
 
   // Restricted Words
   VIEW_RESTRICTED_WORDS: 'view.restricted_words',

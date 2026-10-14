@@ -158,6 +158,8 @@ i18n
           rec: 'REC',
           loading_numbers: 'Loading numbers...',
           call_activity: 'Call Activity',
+          leads_and_follow_ups: 'Leads & Follow-ups',
+          call_outcomes: 'Call Outcomes',
           call_activity_desc: 'View and manage all your voice and agent call activity.',
           lead_name: 'Lead Name',
           agent_campaign: 'Agent/Campaign',

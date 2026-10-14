@@ -43,6 +43,8 @@ export const ROUTES = {
   TRUNK_INTEGRATION: "/trunk-integration",
   TRUNK_INTEGRATION_CREATE: "/trunk-integration/create",
   CALL_ACTIVITY: "/call-activity",
+  LEADS: "/leads",
+  CALL_OUTCOMES: "/call-outcomes",
   RESTRICTED_WORDS: "/restricted-words",
   TOOLBOX: "/toolbox-hub",
   LEAD_CAPTURE_FORMS: "/toolbox-hub/lead-capture-forms",

@@ -27,9 +27,13 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { ContactModal } from './ContactModal'
+import LeadStatusBadge from '@/components/features/outcomes/LeadStatusBadge'
+import { useGetOutcomeSettingsQuery } from '@/redux/api/outcomeApi'
+import Link from 'next/link'
 
 const ContactPage = () => {
   const { t } = useTranslation()
+  const { data: outcomeSettings } = useGetOutcomeSettingsQuery()
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
@@ -167,7 +171,11 @@ const ContactPage = () => {
             <User className="w-5 h-5" />
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-black text-md text-title break-all whitespace-normal line-clamp-2">{row.first_name || row.last_name ? `${row.first_name} ${row.last_name}` : t("unnamed_contact")}</span>
+            {row.lead?.status ? (
+              <Link href={`/leads/${row.id || row._id}`} className="font-black text-md text-title hover:text-primary hover:underline break-all whitespace-normal line-clamp-2">{row.first_name || row.last_name ? `${row.first_name} ${row.last_name}` : t("unnamed_contact")}</Link>
+            ) : (
+              <span className="font-black text-md text-title break-all whitespace-normal line-clamp-2">{row.first_name || row.last_name ? `${row.first_name} ${row.last_name}` : t("unnamed_contact")}</span>
+            )}
           </div>
         </div>
       ),
@@ -185,6 +193,13 @@ const ContactPage = () => {
       sortable: true,
       className: "xl1199:min-w-[305px]",
       cell: (row) => <div className="flex items-center gap-2 text-subtitle-color font-medium text-md break-all whitespace-normal line-clamp-2">{row.email ? <>{row.email}</> : <span className="text-muted-foreground/20 text-xs ">{t("no_email")}</span>}</div>,
+    },
+    {
+      header: t('lead_status', 'Lead status'),
+      className: "xl1199:min-w-[160px]",
+      cell: (row) => row.lead?.status
+        ? <LeadStatusBadge status={row.lead.status} locked={row.lead.locked} statuses={outcomeSettings?.data?.settings?.lead_statuses} />
+        : <span className="text-subtitle-color text-md">—</span>,
     },
     {
       header: t("actions"),
