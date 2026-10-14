@@ -1,7 +1,7 @@
 'use client'
 
 import { UserChartsAndTablesProps } from '@/types/dashboard'
-import { CallActivityCard, CampaignActivityCard, CreditsCard } from '../charts'
+import { CallActivityCard, CampaignActivityCard, CreditsCard, OutcomesCard } from '../charts'
 import { RecentActivityCard } from './RecentActivityCard'
 import { RecentCampaignsCard } from './RecentCampaignsCard'
 import { RecentContactsCard } from './RecentContactsCard'
@@ -9,7 +9,7 @@ import { RecentSmsCampaignsCard } from './RecentSmsCampaignsCard'
 import { RecentTeamMembersCard } from './RecentTeamMembersCard'
 
 export function UserChartsAndTables({ stats, cardVariants, t }: UserChartsAndTablesProps) {
-  const { trends, credits } = stats
+  const { trends, credits, outcomes } = stats
 
   return (
     <div className="space-y-8">
@@ -27,6 +27,9 @@ export function UserChartsAndTables({ stats, cardVariants, t }: UserChartsAndTab
           {credits && <CreditsCard credits={credits} />}
         </div>
       )}
+
+      {/* What the calls led to, and follow-ups waiting */}
+      {outcomes && <OutcomesCard outcomes={outcomes} />}
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
         <RecentCampaignsCard stats={stats} cardVariants={cardVariants} t={t} />

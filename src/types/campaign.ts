@@ -82,7 +82,11 @@ export interface CampaignHistory {
     fail_reason?: string
     recording_url?: string
     transcript?: string
+    contact_id?: string | null
+    outcome?: import('./outcomes').CallOutcome | null
   }>
+  // Calls by outcome (only analysed calls).
+  outcomes?: import('./outcomes').CampaignOutcomeCount[]
 }
 
 export interface CampaignHistoryResponse {

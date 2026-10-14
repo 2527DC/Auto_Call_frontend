@@ -11,6 +11,8 @@ import { ROUTES } from "@/constants/routes"
 import { useGetCampaignHistoryQuery } from "@/redux/api/campaignApi"
 import { Column } from "@/types/table"
 import { formatDate } from "@/utils/validation-schemas"
+import OutcomeBadge from "@/components/features/outcomes/OutcomeBadge"
+import CampaignOutcomes from "./CampaignOutcomes"
 import {
   ArrowLeft,
   Bot,
@@ -83,6 +85,13 @@ export default function CampaignHistoryPage() {
         return <Badge className="bg-edit/10 text-edit border-edit/50 rounded-full px-2.5 font-bold uppercase tracking-wider text-[9px]">{t("completed")}</Badge>
       case 'failed':
         return <Badge className="bg-red-50 text-red-700 dark:bg-red-950/20 dark:text-red-400 border-red-200/50 rounded-full px-2.5 font-bold uppercase tracking-wider text-[9px]">{t("failed")}</Badge>
+      // Status callbacks save busy as 'declined' and no-answer as 'missed'.
+      case 'busy':
+      case 'declined':
+        return <Badge className="bg-red-50 text-red-700 dark:bg-red-950/20 dark:text-red-400 border-red-200/50 rounded-full px-2.5 font-bold uppercase tracking-wider text-[9px]">{t('busy', 'Busy')}</Badge>
+      case 'no-answer':
+      case 'missed':
+        return <Badge className="bg-orange-500/10 text-orange-600 border-orange-500/20 rounded-full px-2.5 font-bold uppercase tracking-wider text-[9px]">{t('no_answer', 'No answer')}</Badge>
       default:
         return <Badge className="bg-blue-500/10 text-blue-600 rounded-full px-2.5 font-bold uppercase tracking-wider text-[9px]">{status}</Badge>
     }
@@ -110,6 +119,16 @@ export default function CampaignHistoryPage() {
       header: t("status"),
       className: 'lg991:min-w-[180px]',
       cell: (row) => getCallStatusBadge(row.status),
+    },
+    {
+      header: t("outcome", "Outcome"),
+      className: 'lg991:min-w-[220px]',
+      cell: (row) => (
+        <div className="flex flex-col gap-1 max-w-[260px]">
+          <OutcomeBadge outcome={row.outcome} />
+          {row.outcome?.summary && <span className="text-xs text-subtitle-color line-clamp-2 whitespace-normal" title={row.outcome.summary}>{row.outcome.summary}</span>}
+        </div>
+      ),
     },
     {
       header: t("duration"),
@@ -349,6 +368,9 @@ export default function CampaignHistoryPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* How the calls ended, and calling people again */}
+      {history.outcomes && history.outcomes.length > 0 && <CampaignOutcomes campaignId={campaignId} outcomes={history.outcomes} />}
 
       {/* Calls Leads List */}
       <div className="space-y-4">

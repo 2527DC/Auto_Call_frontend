@@ -1,4 +1,5 @@
 import { LucideIcon } from "lucide-react"
+import { DashboardOutcomes } from "./outcomes"
 import { Widget, WidgetAnalyticsData } from "./widget"
 
 export interface AdminDashboardProps {
@@ -136,6 +137,7 @@ export interface UserDashboardProps {
         }
         credits?: CreditStats
         trends?: UserTrends
+        outcomes?: DashboardOutcomes
     }
 }
 
