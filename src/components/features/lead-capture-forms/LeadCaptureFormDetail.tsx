@@ -148,6 +148,11 @@ export default function LeadCaptureFormDetail({ id }: LeadCaptureFormDetailProps
         toast.error(t('field_question_required'))
         return
       }
+      const options = field.type === 'choice' ? (field.options || []).map((o) => o.trim()).filter(Boolean) : undefined
+      if (field.type === 'choice' && (!options || options.length < 2)) {
+        toast.error(t('choice_needs_options', 'A choice question needs at least 2 options'))
+        return
+      }
 
       const generatedKey = generateUniqueKey(field.label, i)
       if (labelSet.has(generatedKey)) {
@@ -159,6 +164,8 @@ export default function LeadCaptureFormDetail({ id }: LeadCaptureFormDetailProps
       processedFields.push({
         ...field,
         key: generatedKey,
+        options,
+        hint: field.hint?.trim() || '',
       })
     }
 
@@ -321,7 +328,9 @@ export default function LeadCaptureFormDetail({ id }: LeadCaptureFormDetailProps
                           checked={field.required}
                           onCheckedChange={(val) => handleFieldChange(index, 'required', val)}
                           className="data-[state=checked]:bg-switch-background scale-[0.85] cursor-pointer"
+                          title={t('required_hint', 'Required. Optional questions can be skipped by the caller.')}
                         />
+                        <span className="text-xs text-subtitle-color">{field.required ? t('required', 'Required') : t('optional', 'Optional')}</span>
                       </div>
                       <Button
                         type="button"
@@ -385,8 +394,34 @@ export default function LeadCaptureFormDetail({ id }: LeadCaptureFormDetailProps
                           <SelectItem value="date">{t('date')}</SelectItem>
                           <SelectItem value="time">{t('time')}</SelectItem>
                           <SelectItem value="email">{t('email')}</SelectItem>
+                          <SelectItem value="phone">{t('field_type_phone', 'Phone number')}</SelectItem>
+                          <SelectItem value="yes_no">{t('field_type_yes_no', 'Yes / No')}</SelectItem>
+                          <SelectItem value="choice">{t('field_type_choice', 'Choice (one of a list)')}</SelectItem>
                         </SelectContent>
                       </Select>
+                    </div>
+
+                    {field.type === 'choice' && (
+                      <div className="space-y-2">
+                        <Label className="text-md font-bold text-title tracking-wider">{t('field_options', 'Options')}</Label>
+                        <Input
+                          value={(field.options || []).join(',')}
+                          onChange={(e) => handleFieldChange(index, 'options', e.target.value.split(','))}
+                          placeholder={t('field_options_placeholder', 'e.g. 1BHK, 2BHK, 3BHK')}
+                          className="h-10 rounded-lg"
+                        />
+                        <p className="text-xs text-subtitle-color">{t('field_options_hint', 'Separate with commas. The answer is matched to one of these.')}</p>
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <Label className="text-md font-bold text-title tracking-wider">{t('field_hint', 'Hint for the AI')} <span className="font-normal text-subtitle-color">({t('optional', 'optional')})</span></Label>
+                      <Input
+                        value={field.hint || ''}
+                        onChange={(e) => handleFieldChange(index, 'hint', e.target.value)}
+                        placeholder={t('field_hint_placeholder', 'e.g. In lakhs of rupees')}
+                        className="h-10 rounded-lg"
+                      />
                     </div>
                   </div>
                 ))}

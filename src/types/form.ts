@@ -1,4 +1,4 @@
-export type FormFieldType = 'text' | 'number' | 'date' | 'time' | 'email';
+export type FormFieldType = 'text' | 'number' | 'date' | 'time' | 'email' | 'phone' | 'yes_no' | 'choice';
 
 export interface FormField {
   _id?: string;
@@ -8,6 +8,10 @@ export interface FormField {
   question: string;
   required: boolean;
   type: FormFieldType;
+  // Allowed answers for a "choice" field.
+  options?: string[];
+  // Extra guidance for the AI that reads the answer, e.g. "in lakhs".
+  hint?: string;
 }
 
 export interface Form {
@@ -38,6 +42,11 @@ export interface FormSubmission {
   call_id?: any;
   responses: Record<string, any>;
   created_at: string;
+  id?: string;
+  phone?: string | null;
+  status?: 'partial' | 'completed';
+  direction?: string | null;
+  contact_id?: { id?: string; _id?: string; first_name?: string; last_name?: string; phone_number?: string } | string | null;
 }
 
 export interface FormSubmissionsResponse {
