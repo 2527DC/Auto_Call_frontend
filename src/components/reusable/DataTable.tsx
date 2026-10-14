@@ -165,8 +165,8 @@ export function DataTable<T>({
                 {filters}
               </div>
             )}
-            {/* Bulk Delete - Only visible when items are selected */}
-            {enableSelection && selectedRows.length > 0 && (
+            {/* Bulk Delete - only when items are selected and the page can delete them */}
+            {enableSelection && onBulkDelete && selectedRows.length > 0 && (
               <div className="flex items-center gap-4 animate-in fade-in slide-in-from-right-2 duration-300 flex-wrap">
                 <Button variant={selectedRows.length > 0 ? "destructive" : "ghost"} size="sm" className={cn(" rounded-radius h-10 px-4 font-bold transition-all duration-300 border border-input-border-color bg-bg-card", selectedRows.length === 0 ? "bg-input-color text-muted-foreground/30 cursor-not-allowed" : "bg-destructive/10 dark:hover:bg-destructive text-destructive border-destructive/10 hover:bg-destructive hover:text-white hover:shadow-destructive/20")} onClick={() => selectedRows.length > 0 && setShowDeleteConfirm(true)} disabled={selectedRows.length === 0}>
                   <Trash2 className={cn("size-4 mr-1", selectedRows.length === 0 && "opacity-90")} />
