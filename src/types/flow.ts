@@ -37,6 +37,13 @@ export interface Flow {
   updated_at: string
   deleted_at?: string | null
   system_flow?: boolean
+  // How calls on this workflow treat replies that aren't answers.
+  settings?: FlowSettings
+}
+
+export interface FlowSettings {
+  understand_caller: boolean
+  max_reasks: number
 }
 
 export interface FlowListResponse {
@@ -114,6 +121,7 @@ export type NodeType =
   | 'variable_map'
   | 'redirect_call'
   | 'email_notice'
+  | 'set_outcome'
 
 import type { ElementType } from 'react'
 
@@ -185,6 +193,9 @@ export interface CallTranscript {
   text: string;
   _id?: string;
   timestamp?: string;
+  // The caller cut this agent line off; heard is the part they heard.
+  interrupted?: boolean;
+  heard?: string;
 }
 
 export interface CallLog {
@@ -210,6 +221,10 @@ export interface CallLog {
   ended_at: string | null;
   created_at: string;
   updated_at: string;
+  // What happened on the call (after-call analysis), see types/outcomes.
+  outcome?: import('./outcomes').CallOutcome | null;
+  end_reason?: string | null;
+  live_signals?: { type: string; said?: string; at?: string; callback_at?: string }[];
 }
 
 export interface CallLogsResponse {
