@@ -6,16 +6,6 @@ import { TableLayout } from '@/components/reusable/TableLayout'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-  DialogClose,
-} from '@/components/ui/dialog'
-import { ScrollArea } from '@/components/ui/scrollArea'
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -24,14 +14,19 @@ import {
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import { useGetCallLogsQuery } from '@/redux/api/callApi'
+import { useGetOutcomeSettingsQuery } from '@/redux/api/outcomeApi'
+import { useFileManagement } from '@/hooks/useFileManagement'
+import OutcomeBadge from '@/components/features/outcomes/OutcomeBadge'
+import { SENTIMENT_EMOJI } from '@/components/features/outcomes/format'
 import { useScanCallTranscriptMutation } from '@/redux/api/restrictedWordsApi'
 import { CallLog } from '@/types/flow'
 import { Column } from '@/types/table'
 import { format } from 'date-fns'
-import { AlertTriangle, Clock, Eye, Phone, PhoneIncoming, PhoneOutgoing, ScanSearch } from 'lucide-react'
+import { AlertTriangle, Clock, Download, Phone, PhoneIncoming, PhoneOutgoing, ScanSearch } from 'lucide-react'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import CallDetailDialog from './CallDetailDialog'
 import TakeActionModal from './TakeActionModal'
 
 export default function CallLogsPage() {
@@ -40,6 +35,11 @@ export default function CallLogsPage() {
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [directionFilter, setDirectionFilter] = useState('all')
+  const [outcomeFilter, setOutcomeFilter] = useState('all')
+  const [reachedFilter, setReachedFilter] = useState('all')
+  const { data: outcomeSettings } = useGetOutcomeSettingsQuery()
+  const { downloadFile } = useFileManagement()
+  const [isExporting, setIsExporting] = useState(false)
   const [page, setPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('created_at')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
@@ -63,6 +63,8 @@ export default function CallLogsPage() {
     search: debouncedSearch,
     status: statusFilter === 'all' ? undefined : statusFilter,
     direction: directionFilter === 'all' ? undefined : directionFilter,
+    outcome: outcomeFilter === 'all' ? undefined : outcomeFilter,
+    reached: reachedFilter === 'all' ? undefined : reachedFilter,
     sortColumn,
     sortOrder,
     prioritizeRestricted: isScannedSort
@@ -78,6 +80,19 @@ export default function CallLogsPage() {
     } catch (error) {
       toast.error(t('scan_call_failed') || 'Failed to scan calls')
     }
+  }
+
+  // The list as it is filtered now, as a CSV (each call with its outcome and details).
+  const handleExport = async () => {
+    setIsExporting(true)
+    const params: Record<string, string> = { format: 'csv' }
+    if (debouncedSearch) params.search = debouncedSearch
+    if (statusFilter !== 'all') params.status = statusFilter
+    if (directionFilter !== 'all') params.direction = directionFilter
+    if (outcomeFilter !== 'all') params.outcome = outcomeFilter
+    if (reachedFilter !== 'all') params.reached = reachedFilter
+    await downloadFile('/call-logs/export', params, 'calls')
+    setIsExporting(false)
   }
 
   const handleSort = (column: string) => {
@@ -97,6 +112,7 @@ export default function CallLogsPage() {
       case 'failed': return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20 hover:bg-destructive/20 font-semibold px-2.5 py-0.5">{t('failed') || 'Failed'}</Badge>
       case 'busy': return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20 hover:bg-destructive/20 font-semibold px-2.5 py-0.5">{t('busy') || 'Busy'}</Badge>
       case 'no-answer': return <Badge variant="outline" className="bg-cyan-500/10 text-cyan-700 border-cyan-500/20 hover:bg-cyan-500/20 dark:text-cyan-400 font-semibold px-2.5 py-0.5">{t('no_answer') || 'No Answer'}</Badge>
+      case 'declined': return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20 hover:bg-destructive/20 font-semibold px-2.5 py-0.5">{t('declined') || 'Declined'}</Badge>
       case 'missed': return <Badge variant="outline" className="bg-orange-500/10 text-orange-600 border-orange-500/20 hover:bg-orange-500/20 dark:text-orange-500 font-semibold px-2.5 py-0.5">{t('missed') || 'Missed'}</Badge>
       case 'canceled': return <Badge variant="outline" className="bg-slate-500/10 text-slate-500 border-slate-500/20 hover:bg-slate-500/20 font-semibold px-2.5 py-0.5">{t('canceled') || 'Canceled'}</Badge>
       case 'in-progress': return <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20 hover:bg-blue-500/20 font-semibold px-2.5 py-0.5">{t('in_progress') || 'In Progress'}</Badge>
@@ -124,7 +140,7 @@ export default function CallLogsPage() {
           <span className="font-bold text-title text-base break-all whitespace-normal line-clamp-1">
             {row.lead_name || '-'}
           </span>
-          <span className="text-subtitle-color font-medium text-md break-all whitespace-normal line-clamp-1">{row.to_number}</span>
+          <span className="text-subtitle-color font-medium text-md break-all whitespace-normal line-clamp-1">{row.direction === 'inbound' ? row.from_number : row.to_number}</span>
         </div>
       ),
     },
@@ -136,8 +152,8 @@ export default function CallLogsPage() {
       cell: (row) => (
         <div className={cn("flex items-center gap-1.5 w-max px-2.5 py-1 rounded-radius text-sm font-semibold",
           row.direction === 'inbound' || row.direction === 'incoming'
-            ? "bg-incoming dark:bg-incoming/10 text-incoming-color"
-            : "bg-outgoing dark:bg-outgoing/10 text-outgoing-color"
+            ? "bg-incoming dark:bg-incoming/10 text-incoming-color dark:text-emerald-400"
+            : "bg-outgoing dark:bg-outgoing/10 text-outgoing-color dark:text-rose-400"
         )}>
           {row.direction === 'inbound' || row.direction === 'incoming' ? (
             <PhoneIncoming className="w-3.5 h-3.5" />
@@ -178,6 +194,21 @@ export default function CallLogsPage() {
       cell: (row) => getStatusBadge(row.status),
     },
     {
+      header: t('outcome', 'Outcome'),
+      className: 'xl1920:min-w-[260px] min-w-[200px]',
+      cell: (row) => (
+        <div className="flex flex-col gap-1 max-w-[280px]">
+          <div className="flex items-center gap-1.5">
+            <OutcomeBadge outcome={row.outcome} />
+            {row.outcome?.sentiment && <span title={row.outcome.sentiment}>{SENTIMENT_EMOJI[row.outcome.sentiment]}</span>}
+          </div>
+          {row.outcome?.summary && (
+            <span className="text-sm text-subtitle-color line-clamp-2 whitespace-normal" title={row.outcome.summary}>{row.outcome.summary}</span>
+          )}
+        </div>
+      ),
+    },
+    {
       header: t('interaction_time') || 'Interaction Time',
       className: 'xl1920:min-w-[150px]',
       sortable: true,
@@ -212,82 +243,7 @@ export default function CallLogsPage() {
               <AlertTriangle className="h-4 w-4" />
             </Button>
           )}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-9 w-9 text-primary hover:bg-primary bg-primary/10  hover:text-white transition-colors">
-                <Eye className="h-4 w-4" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]! gap-0! max-w-[calc(100%-2rem)]! sm:p-6 p-4 border-none bg-bg-card max-h-[90vh] overflow-auto no-scrollbar rounded-modal-radius">
-              <DialogHeader className='text-left '>
-                <DialogTitle>{t('call_transcript') || 'Call Transcript'}</DialogTitle>
-              </DialogHeader>
-              <ScrollArea className="h-[400px] mt-4 pr-4">
-                {row.transcript && row.transcript.length > 0 ? (
-                  Array.isArray(row.transcript) ? (
-                    <div className="flex flex-col gap-6 pt-2 pb-4">
-                      {row.transcript.map((msg: any, idx: number, arr: any[]) => {
-                        const isVirtualCall = arr.some((t: any) => t?.role === 'human');
-                        const isRightSide = isVirtualCall ? msg?.role === 'human' : msg?.role === 'user';
-                        const time = msg?.timestamp ? format(new Date(msg.timestamp), 'hh:mm a') : '';
-                        return (
-                          <div
-                            key={idx}
-                            className={cn(
-                              "flex flex-col w-full",
-                              isRightSide ? "items-end" : "items-start"
-                            )}
-                          >
-                            <span className={cn(
-                              "text-sm font-bold text-slate-500 mb-1",
-                              isRightSide ? "text-right " : "text-left "
-                            )}>
-                              {msg.role ? msg.role.charAt(0).toUpperCase() + msg.role.slice(1) : 'Unknown'}
-                            </span>
-                            <div
-                              className={cn(
-                                "flex max-w-[85%] flex-col gap-1 px-4 py-3 text-[15px] shadow-[0_1px_2px_rgba(0,0,0,0.05)]",
-                                isRightSide
-                                  ? "bg-primary text-white rounded-2xl rounded-tr-sm"
-                                  : "bg-primary/10 text-primary dark:text-title rounded-2xl rounded-tl-sm"
-                              )}
-                            >
-                              <span className="leading-relaxed whitespace-pre-wrap">{msg.text || msg.content}</span>
-                              {time && (
-                                <span className={cn(
-                                  "text-xs mt-1 text-right",
-                                  isRightSide ? "text-white" : "text-subtitle-color"
-                                )}>
-                                  {time}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  ) : (
-                    <div className="pt-2 pb-4">
-                      <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-line leading-relaxed">
-                        {typeof row.transcript === 'string' ? row.transcript : JSON.stringify(row.transcript)}
-                      </p>
-                    </div>
-                  )
-                ) : (
-                  <div className="flex items-center text-base justify-center min-h-[350px] w-full text-center text-subtitle-color">
-                    {t('no_transcript_available') || 'No transcript available.'}
-                  </div>
-                )}
-              </ScrollArea>
-              <DialogFooter className="mt-2 pt-4 sm:flex-row flex-col gap-3 sm:space-x-0 border-t border-input-border-color">
-                <DialogClose asChild>
-                  <Button variant="outline" className="w-full sm:w-auto px-6 py-2 bg-primary rounded-lg p-padding! border-none! h-10 text-white">
-                    {t('close') || 'Close'}
-                  </Button>
-                </DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <CallDetailDialog call={row} />
         </div>
       ),
     },
@@ -305,7 +261,9 @@ export default function CallLogsPage() {
         headerIcon={<Phone className="w-8 h-8 text-primary" />}
         columns={columns}
         data={filteredData}
-        isLoading={isLoading || isFetching}
+        // Only on first load: a refresh (e.g. after changing an outcome) must not
+        // replace the rows, or the call details dialog open in a row would close.
+        isLoading={isLoading}
         searchValue={search}
         onSearchChange={setSearch}
         searchPlaceholder={t('search_call_activity') || 'Search call activity...'}
@@ -350,6 +308,30 @@ export default function CallLogsPage() {
               </SelectContent>
             </Select>
 
+            <Select value={outcomeFilter} onValueChange={(val) => { setOutcomeFilter(val); setPage(1); }}>
+              <SelectTrigger className="w-[170px] bg-bg-card border-input-border-color h-11 text-title rounded-radius">
+                <SelectValue placeholder={t('outcome', 'Outcome')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('all_outcomes', 'All outcomes')}</SelectItem>
+                <SelectItem value="none">{t('outcome_not_analysed', 'Not analysed')}</SelectItem>
+                {(outcomeSettings?.data?.settings?.outcomes || []).filter((o) => !o.archived).map((o) => (
+                  <SelectItem key={o.key} value={o.key}>{o.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={reachedFilter} onValueChange={(val) => { setReachedFilter(val); setPage(1); }}>
+              <SelectTrigger className="w-[150px] bg-bg-card border-input-border-color h-11 text-title rounded-radius">
+                <SelectValue placeholder={t('reached', 'Reached')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('reached_all', 'Reached or not')}</SelectItem>
+                <SelectItem value="true">{t('reached_yes', 'Reached')}</SelectItem>
+                <SelectItem value="false">{t('reached_no', 'Not reached')}</SelectItem>
+              </SelectContent>
+            </Select>
+
             <Select value={directionFilter} onValueChange={(val) => { setDirectionFilter(val); setPage(1); }}>
               <SelectTrigger className="w-[140px] bg-bg-card border-input-border-color h-11 text-title rounded-radius">
                 <SelectValue placeholder={t('direction')} />
@@ -364,6 +346,11 @@ export default function CallLogsPage() {
                 ))}
               </SelectContent>
             </Select>
+
+            <Button onClick={handleExport} disabled={isExporting} variant="outline" className="gap-2 h-11 text-sm font-semibold rounded-lg border-input-border-color text-title">
+              {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+              {t('export', 'Export')}
+            </Button>
           </div>
         }
       />
