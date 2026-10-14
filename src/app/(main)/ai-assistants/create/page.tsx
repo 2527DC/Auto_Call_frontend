@@ -5,6 +5,7 @@ import { AgentTypeTabs } from '@/components/features/agents/AgentTypeTabs'
 import { BehavioralConfigCard } from '@/components/features/agents/BehavioralConfigCard'
 import { CoreIntelligenceCard } from '@/components/features/agents/CoreIntelligenceCard'
 import { FloatingActionBar } from '@/components/features/agents/FloatingActionBar'
+import { AfterCallCard } from '@/components/features/agents/AfterCallCard'
 import { KnowledgeBaseCard } from '@/components/features/agents/KnowledgeBaseCard'
 import { PromptingArchitectureCard } from '@/components/features/agents/PromptingArchitectureCard'
 import { PromptTemplatesSection } from '@/components/features/agents/PromptTemplatesSection'
@@ -21,7 +22,7 @@ import {
 import { useGetFlowsQuery } from '@/redux/api/flowApi'
 import { useGetKnowledgeBaseQuery } from '@/redux/api/knowledgeBaseApi'
 import { useGetVoicesQuery } from '@/redux/api/voiceApi'
-import { GreetingMode, InterruptionSensitivity, TelephonyProvider, VoiceProvider } from '@/types/agent'
+import { GreetingMode, InterruptionSensitivity, TelephonyProvider, VoiceProvider, AgentAnalysis } from '@/types/agent'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -83,6 +84,9 @@ export default function CreateAgentPage() {
   const [teamId, setTeamId] = useState<string | null>(null)
   const [memberId, setMemberId] = useState<string | null>(null)
 
+  // After-call analysis (summary, outcome, details to collect, follow-ups)
+  const [analysis, setAnalysis] = useState<AgentAnalysis>({ enabled: true, form_id: null, success_description: '', extra_instructions: '', follow_up_mode: 'default', google_sheet_id: null })
+
   // API Queries & Mutations
   const { data: flowsData } = useGetFlowsQuery({ limit: 100 })
   const { data: kbData } = useGetKnowledgeBaseQuery({ limit: 100 })
@@ -134,6 +138,18 @@ export default function CreateAgentPage() {
       setHelloWaitMs(agent.hello_wait_ms ?? 1000)
       setAllowInterruptions(agent.allow_interruptions ?? true)
       setInterruptionSensitivity(agent.interruption_sensitivity || 'medium')
+
+      if (agent.analysis) {
+        const idOf = (v: unknown) => (v && typeof v === 'object' ? ((v as { _id?: string; id?: string })._id || (v as { id?: string }).id || null) : (v as string | null)) || null
+        setAnalysis({
+          enabled: agent.analysis.enabled ?? true,
+          form_id: idOf(agent.analysis.form_id),
+          success_description: agent.analysis.success_description || '',
+          extra_instructions: agent.analysis.extra_instructions || '',
+          follow_up_mode: agent.analysis.follow_up_mode || 'default',
+          google_sheet_id: idOf(agent.analysis.google_sheet_id)
+        })
+      }
 
       if (agent.transfer_to_human) {
         setTransferEnabled(agent.transfer_to_human.enabled || false)
@@ -194,6 +210,8 @@ export default function CreateAgentPage() {
         hello_wait_ms: helloWaitMs,
         allow_interruptions: allowInterruptions,
         interruption_sensitivity: interruptionSensitivity,
+
+        analysis,
 
         transfer_to_human: {
           enabled: transferEnabled,
@@ -342,6 +360,8 @@ export default function CreateAgentPage() {
               customKnowledgeBase={customKnowledgeBase}
               setCustomKnowledgeBase={setCustomKnowledgeBase}
             />
+
+            <AfterCallCard analysis={analysis} onChange={(patch) => setAnalysis((a) => ({ ...a, ...patch }))} />
           </div>
         </div>
 

@@ -61,6 +61,7 @@ export interface Agent {
   allow_interruptions?: boolean
   interruption_sensitivity?: InterruptionSensitivity
   tts_model?: string | null
+  analysis?: AgentAnalysis
 
   analytics?: {
     total_calls: number
@@ -71,6 +72,24 @@ export interface Agent {
     duration_trend?: number[]
   }
 }
+// Who follows up on a call: the client's default, the AI, the team, or nobody.
+export type AgentFollowUpMode = 'default' | 'ai_call' | 'team' | 'off'
+
+// After-call analysis: a summary, an outcome and the chosen form's details.
+export interface AgentAnalysis {
+  enabled: boolean
+  form_id: string | null
+  success_description: string
+  extra_instructions: string
+  follow_up_mode: AgentFollowUpMode
+  google_sheet_id: string | null
+}
+
+export interface AfterCallCardProps {
+  analysis: AgentAnalysis
+  onChange: (patch: Partial<AgentAnalysis>) => void
+}
+
 export interface LLMModel {
   id?: string
   name: string
@@ -148,6 +167,7 @@ export interface CreateAgentPayload {
   allow_interruptions?: boolean
   interruption_sensitivity?: InterruptionSensitivity
   tts_model?: string | null
+  analysis?: AgentAnalysis
 }
 
 export interface UpdateAgentPayload extends Partial<CreateAgentPayload> {
