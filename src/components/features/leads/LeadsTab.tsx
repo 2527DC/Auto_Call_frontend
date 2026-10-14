@@ -101,7 +101,7 @@ export default function LeadsTab() {
       cell: (row) => {
         const at = row.lead.next_follow_up_at
         if (!at) return <span className="text-sm text-subtitle-color">—</span>
-        return <span className={cn('text-sm font-semibold', new Date(at) < new Date() ? 'text-destructive' : 'text-title')}>{formatWhen(at, t)}</span>
+        return <span className={cn('text-sm font-semibold whitespace-nowrap', new Date(at) < new Date() ? 'text-destructive' : 'text-title')}>{formatWhen(at, t)}</span>
       },
     },
     {

@@ -2,6 +2,7 @@
 
 import { fromLocalInput, toLocalInput } from '@/components/features/outcomes/format'
 import { Button } from '@/components/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -14,7 +15,7 @@ import {
   useUpdateFollowUpMutation,
 } from '@/redux/api/outcomeApi'
 import { FollowUpMode, FollowUpRow } from '@/types/outcomes'
-import { CalendarClock, Check, Loader2, PhoneCall, X } from 'lucide-react'
+import { CalendarClock, Check, Loader2, MoreHorizontal, Phone, PhoneCall, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -23,7 +24,8 @@ const errorMessage = (e: unknown, fallback: string) => (e as { data?: { message?
 
 type Pending = 'reschedule' | 'done' | 'cancel' | null
 
-// Call now (AI), reschedule, mark done or cancel one follow-up.
+// One main action (AI callback: Call now; team task: Mark done), the rest in
+// a menu: reschedule, call the person yourself, mark done, cancel.
 export default function FollowUpActions({ followUp, compact = false }: { followUp: FollowUpRow; compact?: boolean }) {
   const { t } = useTranslation()
   const [dialog, setDialog] = useState<Pending>(null)
@@ -56,31 +58,43 @@ export default function FollowUpActions({ followUp, compact = false }: { followU
     }
   }
 
-  const iconButton = 'h-8 gap-1.5 border-input-border-color text-title'
+  const item = 'cursor-pointer flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-title'
+  const ai = followUp.mode === 'ai_call'
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
-      {followUp.mode === 'ai_call' && !busy && (
-        <Button variant="outline" size="sm" className={iconButton} disabled={calling}
+    <div className="flex items-center gap-1.5">
+      {busy ? (
+        <span className="flex items-center gap-1.5 text-xs font-semibold text-primary"><Loader2 className="h-3.5 w-3.5 animate-spin" />{t('calling_now', 'Calling now…')}</span>
+      ) : ai ? (
+        <Button size="sm" className="h-8 gap-1.5 bg-primary text-white" disabled={calling}
           onClick={() => run(() => callNow(followUp.id).unwrap(), t('fu_call_failed', 'The call could not be placed'))}
           title={t('call_now_hint', 'The AI agent calls now')}>
           {calling ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <PhoneCall className="h-3.5 w-3.5" />}
-          {!compact && t('call_now', 'Call now')}
+          {compact ? t('ai_call_now', 'AI call now') : t('call_now', 'Call now')}
+        </Button>
+      ) : (
+        <Button size="sm" className="h-8 gap-1.5 bg-primary text-white" onClick={() => openDialog('done')}>
+          <Check className="h-3.5 w-3.5" />{t('mark_done', 'Mark done')}
         </Button>
       )}
-      {busy ? (
-        <span className="text-xs font-semibold text-primary">{t('calling_now', 'Calling now…')}</span>
-      ) : (
-        <>
-          <Button variant="outline" size="sm" className={iconButton} onClick={() => openDialog('reschedule')} title={t('reschedule', 'Reschedule')}>
-            <CalendarClock className="h-3.5 w-3.5" />{!compact && t('reschedule', 'Reschedule')}
-          </Button>
-          <Button variant="outline" size="sm" className={iconButton} onClick={() => openDialog('done')} title={t('mark_done', 'Mark done')}>
-            <Check className="h-3.5 w-3.5" />{!compact && t('mark_done', 'Mark done')}
-          </Button>
-          <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-subtitle-color hover:text-destructive" onClick={() => openDialog('cancel')} title={t('cancel_follow_up', 'Cancel follow-up')}>
-            <X className="h-3.5 w-3.5" />{!compact && t('cancel', 'Cancel')}
-          </Button>
-        </>
+      {!busy && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="h-8 w-8 p-0 border-input-border-color text-title" aria-label={t('more_actions', 'More actions')}>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-52 rounded-lg border border-input-border-color bg-bg-card p-1.5 shadow-xl!">
+            <DropdownMenuItem className={item} onClick={() => openDialog('reschedule')}><CalendarClock className="h-4 w-4" />{t('reschedule', 'Reschedule')}</DropdownMenuItem>
+            {followUp.phone && (
+              <DropdownMenuItem className={item} asChild>
+                <a href={`tel:${followUp.phone}`}><Phone className="h-4 w-4" />{t('call_them_yourself', 'Call them yourself')}</a>
+              </DropdownMenuItem>
+            )}
+            {ai && <DropdownMenuItem className={item} onClick={() => openDialog('done')}><Check className="h-4 w-4" />{t('mark_done', 'Mark done')}</DropdownMenuItem>}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className={`${item} text-destructive focus:text-destructive`} onClick={() => openDialog('cancel')}><X className="h-4 w-4" />{t('cancel_follow_up', 'Cancel follow-up')}</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
 
       <Dialog open={!!dialog} onOpenChange={(v) => !v && setDialog(null)}>

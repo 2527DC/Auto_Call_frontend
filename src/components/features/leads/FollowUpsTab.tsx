@@ -72,7 +72,7 @@ export default function FollowUpsTab() {
       cell: (row) => {
         if (tab === 'done') return <span className="text-sm text-title">{formatWhen(row.closed_at, t)}</span>
         const overdue = new Date(row.due_at) < new Date()
-        return <span className={cn('text-sm font-semibold', overdue ? 'text-destructive' : 'text-title')}>{formatWhen(row.due_at, t)}</span>
+        return <span className={cn('text-sm font-semibold whitespace-nowrap', overdue ? 'text-destructive' : 'text-title')}>{formatWhen(row.due_at, t)}</span>
       },
     },
     {
@@ -103,7 +103,7 @@ export default function FollowUpsTab() {
     },
     {
       header: tab === 'done' ? t('result', 'Result') : t('action', 'Action'),
-      className: 'min-w-[200px]',
+      className: 'min-w-[150px]',
       cell: (row) => (tab === 'done'
         ? <span className="text-sm text-title">{closedLabel(row)}</span>
         : <FollowUpActions followUp={row} />),

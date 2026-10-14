@@ -2,6 +2,8 @@
 
 import { PageHeader } from '@/components/reusable/PageHeader'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { cn } from '@/lib/utils'
+import { useGetFollowUpsQuery } from '@/redux/api/outcomeApi'
 import { Target } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
@@ -17,6 +19,10 @@ function LeadsPageInner() {
   const pathname = usePathname()
   const params = useSearchParams()
   const tab = params.get('tab') === 'follow-ups' ? 'follow-ups' : 'leads'
+  // Open work on the Follow-ups tab label: due today plus overdue.
+  const { data: fu } = useGetFollowUpsQuery({ tab: 'due_today', limit: 1 })
+  const overdue = fu?.counts?.overdue || 0
+  const openWork = (fu?.counts?.due_today || 0) + overdue
 
   const switchTab = (value: string) => {
     const next = new URLSearchParams(params.toString())
@@ -37,7 +43,15 @@ function LeadsPageInner() {
       <Tabs value={tab} onValueChange={switchTab}>
         <TabsList className="h-12 p-1.5">
           <TabsTrigger value="leads" className="px-5 data-[state=active]:text-white">{t('leads', 'Leads')}</TabsTrigger>
-          <TabsTrigger value="follow-ups" className="px-5 data-[state=active]:text-white">{t('follow_ups', 'Follow-ups')}</TabsTrigger>
+          <TabsTrigger value="follow-ups" className="gap-2 px-5 data-[state=active]:text-white">
+            {t('follow_ups', 'Follow-ups')}
+            {openWork > 0 && (
+              <span className={cn('rounded-full px-1.5 text-xs font-semibold', overdue ? 'bg-destructive text-white' : 'bg-primary/15 text-primary')}
+                title={t('fu_tab_badge_hint', '{{today}} due today, {{overdue}} overdue', { today: fu?.counts?.due_today || 0, overdue })}>
+                {openWork}
+              </span>
+            )}
+          </TabsTrigger>
         </TabsList>
       </Tabs>
       {tab === 'follow-ups' ? <FollowUpsTab /> : <LeadsTab />}

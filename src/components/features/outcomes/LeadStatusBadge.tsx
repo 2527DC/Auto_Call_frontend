@@ -29,7 +29,7 @@ export function LeadStatusBadge({ status, label, statuses = [], locked, classNam
   const def = statuses.find((s) => s.key === key)
   const tone = KIND_TONE[def?.kind || (key === 'converted' ? 'won' : key === 'do_not_call' ? 'closed' : 'open')]
   return (
-    <Badge variant="outline" className={cn('font-semibold px-2.5 py-0.5 gap-1', tone, className)}>
+    <Badge variant="outline" className={cn('font-semibold px-2.5 py-0.5 gap-1', tone, className)} title={locked ? t('status_locked_hint', "Set by a person: later calls won't change it") : undefined}>
       {locked && <Lock className="h-3 w-3 shrink-0" aria-label={t('set_by_a_person', 'Set by a person')} />}
       <span className="truncate">{label || def?.label || key}</span>
     </Badge>

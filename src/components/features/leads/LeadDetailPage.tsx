@@ -26,6 +26,7 @@ import { toast } from 'sonner'
 import FollowUpActions from './FollowUpActions'
 
 const errorMessage = (e: unknown, fallback: string) => (e as { data?: { message?: string } })?.data?.message || fallback
+const CALLS_SHOWN = 5
 const duration = (s: number) => (!s ? '0s' : s >= 60 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${s}s`)
 
 function Card({ title, action, children, className }: { title: string; action?: ReactNode; children: ReactNode; className?: string }) {
@@ -111,6 +112,7 @@ export default function LeadDetailPage({ id }: { id: string }) {
   const [fuDue, setFuDue] = useState(toLocalInput(new Date(Date.now() + 3600000)))
   const [fuMode, setFuMode] = useState<FollowUpMode>('team')
   const [fuNote, setFuNote] = useState('')
+  const [allCalls, setAllCalls] = useState(false)
 
   if (isLoading) return <div className="flex h-48 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
   if (isError || !data?.data) {
@@ -178,20 +180,22 @@ export default function LeadDetailPage({ id }: { id: string }) {
           <div className="min-w-0">
             <h1 className="text-2xl font-bold text-title truncate">{lead.name || lead.phone_number}</h1>
             <p className="text-sm text-subtitle-color">
-              {[lead.name ? lead.phone_number : null, lead.email || null, leadSource(lead.source, t), `${info.calls || 0} ${t('calls_lower', 'call(s)')}`].filter(Boolean).join(' · ')}
+              {[lead.name ? lead.phone_number : null, lead.email || null, leadSource(lead.source, t), t('n_calls', '{{n}} call(s)', { n: lead.calls.length })].filter(Boolean).join(' · ')}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <LeadStatusBadge status={info.status} label={info.status_label} statuses={lead.statuses} locked={info.locked} className="text-sm" />
-            {info.locked && (
-              <Button variant="ghost" size="sm" className="h-8 text-xs text-subtitle-color" disabled={unlocking}
-                onClick={async () => { try { await unlock(id).unwrap(); toast.success(t('lead_unlocked', 'Calls may update the status again')) } catch (e) { toast.error(errorMessage(e, t('update_failed', 'Could not update'))) } }}
-                title={t('unlock_hint', 'You set this status; later calls only suggest a change.')}>
-                <Lock className="h-3.5 w-3.5 mr-1" />{t('let_calls_update', 'Let calls update it')}
-              </Button>
-            )}
-          </div>
+          <LeadStatusBadge status={info.status} label={info.status_label} statuses={lead.statuses} locked={info.locked} className="text-sm" />
         </div>
+
+        {info.locked && (
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg bg-primary/5 px-3 py-2 text-sm text-title">
+            <Lock className="h-4 w-4 shrink-0 text-primary" />
+            <span className="flex-1 min-w-[200px]">{t('locked_banner', "A person set this status, so later calls won't change it. They only suggest a change in the history.")}</span>
+            <Button variant="outline" size="sm" className="h-8 border-input-border-color" disabled={unlocking}
+              onClick={async () => { try { await unlock(id).unwrap(); toast.success(t('lead_unlocked', 'Calls may update the status again')) } catch (e) { toast.error(errorMessage(e, t('update_failed', 'Could not update'))) } }}>
+              {unlocking && <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" />}{t('let_calls_update', 'Let calls update it')}
+            </Button>
+          </div>
+        )}
 
         {dnc && (
           <div className="flex items-start gap-2 rounded-lg bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
@@ -208,7 +212,10 @@ export default function LeadDetailPage({ id }: { id: string }) {
           {newStatus && (
             <>
               <Input value={statusNote} onChange={(e) => setStatusNote(e.target.value)} placeholder={dnc && newStatus !== 'do_not_call' ? t('dnc_reason_needed', 'Why can we contact them again? (needed)') : t('note_optional', 'Note (optional)')} className="h-10 flex-1 bg-bg-card border-input-border-color" />
-              <Button className="h-10 bg-primary text-white" onClick={saveStatus} disabled={savingStatus}>{savingStatus && <Loader2 className="h-4 w-4 animate-spin mr-1" />}{t('save', 'Save')}</Button>
+              <div className="flex gap-2">
+                <Button variant="outline" className="h-10 border-input-border-color" onClick={() => { setNewStatus(''); setStatusNote('') }} disabled={savingStatus}>{t('cancel', 'Cancel')}</Button>
+                <Button className="h-10 bg-primary text-white" onClick={saveStatus} disabled={savingStatus}>{savingStatus && <Loader2 className="h-4 w-4 animate-spin mr-1" />}{t('save_status', 'Save status')}</Button>
+              </div>
             </>
           )}
         </div>
@@ -216,9 +223,17 @@ export default function LeadDetailPage({ id }: { id: string }) {
 
       <div className="grid gap-5 lg:grid-cols-3 items-start">
         {/* Calls */}
-        <Card title={t('calls', 'Calls')} className="lg:col-span-2">
-          {lead.calls.length ? <div className="space-y-3">{lead.calls.map((c) => <CallCard key={c.id} call={c} />)}</div>
-            : <p className="text-sm text-subtitle-color">{t('no_calls_yet', 'No calls yet.')}</p>}
+        <Card title={t('calls_n', 'Calls ({{n}})', { n: lead.calls.length })} className="lg:col-span-2">
+          {lead.calls.length ? (
+            <div className="space-y-3">
+              {(allCalls ? lead.calls : lead.calls.slice(0, CALLS_SHOWN)).map((c) => <CallCard key={c.id} call={c} />)}
+              {lead.calls.length > CALLS_SHOWN && (
+                <Button variant="outline" className="w-full border-input-border-color text-title" onClick={() => setAllCalls(!allCalls)}>
+                  {allCalls ? t('show_fewer_calls', 'Show fewer calls') : t('show_all_calls', 'Show all {{n}} calls', { n: lead.calls.length })}
+                </Button>
+              )}
+            </div>
+          ) : <p className="text-sm text-subtitle-color">{t('no_calls_yet', 'No calls yet.')}</p>}
         </Card>
 
         {/* What to do next comes first on a phone */}
