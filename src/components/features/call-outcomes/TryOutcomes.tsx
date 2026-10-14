@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useGetCallLogsQuery } from '@/redux/api/callApi'
 import { useAnalyzePastCallsMutation, useTestOutcomeOnCallMutation } from '@/redux/api/outcomeApi'
 import { OutcomeTestResult } from '@/types/outcomes'
-import { FlaskConical, History, Loader2 } from 'lucide-react'
+import { AlertTriangle, FlaskConical, History, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -17,8 +17,9 @@ const errorMessage = (e: unknown, fallback: string) => (e as { data?: { message?
 const today = () => new Date(Date.now() + 330 * 60000).toISOString().slice(0, 10)
 
 // Check the saved outcomes on a real past call (nothing is saved), and
-// analyse calls made before outcomes were turned on.
-export default function TryOutcomes() {
+// analyse calls made before outcomes were turned on. Both use the saved
+// settings, so `unsaved` warns when the page has changes not saved yet.
+export default function TryOutcomes({ unsaved = false }: { unsaved?: boolean }) {
   const { t } = useTranslation()
   const { data: calls } = useGetCallLogsQuery({ limit: 20, status: 'completed', sortColumn: 'created_at', sortOrder: 'desc' })
   const [test, { isLoading: testing }] = useTestOutcomeOnCallMutation()
@@ -49,11 +50,17 @@ export default function TryOutcomes() {
 
   const field = 'h-10 bg-bg-card border-input-border-color text-title rounded-radius'
   return (
+    <div className="space-y-4">
+    {unsaved && (
+      <p className="flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2.5 text-sm text-amber-700 dark:text-amber-400">
+        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />{t('test_uses_saved', 'These use your saved settings. Save your changes first to test them.')}
+      </p>
+    )}
     <div className="grid gap-5 lg:grid-cols-2">
       <section className="rounded-lg border border-input-border-color bg-bg-card p-4 sm:p-5 space-y-3">
         <div>
           <h2 className="flex items-center gap-2 text-base font-bold text-title"><FlaskConical className="h-4 w-4 text-primary" />{t('try_on_past_call', 'Try it on a past call')}</h2>
-          <p className="text-sm text-subtitle-color">{t('try_on_past_call_hint', 'See what the AI would decide with your saved settings. Nothing is changed.')}</p>
+          <p className="text-sm text-subtitle-color">{t('try_on_past_call_hint', 'Pick a recent call and see which outcome the AI would choose now. Nothing on the call changes.')}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
           <Select value={callId} onValueChange={setCallId}>
@@ -87,7 +94,7 @@ export default function TryOutcomes() {
       <section className="rounded-lg border border-input-border-color bg-bg-card p-4 sm:p-5 space-y-3">
         <div>
           <h2 className="flex items-center gap-2 text-base font-bold text-title"><History className="h-4 w-4 text-primary" />{t('analyse_past_calls', 'Analyse past calls')}</h2>
-          <p className="text-sm text-subtitle-color">{t('analyse_past_calls_hint', 'Calls made before outcomes were on. Up to 200 calls each time.')}</p>
+          <p className="text-sm text-subtitle-color">{t('analyse_past_calls_hint_long', 'Gives outcomes to calls made before this was turned on. Up to 200 calls per run; calls that already have one are skipped.')}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 sm:items-end">
           <label className="flex-1 space-y-1"><span className="text-xs text-subtitle-color">{t('from', 'From')}</span><Input type="date" value={from} max={to} onChange={(e) => setFrom(e.target.value)} className={field} /></label>
@@ -95,6 +102,7 @@ export default function TryOutcomes() {
           <Button variant="outline" className="h-10 border-input-border-color" disabled={!from || !to || queueing} onClick={runPast}>{queueing && <Loader2 className="h-4 w-4 animate-spin mr-1" />}{t('analyse', 'Analyse')}</Button>
         </div>
       </section>
+    </div>
     </div>
   )
 }
