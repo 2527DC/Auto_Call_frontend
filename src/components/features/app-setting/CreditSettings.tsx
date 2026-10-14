@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import CreditSettingsCard from './credits/CreditSettingsCard'
 import ProviderCostsCard from './credits/ProviderCostsCard'
+import CallOutcomesCard from './credits/CallOutcomesCard'
+import { CreditSettingsFormValues } from '@/types/settings'
 
 const FormikStateConnector = ({
   setSaveState,
@@ -43,7 +45,7 @@ const CreditSettings = ({ setSaveState }: { setSaveState: (state: any) => void }
   const [updateSettings, { isLoading: isUpdating }] = useUpdateAdminSettingsMutation()
 
   // Same defaults as the backend, for settings saved before these fields existed.
-  const initialValues = {
+  const initialValues: CreditSettingsFormValues = {
     credit_deduction_type: 'per_minute',
     credits_per_call: 1,
     credits_per_minute: 1,
@@ -64,6 +66,10 @@ const CreditSettings = ({ setSaveState }: { setSaveState: (state: any) => void }
     cost_llm_output_per_1m_tokens: 58.2,
     cost_sms_per_message: 0,
     cost_whatsapp_per_message: 0,
+    outcomes_mode: 'off',
+    credits_per_analysis: 0,
+    calling_window_start: 10,
+    calling_window_end: 21,
   }
 
   const onSubmit = async (values: typeof initialValues) => {
@@ -85,6 +91,10 @@ const CreditSettings = ({ setSaveState }: { setSaveState: (state: any) => void }
     ...initialValues,
     ...settings,
     credits_per_sms: settings.credits_per_sms ?? initialValues.credits_per_sms,
+    outcomes_mode: settings.outcomes_mode ?? initialValues.outcomes_mode,
+    credits_per_analysis: settings.credits_per_analysis ?? initialValues.credits_per_analysis,
+    calling_window_start: settings.calling_window_start ?? initialValues.calling_window_start,
+    calling_window_end: settings.calling_window_end ?? initialValues.calling_window_end,
   }
 
   return (
@@ -104,6 +114,7 @@ const CreditSettings = ({ setSaveState }: { setSaveState: (state: any) => void }
           />
           <div className="grid grid-cols-1 gap-6">
             <CreditSettingsCard />
+            <CallOutcomesCard />
             <ProviderCostsCard />
           </div>
         </Form>

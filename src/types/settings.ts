@@ -161,6 +161,10 @@ export interface CreditSettingsFormValues {
   cost_llm_output_per_1m_tokens: number
   cost_sms_per_message: number
   cost_whatsapp_per_message: number
+  outcomes_mode: 'off' | 'admin_only' | 'all'
+  credits_per_analysis: number
+  calling_window_start: number
+  calling_window_end: number
 }
 
 export interface SignupCustomizationFormValues {
