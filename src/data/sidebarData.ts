@@ -453,6 +453,13 @@ export const sidebarMenuData: MenuSection[] = [
         requiredRole: "admin",
       },
       {
+        id: 'ai-insights',
+        label: 'AI Analytics',
+        icon: 'brainCircuit',
+        path: ROUTES.AI_INSIGHTS,
+        requiredRole: "admin",
+      },
+      {
         id: 'price-estimator',
         label: 'Price Estimator',
         icon: 'calculator',

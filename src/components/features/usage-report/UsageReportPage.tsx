@@ -9,7 +9,10 @@ import { cn } from '@/lib/utils'
 import { useGetUsageReportQuery } from '@/redux/api/usageReportApi'
 import { Column } from '@/types/table'
 import { UsageReportClient } from '@/types/usageReport'
-import { IndianRupee, Percent, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ROUTES } from '@/constants/routes'
+import { ArrowUpRight, BrainCircuit, IndianRupee, Percent, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import CreditCostCard from './CreditCostCard'
@@ -123,6 +126,13 @@ const UsageReportPage = () => {
           </p>
         </div>
         <div className="flex flex-wrap items-end gap-3">
+          <Link href={ROUTES.AI_INSIGHTS}>
+            <Button variant="outline" className="h-10 gap-2 font-semibold text-xs border-input-border-color bg-bg-card hover:bg-primary/5">
+              <BrainCircuit className="w-4 h-4 text-primary" />
+              <span>AI Analytics</span>
+              <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
+            </Button>
+          </Link>
           <div className="space-y-1">
             <Label htmlFor="report-from" className="text-xs text-subtitle-color">{t('from', 'From')}</Label>
             <Input id="report-from" type="date" value={from} max={to} onChange={(e) => e.target.value && setFrom(e.target.value)} className="h-10 w-40 bg-input-color border-input-border-color" />

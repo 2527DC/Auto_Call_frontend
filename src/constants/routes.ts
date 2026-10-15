@@ -33,6 +33,7 @@ export const ROUTES = {
   PLANS: "/plans",
   TRANSACTIONS: "/transactions",
   COST_REPORT: "/cost-report",
+  AI_INSIGHTS: "/ai-insights",
   PRICE_ESTIMATOR: "/price-estimator",
   WHATSAPP_INBOX: "/whatsapp-inbox",
   WHATSAPP_AUTOMATIONS: "/whatsapp-automations",
