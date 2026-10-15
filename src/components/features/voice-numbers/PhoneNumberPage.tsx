@@ -297,30 +297,40 @@ const PhoneNumberPage = () => {
       ),
     },
     {
-      header: t('elevenlabs'),
-      cell: (row) => (
-        <div className="flex items-center gap-2">
-          {row.is_synced_to_elevenlabs ? (
-            <div className="flex items-center gap-1.5 text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-black uppercase tracking-tighter">{t('synced')}</span>
-            </div>
-          ) : (
-            canUpdatePhone && (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleSyncElevenLabs(row)}
-                disabled={isSyncingElevenLabs && syncingRowId === (row._id || row.id)}
-                className="h-8 rounded-full bg-primary/10 text-primary dark:bg-white/5 border-input-border-color text-sm font-black gap-1.5 hover:bg-primary hover:text-white transition-all"
-              >
-                <RefreshCw className={cn('w-3 h-3', isSyncingElevenLabs && syncingRowId === (row._id || row.id) && 'animate-spin')} />
-                {t('sync_now')}
-              </Button>
-            )
-          )}
-        </div>
-      ),
+      header: t('elevenlabs_sync', 'ElevenLabs Sync'),
+      cell: (row) => {
+        if (row.provider === 'plivo') {
+          return (
+            <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-tight bg-primary/10 text-primary border-primary/20">
+              {t('voxeno_native', 'Voxeno Native')}
+            </Badge>
+          )
+        }
+
+        return (
+          <div className="flex items-center gap-2">
+            {row.is_synced_to_elevenlabs ? (
+              <div className="flex items-center gap-1.5 text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span className="text-[10px] font-black uppercase tracking-tighter">{t('synced')}</span>
+              </div>
+            ) : (
+              canUpdatePhone && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleSyncElevenLabs(row)}
+                  disabled={isSyncingElevenLabs && syncingRowId === (row._id || row.id)}
+                  className="h-8 rounded-full bg-primary/10 text-primary dark:bg-white/5 border-input-border-color text-sm font-black gap-1.5 hover:bg-primary hover:text-white transition-all"
+                >
+                  <RefreshCw className={cn('w-3 h-3', isSyncingElevenLabs && syncingRowId === (row._id || row.id) && 'animate-spin')} />
+                  {t('sync_now')}
+                </Button>
+              )
+            )}
+          </div>
+        )
+      },
     },
     {
       header: t('price', 'Price'),
