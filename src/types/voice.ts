@@ -48,9 +48,12 @@ export interface VoiceModelsResponse {
 
 // Masked except the last 4 characters; '' when the client has no key.
 export interface ClientProviderKeys {
-  elevenlabs_api_key: string
-  deepgram_api_key: string
-  sarvam_ai_api_key: string
+  elevenlabs_api_key?: string
+  deepgram_api_key?: string
+  sarvam_ai_api_key?: string
+  plivo_auth_id?: string
+  plivo_auth_token?: string
+  plivo_app_id?: string
 }
 
 export interface AssignAgentModalProps {
