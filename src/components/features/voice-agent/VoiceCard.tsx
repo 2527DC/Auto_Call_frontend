@@ -103,6 +103,21 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
               <Badge variant="outline" className="bg-primary/10 border-transparent text-primary text-[10px] uppercase tracking-wider font-semibold rounded-full px-2.5 py-0.5 shadow-sm shadow-primary/10">
                 {t(voice.provider)}
               </Badge>
+              {voice.provider === 'sarvam_ai' && (
+                <Badge variant="outline" className="bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 text-[10px] font-semibold rounded-full px-2 py-0.5">
+                  EN • HI • KN +10
+                </Badge>
+              )}
+              {voice.provider === 'elevenlabs' && (
+                <Badge variant="outline" className="bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-semibold rounded-full px-2 py-0.5">
+                  EN • HI (Multi)
+                </Badge>
+              )}
+              {voice.provider === 'deepgram' && (
+                <Badge variant="outline" className="bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400 text-[10px] font-semibold rounded-full px-2 py-0.5">
+                  EN
+                </Badge>
+              )}
             </div>
             <h3 className="sm:text-xl text-lg font-bold text-title group-hover:text-primary transition-colors line-clamp-2">
               {voice.name}

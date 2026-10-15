@@ -19,6 +19,7 @@ export const VoiceAgentPage = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState("")
   const [providerFilter, setProviderFilter] = useState("all")
+  const [languageFilter, setLanguageFilter] = useState("all")
   const [visibilityFilter, setVisibilityFilter] = useState("all")
   const debouncedSearch = useDebounce(search, 500)
   const { hasPermission } = usePermission()
@@ -56,7 +57,21 @@ export const VoiceAgentPage = () => {
     const matchesProvider = providerFilter === "all" || voice.provider?.toLowerCase() === providerFilter.toLowerCase()
     const matchesVisibility = visibilityFilter === "all" || voice.status === visibilityFilter
 
-    return matchesSearch && matchesProvider && matchesVisibility
+    const matchesLanguage = (() => {
+      if (languageFilter === "all") return true
+      if (languageFilter === "kn") {
+        return voice.provider === "sarvam_ai"
+      }
+      if (languageFilter === "hi") {
+        return voice.provider === "sarvam_ai" || voice.provider === "elevenlabs"
+      }
+      if (languageFilter === "en") {
+        return true
+      }
+      return true
+    })()
+
+    return matchesSearch && matchesProvider && matchesVisibility && matchesLanguage
   })
 
   return (
@@ -100,7 +115,7 @@ export const VoiceAgentPage = () => {
           emptyStateActionLabel={t('sync_voice')}
           onEmptyStateAction={canSync ? handleSync : undefined}
           filterContent={
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
             {canSync && (
               <div className="w-[180px]">
                 <Select value={visibilityFilter} onValueChange={setVisibilityFilter}>
@@ -121,11 +136,23 @@ export const VoiceAgentPage = () => {
                   <SelectValue placeholder={t("all_providers")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("all")}</SelectItem>
+                  <SelectItem value="all">{t("all_providers", "All Providers")}</SelectItem>
                   <SelectItem value="elevenlabs">{t("elevenlabs")}</SelectItem>
                   <SelectItem value="deepgram">{t("deepgram")}</SelectItem>
                   <SelectItem value="sarvam_ai">{t("sarvam_ai")}</SelectItem>
-
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-[180px]">
+              <Select value={languageFilter} onValueChange={setLanguageFilter}>
+                <SelectTrigger className="h-11 bg-input-color border-transparent focus:border-primary">
+                  <SelectValue placeholder={t("all_languages", "All Languages")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("all_languages", "All Languages")}</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="hi">Hindi (हिंदी)</SelectItem>
+                  <SelectItem value="kn">Kannada (ಕನ್ನಡ)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
