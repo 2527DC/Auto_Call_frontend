@@ -49,6 +49,11 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
       audio.onerror = (err) => {
         console.error("Audio playback error:", err)
         setIsPlaying(false)
+        toast.error(
+          voice.provider === 'sarvam_ai'
+            ? t('sarvam_key_invalid', 'Sarvam AI authentication error: The configured API key was rejected by Sarvam AI. Please check your key in Settings.')
+            : t('preview_playback_failed', 'Failed to play voice preview. Please check provider settings.')
+        )
       }
       audioRef.current = audio
     }
@@ -64,6 +69,13 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
           .catch((err) => {
             console.error("Failed to play voice preview:", err)
             setIsPlaying(false)
+            if (err?.name !== 'AbortError') {
+              toast.error(
+                voice.provider === 'sarvam_ai'
+                  ? t('sarvam_key_invalid', 'Sarvam AI authentication error: The configured API key was rejected by Sarvam AI. Please check your key in Settings.')
+                  : t('preview_playback_failed', 'Failed to play voice preview.')
+              )
+            }
           })
       } else {
         setIsPlaying(true)
