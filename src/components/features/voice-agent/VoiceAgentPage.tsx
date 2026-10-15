@@ -20,8 +20,9 @@ export const VoiceAgentPage = () => {
   const [search, setSearch] = useState("")
   const [providerFilter, setProviderFilter] = useState("all")
   const [languageFilter, setLanguageFilter] = useState("all")
+  const [genderFilter, setGenderFilter] = useState("all")
   const [visibilityFilter, setVisibilityFilter] = useState("all")
-  const debouncedSearch = useDebounce(search, 500)
+  const debouncedSearch = useDebounce(search, 300)
   const { hasPermission } = usePermission()
 
   const canSync = hasPermission(PERMISSIONS.SYNC_VOICES)
@@ -44,23 +45,31 @@ export const VoiceAgentPage = () => {
     }
   }
 
-  // Client-side filtering as the API doesn't seem to support search params currently based on backend controller
+  // Client-side filtering for fast, responsive search and faceted filtering
   const filteredVoices = allVoices.filter(voice => {
-    const searchLower = debouncedSearch.toLowerCase()
-    const matchesSearch = (
-      voice.name.toLowerCase().includes(searchLower) ||
-      voice.labels.accent?.toLowerCase().includes(searchLower) ||
-      voice.labels.gender?.toLowerCase().includes(searchLower) ||
-      voice.labels.description?.toLowerCase().includes(searchLower)
+    const searchLower = (search || debouncedSearch || "").toLowerCase().trim()
+    const matchesSearch = !searchLower || (
+      voice.name?.toLowerCase().includes(searchLower) ||
+      voice.voice_id?.toLowerCase().includes(searchLower) ||
+      voice.labels?.accent?.toLowerCase().includes(searchLower) ||
+      voice.labels?.gender?.toLowerCase().includes(searchLower) ||
+      voice.labels?.description?.toLowerCase().includes(searchLower) ||
+      voice.provider?.toLowerCase().includes(searchLower)
     )
 
     const matchesProvider = providerFilter === "all" || voice.provider?.toLowerCase() === providerFilter.toLowerCase()
     const matchesVisibility = visibilityFilter === "all" || voice.status === visibilityFilter
 
+    const voiceGender = (voice.labels?.gender || "").toLowerCase().trim()
+    const matchesGender = genderFilter === "all" || (
+      genderFilter === "male" ? (voiceGender === "male") :
+      genderFilter === "female" ? (voiceGender === "female") : true
+    )
+
     const matchesLanguage = (() => {
       if (languageFilter === "all") return true
       if (languageFilter === "kn") {
-        return voice.provider === "sarvam_ai"
+        return voice.provider === "sarvam_ai" || voice.provider === "elevenlabs"
       }
       if (languageFilter === "hi") {
         return voice.provider === "sarvam_ai" || voice.provider === "elevenlabs"
@@ -71,7 +80,7 @@ export const VoiceAgentPage = () => {
       return true
     })()
 
-    return matchesSearch && matchesProvider && matchesVisibility && matchesLanguage
+    return matchesSearch && matchesProvider && matchesVisibility && matchesGender && matchesLanguage
   })
 
   return (
@@ -109,7 +118,7 @@ export const VoiceAgentPage = () => {
           isLoading={isLoading}
           searchValue={search}
           onSearchChange={setSearch}
-          searchPlaceholder={t("search_voices")}
+          searchPlaceholder={t("search_voices_by_name", "Search voice by name...")}
           emptyStateTitle={t("no_voices_title", "No Voices Found")}
           emptyMessage={t("no_voices_desc", "Sync available voices from your provider for automated calls.")}
           emptyStateActionLabel={t('sync_voice')}
@@ -130,7 +139,7 @@ export const VoiceAgentPage = () => {
                 </Select>
               </div>
             )}
-            <div className="w-[180px]">
+            <div className="w-[160px]">
               <Select value={providerFilter} onValueChange={setProviderFilter}>
                 <SelectTrigger className="h-11 bg-input-color border-transparent focus:border-primary">
                   <SelectValue placeholder={t("all_providers")} />
@@ -143,7 +152,19 @@ export const VoiceAgentPage = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="w-[180px]">
+            <div className="w-[150px]">
+              <Select value={genderFilter} onValueChange={setGenderFilter}>
+                <SelectTrigger className="h-11 bg-input-color border-transparent focus:border-primary">
+                  <SelectValue placeholder={t("all_genders", "All Genders")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("all_genders", "All Genders")}</SelectItem>
+                  <SelectItem value="male">{t("male", "Male")}</SelectItem>
+                  <SelectItem value="female">{t("female", "Female")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-[160px]">
               <Select value={languageFilter} onValueChange={setLanguageFilter}>
                 <SelectTrigger className="h-11 bg-input-color border-transparent focus:border-primary">
                   <SelectValue placeholder={t("all_languages", "All Languages")} />
