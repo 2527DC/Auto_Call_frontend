@@ -35,10 +35,16 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
   }, [])
 
   const togglePlay = () => {
-    if (!voice.preview_url) return
+    let url = voice.preview_url || `/api/voices/${voice.voice_id}/preview`
+    if (url.includes('127.0.0.1') || url.includes('localhost:5000')) {
+      url = `/api/voices/${voice.voice_id}/preview`
+    }
 
-    if (!audioRef.current) {
-      const audio = new Audio(voice.preview_url)
+    if (!audioRef.current || !audioRef.current.src.endsWith(url)) {
+      if (audioRef.current) {
+        audioRef.current.pause()
+      }
+      const audio = new Audio(url)
       audio.onended = () => setIsPlaying(false)
       audio.onerror = (err) => {
         console.error("Audio playback error:", err)
