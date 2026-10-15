@@ -159,7 +159,11 @@ export const VoiceAgentPage = () => {
             </div>
           }
           renderCard={(voice) => (
-            <VoiceCard voice={voice} canManage={canSync} />
+            <VoiceCard
+              voice={voice}
+              canManage={canSync}
+              defaultLanguage={languageFilter !== 'all' ? languageFilter : 'en'}
+            />
           )}
         />
       </div>

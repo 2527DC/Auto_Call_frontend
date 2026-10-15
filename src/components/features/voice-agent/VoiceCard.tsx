@@ -6,12 +6,12 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { useUpdateVoiceStatusMutation } from "@/redux/api/voiceApi"
 import { VoiceCardProps } from "@/types/voice"
-import { AudioWaveform, Globe, Pause, Play, Sparkles, User } from "lucide-react"
+import { AudioWaveform, Globe, Loader2, Pause, Play, Sparkles, User } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
-export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
+export const VoiceCard = ({ voice, canManage = false, defaultLanguage = 'en' }: VoiceCardProps) => {
   const { t } = useTranslation()
   const [updateVoiceStatus, { isLoading: isUpdatingStatus }] = useUpdateVoiceStatusMutation()
 
@@ -22,8 +22,36 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
       toast.error(err?.data?.message || t("failed_to_update_voice"))
     }
   }
+
+  const isMultilingual = voice.provider === 'sarvam_ai' || voice.provider === 'elevenlabs'
+  const supportedLanguages = isMultilingual
+    ? [
+        { code: 'en', label: 'English', short: 'EN' },
+        { code: 'hi', label: 'हिंदी', short: 'HI' },
+        { code: 'kn', label: 'ಕನ್ನಡ', short: 'KN' },
+      ]
+    : [
+        { code: 'en', label: 'English', short: 'EN' },
+      ]
+
+  const initialLang = (defaultLanguage && ['en', 'hi', 'kn'].includes(defaultLanguage) && isMultilingual)
+    ? defaultLanguage
+    : 'en'
+
+  const [selectedLanguage, setSelectedLanguage] = useState(initialLang)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const currentUrlRef = useRef<string>('')
+
+  useEffect(() => {
+    if (defaultLanguage && ['en', 'hi', 'kn'].includes(defaultLanguage) && isMultilingual) {
+      setSelectedLanguage(defaultLanguage)
+      if (isPlaying && currentUrlRef.current && !currentUrlRef.current.includes(`lang=${defaultLanguage}`)) {
+        togglePlay(defaultLanguage)
+      }
+    }
+  }, [defaultLanguage, isMultilingual])
 
   useEffect(() => {
     return () => {
@@ -34,21 +62,33 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
     }
   }, [])
 
-  const togglePlay = () => {
-    let url = voice.preview_url || `/api/voices/${voice.voice_id}/preview`
-    if (url.includes('127.0.0.1') || url.includes('localhost:5000')) {
-      url = `/api/voices/${voice.voice_id}/preview`
-    }
+  const getPreviewUrl = (lang: string) => {
+    return `/api/voices/${voice.voice_id}/preview?lang=${lang}`
+  }
 
-    if (!audioRef.current || !audioRef.current.src.endsWith(url)) {
+  const togglePlay = (targetLang?: string) => {
+    const langToPlay = targetLang || selectedLanguage
+    const url = getPreviewUrl(langToPlay)
+
+    if (!audioRef.current || currentUrlRef.current !== url) {
       if (audioRef.current) {
         audioRef.current.pause()
       }
+      setIsLoadingAudio(true)
       const audio = new Audio(url)
-      audio.onended = () => setIsPlaying(false)
+      currentUrlRef.current = url
+
+      audio.oncanplay = () => {
+        setIsLoadingAudio(false)
+      }
+      audio.onended = () => {
+        setIsPlaying(false)
+        setIsLoadingAudio(false)
+      }
       audio.onerror = (err) => {
         console.error("Audio playback error:", err)
         setIsPlaying(false)
+        setIsLoadingAudio(false)
         toast.error(
           voice.provider === 'sarvam_ai'
             ? t('sarvam_key_invalid', 'Sarvam AI authentication error: The configured API key was rejected by Sarvam AI. Please check your key in Settings.')
@@ -58,17 +98,22 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
       audioRef.current = audio
     }
 
-    if (isPlaying) {
+    if (isPlaying && (!targetLang || targetLang === selectedLanguage)) {
       audioRef.current.pause()
       setIsPlaying(false)
     } else {
+      setIsLoadingAudio(true)
       const playPromise = audioRef.current.play()
       if (playPromise !== undefined) {
         playPromise
-          .then(() => setIsPlaying(true))
+          .then(() => {
+            setIsLoadingAudio(false)
+            setIsPlaying(true)
+          })
           .catch((err) => {
             console.error("Failed to play voice preview:", err)
             setIsPlaying(false)
+            setIsLoadingAudio(false)
             if (err?.name !== 'AbortError') {
               toast.error(
                 voice.provider === 'sarvam_ai'
@@ -79,7 +124,16 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
           })
       } else {
         setIsPlaying(true)
+        setIsLoadingAudio(false)
       }
+    }
+  }
+
+  const handleLanguageSelect = (langCode: string) => {
+    if (selectedLanguage === langCode && isPlaying) return
+    setSelectedLanguage(langCode)
+    if (isPlaying) {
+      togglePlay(langCode)
     }
   }
 
@@ -128,7 +182,7 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
               )}
               {voice.provider === 'elevenlabs' && (
                 <Badge variant="outline" className="bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-semibold rounded-full px-2 py-0.5">
-                  EN • HI (Multi)
+                  EN • HI • KN (Multi)
                 </Badge>
               )}
               {voice.provider === 'deepgram' && (
@@ -140,11 +194,40 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
             <h3 className="sm:text-xl text-lg font-bold text-title group-hover:text-primary transition-colors line-clamp-2">
               {voice.name}
             </h3>
+
+            {/* Language Selection for Voice Preview */}
+            {isMultilingual && (
+              <div className="flex items-center gap-2 pt-1 flex-wrap">
+                <span className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                  {t("language", "Language")}:
+                </span>
+                <div className="inline-flex rounded-lg bg-subcard p-0.5 border border-input-border-color">
+                  {supportedLanguages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleLanguageSelect(lang.code)
+                      }}
+                      className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-all duration-200 cursor-pointer ${
+                        selectedLanguage === lang.code
+                          ? "bg-primary text-white shadow-xs"
+                          : "text-zinc-600 dark:text-zinc-300 hover:text-primary hover:bg-primary/5"
+                      }`}
+                      title={`Play sample in ${lang.label}`}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           <Button
             size="icon"
-            onClick={togglePlay}
-            disabled={!voice.preview_url}
+            onClick={() => togglePlay()}
+            disabled={isLoadingAudio}
             className={`shrink-0 w-14 h-14 rounded-full transition-all duration-500 relative overflow-hidden ${isPlaying
               ? "bg-primary text-white scale-105 shadow-lg shadow-primary/30"
               : "bg-subcard text-zinc-600 dark:text-zinc-300 hover:bg-primary/10 hover:text-primary border border-input-border-color hover:border-primary/30"
@@ -153,7 +236,9 @@ export const VoiceCard = ({ voice, canManage = false }: VoiceCardProps) => {
             {isPlaying && (
               <span className="absolute inset-0 rounded-full animate-ping bg-primary/20" />
             )}
-            {isPlaying ? (
+            {isLoadingAudio ? (
+              <Loader2 className="w-5 h-5 animate-spin relative z-10" />
+            ) : isPlaying ? (
               <Pause className="w-5 h-5 fill-current relative z-10" />
             ) : (
               <Play className="w-5 h-5 fill-current relative z-10" />

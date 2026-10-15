@@ -27,6 +27,7 @@ export interface VoiceCardProps {
   voice: Voice
   // Admins get a switch to show or hide the voice for clients.
   canManage?: boolean
+  defaultLanguage?: string
 }
 
 export interface VoiceModel {
