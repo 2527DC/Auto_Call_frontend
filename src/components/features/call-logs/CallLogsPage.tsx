@@ -78,12 +78,22 @@ export default function CallLogsPage() {
     sortOrder,
     prioritizeRestricted: isScannedSort,
     user_id: clientFilter === 'all' ? undefined : clientFilter,
-  }, {
-    // If there is any active call on the current page, poll every 4 seconds to guarantee fresh status and duration
-    pollingInterval: (callLogsResponse?.data || []).some(
-      (c: CallLog) => c.status === 'in-progress' || c.status === 'queued' || c.status === 'ringing'
-    ) ? 4000 : 0
   })
+
+  // If there is any active call on the current page, poll every 4 seconds to guarantee fresh status and duration
+  const hasActiveCalls = useMemo(() => {
+    return (callLogsResponse?.data || []).some(
+      (c: CallLog) => c.status === 'in-progress' || c.status === 'queued' || c.status === 'ringing'
+    )
+  }, [callLogsResponse?.data])
+
+  React.useEffect(() => {
+    if (!hasActiveCalls) return
+    const interval = setInterval(() => {
+      refetch()
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [hasActiveCalls, refetch])
 
   // Live WebSocket updates: refresh table immediately as soon as a call completes or outcome is analysed
   React.useEffect(() => {
