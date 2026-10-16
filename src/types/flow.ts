@@ -201,7 +201,7 @@ export interface CallTranscript {
 export interface CallLog {
   _id: string;
   id?: string;
-  user_id: string;
+  user_id: string | { _id: string; id?: string; name?: string; email?: string; company?: string; phone_number?: string };
   flow_id: { _id: string; name: string; id?: string } | null;
   agent_id: { id: string; name: string } | string | null;
   campaign_id: { id: string; name: string } | string | null;

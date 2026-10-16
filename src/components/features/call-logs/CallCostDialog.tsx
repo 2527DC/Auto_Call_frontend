@@ -108,7 +108,13 @@ export const CallCostDialog: React.FC<CallCostDialogProps> = ({
                   <div className="text-2xl sm:text-3xl font-extrabold text-title mt-0.5">
                     {formatMoney(costData.total_cost)}
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-subtitle-color mt-1">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-subtitle-color mt-1">
+                    {costData.client?.name && costData.client.name !== 'Unknown Client' && (
+                      <>
+                        <span className="text-primary font-semibold">Client: {costData.client.name}</span>
+                        <span>·</span>
+                      </>
+                    )}
                     <span>Duration: <strong>{costData.duration.formatted}</strong></span>
                     <span>·</span>
                     <span>Billed: <strong>{costData.duration.billed_minutes} min</strong></span>

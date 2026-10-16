@@ -12,7 +12,7 @@ export const callApi = baseApi.injectEndpoints({
         body,
       }),
     }),
-    getCallLogs: builder.query<CallLogsResponse, { page?: number; limit?: number; search?: string; status?: string; direction?: string; outcome?: string; reached?: string; sentiment?: string; sortColumn?: string; sortOrder?: string; prioritizeRestricted?: boolean } | void>({
+    getCallLogs: builder.query<CallLogsResponse, { page?: number; limit?: number; search?: string; status?: string; direction?: string; outcome?: string; reached?: string; sentiment?: string; sortColumn?: string; sortOrder?: string; prioritizeRestricted?: boolean; user_id?: string } | void>({
       query: (params) => {
         if (!params) return '/call-logs';
         const queryParams = new URLSearchParams();
@@ -27,6 +27,7 @@ export const callApi = baseApi.injectEndpoints({
         if (params.sortColumn) queryParams.append('sortColumn', params.sortColumn);
         if (params.sortOrder) queryParams.append('sortOrder', params.sortOrder);
         if (params.prioritizeRestricted) queryParams.append('prioritizeRestricted', 'true');
+        if (params.user_id) queryParams.append('user_id', params.user_id);
         
         const queryString = queryParams.toString();
         return queryString ? `/call-logs?${queryString}` : '/call-logs';

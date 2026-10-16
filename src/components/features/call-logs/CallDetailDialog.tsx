@@ -99,10 +99,17 @@ export default function CallDetailDialog({ call }: { call: CallLog }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[640px]! gap-0! max-w-[calc(100%-1.5rem)]! sm:p-6 p-4 border-none bg-bg-card max-h-[90vh] overflow-y-auto no-scrollbar rounded-modal-radius">
         <DialogHeader className="text-left space-y-1">
-          <DialogTitle className="flex items-center gap-2 text-title">
-            {inbound ? <PhoneIncoming className="h-5 w-5 shrink-0 text-incoming-color dark:text-emerald-400" /> : <PhoneOutgoing className="h-5 w-5 shrink-0 text-outgoing-color dark:text-rose-400" />}
-            <span className="truncate">{call.lead_name || number}</span>
-          </DialogTitle>
+          <div className="flex items-center justify-between gap-2">
+            <DialogTitle className="flex items-center gap-2 text-title">
+              {inbound ? <PhoneIncoming className="h-5 w-5 shrink-0 text-incoming-color dark:text-emerald-400" /> : <PhoneOutgoing className="h-5 w-5 shrink-0 text-outgoing-color dark:text-rose-400" />}
+              <span className="truncate">{call.lead_name || number}</span>
+            </DialogTitle>
+            {isAdmin && typeof call.user_id === 'object' && call.user_id?.name && (
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-primary/10 text-primary shrink-0">
+                {call.user_id.name}
+              </span>
+            )}
+          </div>
           <DialogDescription className="text-subtitle-color text-sm">
             {[number !== call.lead_name ? number : null, inbound ? t('incoming', 'Incoming') : t('outgoing', 'Outgoing'), format(new Date(call.created_at), 'MMM dd, yyyy HH:mm'), formatDuration(call.duration), agentName || campaignName].filter(Boolean).join(' · ')}
           </DialogDescription>

@@ -27,6 +27,7 @@ import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useAppSelector } from '@/redux/hooks'
+import { useGetUsersQuery } from '@/redux/api/userApi'
 import CallCostDialog from './CallCostDialog'
 import CallDetailDialog from './CallDetailDialog'
 import TakeActionModal from './TakeActionModal'
@@ -41,7 +42,10 @@ export default function CallLogsPage() {
   const [directionFilter, setDirectionFilter] = useState('all')
   const [outcomeFilter, setOutcomeFilter] = useState('all')
   const [reachedFilter, setReachedFilter] = useState('all')
+  const [clientFilter, setClientFilter] = useState('all')
   const { data: outcomeSettings } = useGetOutcomeSettingsQuery()
+  const { data: usersResponse } = useGetUsersQuery({ page: 1, limit: 100 }, { skip: !isAdmin })
+  const clients = usersResponse?.users || []
   const { downloadFile } = useFileManagement()
   const [isExporting, setIsExporting] = useState(false)
   const [page, setPage] = useState(1)
@@ -71,7 +75,8 @@ export default function CallLogsPage() {
     reached: reachedFilter === 'all' ? undefined : reachedFilter,
     sortColumn,
     sortOrder,
-    prioritizeRestricted: isScannedSort
+    prioritizeRestricted: isScannedSort,
+    user_id: clientFilter === 'all' ? undefined : clientFilter,
   })
 
   const handleScanAll = async () => {
@@ -95,6 +100,7 @@ export default function CallLogsPage() {
     if (directionFilter !== 'all') params.direction = directionFilter
     if (outcomeFilter !== 'all') params.outcome = outcomeFilter
     if (reachedFilter !== 'all') params.reached = reachedFilter
+    if (clientFilter !== 'all') params.user_id = clientFilter
     await downloadFile('/call-logs/export', params, 'calls')
     setIsExporting(false)
   }
@@ -148,6 +154,27 @@ export default function CallLogsPage() {
         </div>
       ),
     },
+    ...(isAdmin ? [{
+      header: t('client', 'Client / User'),
+      className: 'xl1920:min-w-[190px]',
+      cell: (row: CallLog) => {
+        const u = typeof row.user_id === 'object' && row.user_id !== null ? row.user_id : null
+        const name = u?.name || (typeof row.user_id === 'string' ? 'ID: ' + row.user_id.slice(-6) : 'Admin')
+        const email = u?.email
+        return (
+          <div className="flex flex-col gap-0.5 max-w-[180px]">
+            <span className="font-semibold text-title text-sm truncate" title={name}>
+              {name}
+            </span>
+            {email && (
+              <span className="text-xs text-subtitle-color truncate" title={email}>
+                {email}
+              </span>
+            )}
+          </div>
+        )
+      },
+    }] : []),
     {
       header: t('direction') || 'Direction',
       className: 'xl1920:min-w-[180px]',
@@ -299,6 +326,22 @@ export default function CallLogsPage() {
               {isScanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <ScanSearch className="w-5 h-5" />}
               {t('sync_now') || 'Sync Now'}
             </Button>
+            {isAdmin && (
+              <Select value={clientFilter} onValueChange={(val) => { setClientFilter(val); setPage(1); }}>
+                <SelectTrigger className="w-[180px] bg-bg-card border-input-border-color h-11 text-title rounded-radius">
+                  <SelectValue placeholder={t('client', 'All Clients')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('all_clients', 'All Clients')}</SelectItem>
+                  {clients.map((c) => (
+                    <SelectItem key={c.id || (c as unknown as { _id?: string })._id} value={c.id || (c as unknown as { _id?: string })._id || ''}>
+                      {c.name ? `${c.name} (${c.email})` : c.email}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+
             <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setPage(1); }}>
               <SelectTrigger className="w-[140px] bg-bg-card border-input-border-color h-11 text-title rounded-radius">
                 <SelectValue placeholder={t('status')} />
