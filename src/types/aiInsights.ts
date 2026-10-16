@@ -43,6 +43,22 @@ export interface AiInsightClient {
   cost_percentage: number
 }
 
+export interface AiInsightPhoneNumber {
+  phone_number: string
+  provider: string
+  calls_count: number
+  inbound_calls: number
+  outbound_calls: number
+  duration_seconds: number
+  billed_minutes: number
+  telephony_cost: number
+  ai_cost: number
+  total_cost: number
+  cost_percentage: number
+  agents: string
+  clients: string
+}
+
 export interface AiInsightRecentCall {
   id: string
   created_at: string
@@ -55,7 +71,13 @@ export interface AiInsightRecentCall {
     id: string | null
     name: string
   }
+  phone_number?: string
+  direction?: string
+  telephony_provider?: string
   duration: number
+  telephony_cost?: number
+  ai_cost?: number
+  cost: number
   model: string
   provider: string
   input_tokens: number
@@ -65,15 +87,18 @@ export interface AiInsightRecentCall {
   tts_provider: string
   stt_seconds: number
   tts_characters: number
-  cost: number
 }
 
 export interface AiInsightsSummary {
   total_cost: number
+  total_ai_cost?: number
+  total_telephony_cost?: number
+  total_telephony_minutes?: number
   cost_breakdown: {
     llm: number
     stt: number
     tts: number
+    telephony?: number
   }
   total_tokens: number
   input_tokens: number
@@ -83,6 +108,7 @@ export interface AiInsightsSummary {
   total_tts_chars: number
   top_model: string
   top_provider: string
+  top_phone_number?: string
   avg_tokens_per_call: number
   avg_cost_per_call: number
 }
@@ -99,6 +125,7 @@ export interface AiInsightsResponse {
   summary: AiInsightsSummary
   models: AiInsightModel[]
   providers: AiInsightProvider[]
+  phone_numbers?: AiInsightPhoneNumber[]
   timeline: AiInsightTimeline[]
   clients: AiInsightClient[]
   recent_calls: AiInsightRecentCall[]

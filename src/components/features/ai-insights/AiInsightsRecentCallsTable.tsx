@@ -28,14 +28,16 @@ export const AiInsightsRecentCallsTable: React.FC<AiInsightsRecentCallsTableProp
         c.user?.name?.toLowerCase().includes(q) ||
         c.agent?.name?.toLowerCase().includes(q) ||
         c.model?.toLowerCase().includes(q) ||
-        c.provider?.toLowerCase().includes(q)
+        c.provider?.toLowerCase().includes(q) ||
+        c.phone_number?.toLowerCase().includes(q) ||
+        c.telephony_provider?.toLowerCase().includes(q)
     )
   }, [recentCalls, search])
 
   const columns: Column<AiInsightRecentCall>[] = [
     {
-      header: 'Call Details',
-      className: 'min-w-[190px]',
+      header: 'Call & Route Details',
+      className: 'min-w-[210px]',
       cell: (row) => {
         let dateStr = ''
         try {
@@ -45,12 +47,20 @@ export const AiInsightsRecentCallsTable: React.FC<AiInsightsRecentCallsTableProp
         }
         return (
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+            <div className="p-2.5 rounded-lg bg-primary/10 text-primary shrink-0">
               <PhoneCall className="w-4 h-4" />
             </div>
             <div className="flex flex-col min-w-0">
               <span className="font-bold text-title truncate">{row.agent?.name || 'Direct Call'}</span>
-              <span className="text-xs text-subtitle-color truncate">{dateStr}</span>
+              <div className="flex items-center gap-1.5 text-xs text-subtitle-color truncate mt-0.5">
+                <span className="font-semibold text-primary">{row.phone_number || 'Direct'}</span>
+                {row.direction && (
+                  <Badge variant="outline" className={`text-[9px] px-1 py-0 uppercase font-semibold ${row.direction === 'inbound' ? 'text-emerald-500 border-emerald-500/20' : 'text-sky-500 border-sky-500/20'}`}>
+                    {row.direction}
+                  </Badge>
+                )}
+              </div>
+              <span className="text-[11px] text-zinc-400 truncate">{dateStr}</span>
             </div>
           </div>
         )
@@ -58,7 +68,7 @@ export const AiInsightsRecentCallsTable: React.FC<AiInsightsRecentCallsTableProp
     },
     {
       header: 'Client',
-      className: 'min-w-[160px]',
+      className: 'min-w-[150px]',
       cell: (row) => (
         <div className="flex flex-col min-w-0">
           <span className="font-semibold text-title truncate">{row.user?.name || 'Unknown'}</span>
@@ -68,16 +78,21 @@ export const AiInsightsRecentCallsTable: React.FC<AiInsightsRecentCallsTableProp
     },
     {
       header: 'Duration',
-      className: 'min-w-[90px]',
+      className: 'min-w-[95px]',
       cell: (row) => (
-        <span className="font-medium text-title">
-          {Math.floor(row.duration / 60)}m {row.duration % 60}s
-        </span>
+        <div className="flex flex-col">
+          <span className="font-semibold text-title">
+            {Math.floor(row.duration / 60)}m {row.duration % 60}s
+          </span>
+          <span className="text-[10px] text-subtitle-color">
+            {row.telephony_provider || 'Plivo'}
+          </span>
+        </div>
       ),
     },
     {
       header: 'AI Model',
-      className: 'min-w-[150px]',
+      className: 'min-w-[140px]',
       cell: (row) => (
         <div className="flex flex-col">
           <span className="font-semibold text-title text-xs">{row.model}</span>
@@ -89,7 +104,7 @@ export const AiInsightsRecentCallsTable: React.FC<AiInsightsRecentCallsTableProp
     },
     {
       header: 'Tokens (In / Out)',
-      className: 'min-w-[150px]',
+      className: 'min-w-[140px]',
       cell: (row) => (
         <div className="flex flex-col">
           <span className="font-bold text-title">{row.total_tokens.toLocaleString()} tok</span>
@@ -101,21 +116,26 @@ export const AiInsightsRecentCallsTable: React.FC<AiInsightsRecentCallsTableProp
     },
     {
       header: 'Voice Engine',
-      className: 'min-w-[140px]',
+      className: 'min-w-[135px]',
       cell: (row) => (
         <div className="text-xs text-subtitle-color space-y-0.5">
-          <div>STT: <span className="font-medium text-title">{row.stt_provider}</span> ({row.stt_seconds}s)</div>
-          <div>TTS: <span className="font-medium text-title">{row.tts_provider}</span> ({row.tts_characters}ch)</div>
+          <div>STT: <span className="font-medium text-title">{row.stt_provider || 'deepgram'}</span> ({row.stt_seconds || 0}s)</div>
+          <div>TTS: <span className="font-medium text-title">{row.tts_provider || 'deepgram'}</span> ({row.tts_characters || 0}ch)</div>
         </div>
       ),
     },
     {
-      header: 'Call AI Cost',
-      className: 'min-w-[110px]',
+      header: 'Total Cost',
+      className: 'min-w-[130px]',
       cell: (row) => (
-        <span className="font-bold text-amber-500">
-          {formatMoney(row.cost)}
-        </span>
+        <div className="flex flex-col">
+          <span className="font-bold text-title">
+            {formatMoney(row.cost)}
+          </span>
+          <span className="text-[10px] text-subtitle-color">
+            Tel: {formatMoney(row.telephony_cost || 0)} · AI: {formatMoney(row.ai_cost || 0)}
+          </span>
+        </div>
       ),
     },
   ]

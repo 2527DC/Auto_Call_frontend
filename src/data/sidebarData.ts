@@ -454,7 +454,7 @@ export const sidebarMenuData: MenuSection[] = [
       },
       {
         id: 'ai-insights',
-        label: 'AI Analytics',
+        label: 'AI & Provider Analytics',
         icon: 'brainCircuit',
         path: ROUTES.AI_INSIGHTS,
         requiredRole: "admin",

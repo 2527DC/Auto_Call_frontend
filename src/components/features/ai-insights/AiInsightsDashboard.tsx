@@ -18,6 +18,7 @@ import {
   Cpu,
   Layers,
   Mic,
+  Phone,
   PieChart,
   RefreshCw,
   Sparkles,
@@ -30,6 +31,7 @@ import { useTranslation } from 'react-i18next'
 import { AiInsightsClientsTable } from './AiInsightsClientsTable'
 import { AiInsightsDonutChart, DonutDataItem } from './AiInsightsDonutChart'
 import { AiInsightsModelsTable } from './AiInsightsModelsTable'
+import { AiInsightsPhoneNumbersTable } from './AiInsightsPhoneNumbersTable'
 import { AiInsightsProvidersGrid } from './AiInsightsProvidersGrid'
 import { AiInsightsRecentCallsTable } from './AiInsightsRecentCallsTable'
 import { AiInsightsStatCard } from './AiInsightsStatCard'
@@ -75,6 +77,7 @@ export const AiInsightsDashboard: React.FC = () => {
 
   const summary = data?.summary
   const models = data?.models || []
+  const phoneNumbers = data?.phone_numbers || []
   const providers = data?.providers || []
   const timeline = data?.timeline || []
   const clients = data?.clients || []
@@ -111,10 +114,10 @@ export const AiInsightsDashboard: React.FC = () => {
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-title tracking-tight">
-                {t('ai_insights_title', 'AI Analytics & Intelligence Usage')}
+                {t('ai_insights_title', 'AI & Provider Analytics')}
               </h1>
               <p className="text-sm text-subtitle-color mt-0.5 font-medium">
-                {t('ai_insights_desc', 'Granular telemetry on model tokens, provider spend (OpenAI, Deepgram, Sarvam, ElevenLabs), and client shares.')}
+                {t('ai_insights_desc', 'Granular telemetry across AI models (OpenAI), Voice Engines (Deepgram, Sarvam, ElevenLabs), and Telephony Carriers (Plivo, Twilio, SIP).')}
               </p>
             </div>
           </div>
@@ -224,17 +227,23 @@ export const AiInsightsDashboard: React.FC = () => {
       {/* Top Stat Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <AiInsightsStatCard
-          title="Total AI Spend"
+          title="Total Platform Spend"
           value={summary ? formatMoney(summary.total_cost) : '—'}
           icon={Coins}
           iconColor="text-amber-500"
           iconBg="bg-amber-500/10"
           subValue={
             summary ? (
-              <div className="flex items-center justify-between text-[11px]">
-                <span>LLM: {formatMoney(summary.cost_breakdown.llm)}</span>
-                <span>STT: {formatMoney(summary.cost_breakdown.stt)}</span>
-                <span>TTS: {formatMoney(summary.cost_breakdown.tts)}</span>
+              <div className="flex flex-col gap-0.5 text-[11px]">
+                <div className="flex items-center justify-between font-semibold">
+                  <span className="text-sky-500">Carrier: {formatMoney(summary.total_telephony_cost || summary.cost_breakdown?.telephony || 0)}</span>
+                  <span className="text-amber-500">AI: {formatMoney(summary.total_ai_cost || ((summary.cost_breakdown?.llm || 0) + (summary.cost_breakdown?.stt || 0) + (summary.cost_breakdown?.tts || 0)))}</span>
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-subtitle-color">
+                  <span>LLM: {formatMoney(summary.cost_breakdown?.llm || 0)}</span>
+                  <span>STT: {formatMoney(summary.cost_breakdown?.stt || 0)}</span>
+                  <span>TTS: {formatMoney(summary.cost_breakdown?.tts || 0)}</span>
+                </div>
               </div>
             ) : null
           }
@@ -257,32 +266,32 @@ export const AiInsightsDashboard: React.FC = () => {
         />
 
         <AiInsightsStatCard
-          title="Voice Audio Processed"
-          value={summary ? `${summary.total_audio_minutes} min` : '—'}
+          title="Telephony & Audio"
+          value={summary ? `${summary.total_telephony_minutes || 0} min` : '—'}
           icon={Mic}
           iconColor="text-sky-500"
           iconBg="bg-sky-500/10"
           subValue={
             summary ? (
               <div className="flex items-center justify-between text-[11px]">
-                <span>STT Recognition</span>
-                <span className="font-semibold text-title">{compact(summary.total_tts_chars)} TTS chars</span>
+                <span>STT: {summary.total_audio_minutes} min</span>
+                <span className="font-semibold text-title">{compact(summary.total_tts_chars)} TTS ch</span>
               </div>
             ) : null
           }
         />
 
         <AiInsightsStatCard
-          title="Primary Model"
-          value={summary?.top_model || '—'}
+          title="Top Carrier & Model"
+          value={summary?.top_provider || '—'}
           icon={Sparkles}
           iconColor="text-emerald-500"
           iconBg="bg-emerald-500/10"
-          badgeText={models[0] ? `${models[0].tokens_percentage}% traffic` : undefined}
+          badgeText={summary?.top_phone_number ? `${summary.top_phone_number}` : undefined}
           subValue={
             summary ? (
               <div className="flex items-center justify-between text-[11px]">
-                <span>Top Provider: <strong className="text-title">{summary.top_provider}</strong></span>
+                <span>LLM: <strong className="text-title">{summary.top_model}</strong></span>
                 <span>{summary.total_calls} calls</span>
               </div>
             ) : null
@@ -382,13 +391,17 @@ export const AiInsightsDashboard: React.FC = () => {
                 <Cpu className="w-3.5 h-3.5" />
                 <span>Models ({models.length})</span>
               </TabsTrigger>
-              <TabsTrigger value="clients" className="gap-2 text-xs font-semibold px-3 py-1.5">
-                <Users className="w-3.5 h-3.5" />
-                <span>Clients ({clients.length})</span>
+              <TabsTrigger value="phone_numbers" className="gap-2 text-xs font-semibold px-3 py-1.5">
+                <Phone className="w-3.5 h-3.5" />
+                <span>Phone Numbers ({phoneNumbers.length})</span>
               </TabsTrigger>
               <TabsTrigger value="providers" className="gap-2 text-xs font-semibold px-3 py-1.5">
                 <Layers className="w-3.5 h-3.5" />
-                <span>Providers</span>
+                <span>Providers ({providers.length})</span>
+              </TabsTrigger>
+              <TabsTrigger value="clients" className="gap-2 text-xs font-semibold px-3 py-1.5">
+                <Users className="w-3.5 h-3.5" />
+                <span>Clients ({clients.length})</span>
               </TabsTrigger>
               <TabsTrigger value="recent" className="gap-2 text-xs font-semibold px-3 py-1.5">
                 <Activity className="w-3.5 h-3.5" />
@@ -401,6 +414,10 @@ export const AiInsightsDashboard: React.FC = () => {
             <AiInsightsModelsTable models={models} isLoading={isFetching} />
           </TabsContent>
 
+          <TabsContent value="phone_numbers" className="m-0 focus-visible:outline-none">
+            <AiInsightsPhoneNumbersTable phoneNumbers={phoneNumbers} isLoading={isFetching} />
+          </TabsContent>
+
           <TabsContent value="clients" className="m-0 focus-visible:outline-none">
             <AiInsightsClientsTable clients={clients} isLoading={isFetching} />
           </TabsContent>
@@ -408,7 +425,7 @@ export const AiInsightsDashboard: React.FC = () => {
           <TabsContent value="providers" className="m-0 focus-visible:outline-none">
             <AiInsightsProvidersGrid
               providers={providers}
-              costBreakdown={summary?.cost_breakdown || { llm: 0, stt: 0, tts: 0 }}
+              costBreakdown={summary?.cost_breakdown || { llm: 0, stt: 0, tts: 0, telephony: 0 }}
             />
           </TabsContent>
 
@@ -424,7 +441,7 @@ export const AiInsightsDashboard: React.FC = () => {
           Telemetry & Economics Methodology:
         </p>
         <p>
-          Token counts reflect exact input prompt context and output completion tokens measured during live AI streaming calls. Model costs are calculated using standard production rates: GPT-4o-mini at ₹14.55/1M input & ₹58.20/1M output, Deepgram at ₹0.42/min STT & ₹1.46/1k chars TTS, Sarvam AI at ₹0.50/min STT & ₹3.00/1k chars TTS, and ElevenLabs at ₹3.88/1k chars TTS. Calls before telemetry activation are normalized with voice model defaults.
+          Token counts reflect exact input prompt context and output completion tokens measured during live AI streaming calls. Model costs are calculated using standard production rates: GPT-4o-mini at ₹14.55/1M input & ₹58.20/1M output, Deepgram at ₹0.42/min STT & ₹1.46/1k chars TTS, Sarvam AI at ₹0.50/min STT & ₹3.00/1k chars TTS, and ElevenLabs at ₹3.88/1k chars TTS. Telephony carrier usage (Plivo, Twilio, SIP) is billed by exact call duration (Plivo 30s increments, Twilio 60s increments) across all provisioned phone numbers and BYO provider trunks.
         </p>
       </div>
     </div>

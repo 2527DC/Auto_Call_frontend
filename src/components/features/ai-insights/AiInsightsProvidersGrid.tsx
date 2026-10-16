@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { formatMoney } from '@/lib/currency'
 import { AiInsightProvider } from '@/types/aiInsights'
-import { AudioWaveform, BrainCircuit, Mic, Sparkles } from 'lucide-react'
+import { AudioWaveform, BrainCircuit, Mic, Phone, PhoneCall, Sparkles } from 'lucide-react'
 import React from 'react'
 
 interface AiInsightsProvidersGridProps {
@@ -14,10 +14,39 @@ interface AiInsightsProvidersGridProps {
     llm: number
     stt: number
     tts: number
+    telephony?: number
   }
 }
 
 const PROVIDER_METADATA: Record<string, { icon: any; color: string; bg: string; subtitle: string; rateNote: string }> = {
+  plivo: {
+    icon: PhoneCall,
+    color: 'text-sky-500',
+    bg: 'bg-sky-500/10',
+    subtitle: 'Telephony Carrier & SIP Trunking',
+    rateNote: '₹0.38 / min (30-second increment billing)',
+  },
+  twilio: {
+    icon: Phone,
+    color: 'text-rose-500',
+    bg: 'bg-rose-500/10',
+    subtitle: 'Elastic SIP & Global Carrier Voice',
+    rateNote: '₹1.10 / min (60-second increment billing)',
+  },
+  sip_trunk: {
+    icon: PhoneCall,
+    color: 'text-purple-500',
+    bg: 'bg-purple-500/10',
+    subtitle: 'Custom VoIP SIP Trunk Gateway',
+    rateNote: '₹0.20 / min (Configured SIP trunk rate)',
+  },
+  meta_whatsapp: {
+    icon: PhoneCall,
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-500/10',
+    subtitle: 'WhatsApp Cloud Voice Calling API',
+    rateNote: '₹0.30 / min (WhatsApp calling rate)',
+  },
   openai: {
     icon: BrainCircuit,
     color: 'text-emerald-500',
@@ -57,9 +86,19 @@ export const AiInsightsProvidersGrid: React.FC<AiInsightsProvidersGridProps> = (
       {/* Category breakdown bar */}
       <Card className="p-5 rounded-radius border border-input-border-color bg-bg-card shadow-xs">
         <h3 className="text-sm font-bold text-title uppercase tracking-wider mb-3">
-          AI Service Category Distribution
+          AI & Telephony Service Category Distribution
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-3 rounded-lg border border-input-border-color bg-subcard">
+            <div className="flex items-center justify-between text-xs text-subtitle-color font-medium">
+              <span>Telephony (Plivo/Carrier)</span>
+              <span className="font-bold text-title">{formatMoney(costBreakdown.telephony || 0)}</span>
+            </div>
+            <div className="mt-2 text-xs text-subtitle-color">
+              Telecom minutes & DID number routing
+            </div>
+          </div>
+
           <div className="p-3 rounded-lg border border-input-border-color bg-subcard">
             <div className="flex items-center justify-between text-xs text-subtitle-color font-medium">
               <span>LLM Reasoning (OpenAI)</span>
