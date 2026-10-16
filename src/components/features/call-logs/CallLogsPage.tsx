@@ -26,11 +26,15 @@ import { AlertTriangle, Clock, Download, Phone, PhoneIncoming, PhoneOutgoing, Sc
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { useAppSelector } from '@/redux/hooks'
+import CallCostDialog from './CallCostDialog'
 import CallDetailDialog from './CallDetailDialog'
 import TakeActionModal from './TakeActionModal'
 
 export default function CallLogsPage() {
   const { t } = useTranslation()
+  const user = useAppSelector((state) => state.auth.user)
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin'
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -235,13 +239,20 @@ export default function CallLogsPage() {
     },
     {
       header: t('action') || 'Action',
-      className: 'xl1920:min-w-[100px]',
+      className: 'xl1920:min-w-[120px]',
       cell: (row) => (
         <div className="flex items-center gap-2">
           {row.detected_words && row.detected_words.length > 0 && (
             <Button variant="ghost" size="icon" onClick={() => setSelectedUser(row)} className="h-9 w-9 text-destructive bg-destructive/10 hover:bg-destructive hover:text-white transition-colors" title={t('take_action') || 'Take Action'}>
               <AlertTriangle className="h-4 w-4" />
             </Button>
+          )}
+          {isAdmin && (
+            <CallCostDialog
+              callId={row.id || row._id}
+              leadName={row.lead_name}
+              callNumber={row.direction === 'inbound' ? row.from_number : row.to_number}
+            />
           )}
           <CallDetailDialog call={row} />
         </div>

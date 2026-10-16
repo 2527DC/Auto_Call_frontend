@@ -1,5 +1,6 @@
-import { baseApi } from './baseApi'
+import { CallCostResponse } from '@/types/callCost'
 import { CallLogsResponse, CallResponse, PlaceCallPayload } from '@/types/flow'
+import { baseApi } from './baseApi'
 
 export const callApi = baseApi.injectEndpoints({
   overrideExisting: true,
@@ -32,7 +33,11 @@ export const callApi = baseApi.injectEndpoints({
       },
       providesTags: ['CallLogs'],
     }),
+    getCallCost: builder.query<CallCostResponse, string>({
+      query: (id) => `/call-logs/${id}/cost`,
+    }),
   }),
 })
 
-export const { usePlaceCallMutation, useGetCallLogsQuery } = callApi
+export const { usePlaceCallMutation, useGetCallLogsQuery, useGetCallCostQuery } = callApi
+

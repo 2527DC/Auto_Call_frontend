@@ -9,13 +9,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textArea'
 import { cn } from '@/lib/utils'
 import { useGetOutcomeSettingsQuery, useReanalyzeCallMutation, useSetCallOutcomeMutation } from '@/redux/api/outcomeApi'
+import { useAppSelector } from '@/redux/hooks'
 import { CallLog } from '@/types/flow'
 import { format } from 'date-fns'
-import { Eye, Loader2, PhoneIncoming, PhoneOutgoing, RefreshCw, Scissors, UserRound } from 'lucide-react'
+import { Eye, Loader2, PhoneIncoming, PhoneOutgoing, Receipt, RefreshCw, Scissors, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import CallCostDialog from './CallCostDialog'
 
 const formatDuration = (seconds: number) => {
   if (!seconds) return '0s'
@@ -30,6 +32,8 @@ const errorMessage = (e: unknown, fallback: string) => (e as { data?: { message?
 // the details collected), what the caller said, and the conversation.
 export default function CallDetailDialog({ call }: { call: CallLog }) {
   const { t } = useTranslation()
+  const user = useAppSelector((state) => state.auth.user)
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin'
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState(false)
   const [newKey, setNewKey] = useState('')
@@ -118,6 +122,19 @@ export default function CallDetailDialog({ call }: { call: CallLog }) {
               )}
             </div>
             <div className="flex items-center gap-2">
+              {isAdmin && (
+                <CallCostDialog
+                  callId={callId}
+                  leadName={call.lead_name}
+                  callNumber={number}
+                  trigger={
+                    <Button variant="outline" size="sm" className="h-8 gap-1.5 border-input-border-color text-amber-500 hover:text-amber-600 bg-amber-500/10 hover:bg-amber-500/20 font-medium">
+                      <Receipt className="h-3.5 w-3.5" />
+                      <span>{t('call_cost', 'Cost Breakdown')}</span>
+                    </Button>
+                  }
+                />
+              )}
               {contactId && (
                 <Button asChild variant="outline" size="sm" className="h-8 gap-1.5 border-input-border-color">
                   <Link href={`/leads/${contactId}`}><UserRound className="h-3.5 w-3.5" />{t('open_lead', 'Open lead')}</Link>
