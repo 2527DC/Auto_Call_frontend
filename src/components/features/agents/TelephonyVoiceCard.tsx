@@ -46,6 +46,8 @@ export function TelephonyVoiceCard({
   setTeamId,
   memberId,
   setMemberId,
+  transferPhoneNumber,
+  setTransferPhoneNumber,
 }: TelephonyVoiceCardProps) {
   // Only the models the admin allows (and priced) are offered.
   const { data: modelsData } = useGetVoiceModelsQuery(undefined, { skip: voiceProvider !== VoiceProvider.ELEVENLABS })
@@ -258,12 +260,35 @@ export function TelephonyVoiceCard({
 
           {transferEnabled && (
             <div className="space-y-6 bg-input-color p-4 rounded-radius border border-input-border-color mt-4 animate-in fade-in slide-in-from-top-2">
-              <TransferTeamSelector
-                teamId={teamId}
-                setTeamId={setTeamId}
-                memberId={memberId}
-                setMemberId={setMemberId}
-              />
+              {/* Direct Forward / Transfer Phone Number */}
+              <div className="space-y-2">
+                <Label className="text-md font-medium text-title">
+                  {t('transfer_phone_number', 'Direct Transfer Phone Number (Mobile / Landline)')}
+                </Label>
+                <Input
+                  type="tel"
+                  placeholder="+919876543210"
+                  value={transferPhoneNumber || ''}
+                  onChange={(e) => setTransferPhoneNumber?.(e.target.value)}
+                  className="h-10 rounded-radius bg-input-color border-input-border-color font-bold focus:bg-input-color transition-all text-sm"
+                />
+                <p className="text-[12px] text-muted-foreground">
+                  {t('transfer_phone_desc', 'Enter the normal mobile or landline number with country code (e.g. +91XXXXXXXXXX) to transfer the call directly to a real person.')}
+                </p>
+              </div>
+
+              {/* Or Select from Team Member */}
+              <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-white/5">
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {t('or_select_team_member', 'Or Transfer to Team Member')}
+                </div>
+                <TransferTeamSelector
+                  teamId={teamId}
+                  setTeamId={setTeamId}
+                  memberId={memberId}
+                  setMemberId={setMemberId}
+                />
+              </div>
 
               {/* Transfer Keywords */}
               <div className="space-y-3">

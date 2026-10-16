@@ -53,6 +53,7 @@ export interface Agent {
     transfer_keywords?: string[]
     team_id?: string | null
     member_id?: string | null
+    transfer_phone_number?: string | null
   }
   max_call_duration?: number
   enable_call_recording?: boolean
@@ -159,6 +160,7 @@ export interface CreateAgentPayload {
     transfer_keywords?: string[]
     team_id?: string | null
     member_id?: string | null
+    transfer_phone_number?: string | null
   }
   max_call_duration?: number
   enable_call_recording?: boolean
@@ -283,6 +285,8 @@ export interface TelephonyVoiceCardProps {
   setTeamId: (id: string | null) => void
   memberId: string | null
   setMemberId: (id: string | null) => void
+  transferPhoneNumber?: string
+  setTransferPhoneNumber?: (phone: string) => void
 }
 
 export interface TuningParametersCardProps {

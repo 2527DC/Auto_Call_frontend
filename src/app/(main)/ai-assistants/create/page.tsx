@@ -83,6 +83,7 @@ export default function CreateAgentPage() {
   const [transferKeywords, setTransferKeywords] = useState<string[]>([])
   const [teamId, setTeamId] = useState<string | null>(null)
   const [memberId, setMemberId] = useState<string | null>(null)
+  const [transferPhoneNumber, setTransferPhoneNumber] = useState<string>('')
 
   // After-call analysis (summary, outcome, details to collect, follow-ups)
   const [analysis, setAnalysis] = useState<AgentAnalysis>({ enabled: true, form_id: null, success_description: '', extra_instructions: '', follow_up_mode: 'default', google_sheet_id: null })
@@ -156,6 +157,7 @@ export default function CreateAgentPage() {
         setTransferKeywords(agent.transfer_to_human.transfer_keywords || [])
         setTeamId(agent.transfer_to_human.team_id || null)
         setMemberId(agent.transfer_to_human.member_id || null)
+        setTransferPhoneNumber(agent.transfer_to_human.transfer_phone_number || '')
       }
     }
   }, [agentDetails])
@@ -217,7 +219,8 @@ export default function CreateAgentPage() {
           enabled: transferEnabled,
           transfer_keywords: transferKeywords,
           team_id: teamId,
-          member_id: memberId
+          member_id: memberId,
+          transfer_phone_number: transferPhoneNumber?.trim() || null
         },
 
         status: agentDetails?.data?.status || 'active'
@@ -352,6 +355,8 @@ export default function CreateAgentPage() {
               setTeamId={setTeamId}
               memberId={memberId}
               setMemberId={setMemberId}
+              transferPhoneNumber={transferPhoneNumber}
+              setTransferPhoneNumber={setTransferPhoneNumber}
             />
 
             <KnowledgeBaseCard
