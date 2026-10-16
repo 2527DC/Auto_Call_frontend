@@ -44,7 +44,7 @@ export default function CallLogsPage() {
   const [reachedFilter, setReachedFilter] = useState('all')
   const [clientFilter, setClientFilter] = useState('all')
   const { data: outcomeSettings } = useGetOutcomeSettingsQuery()
-  const { data: usersResponse } = useGetUsersQuery({ page: 1, limit: 100 }, { skip: !isAdmin })
+  const { data: usersResponse } = useGetUsersQuery({ page: 1, limit: 500 }, { skip: !isAdmin })
   const clients = usersResponse?.users || []
   const { downloadFile } = useFileManagement()
   const [isExporting, setIsExporting] = useState(false)
@@ -257,7 +257,7 @@ export default function CallLogsPage() {
       cell: (row) => (
         <div className="min-w-[200px]">
           {row.recording_url ? (
-            <NativeAudioWithOverlay src={row.recording_url} durationInSeconds={row.duration} className="w-[240px]!" />
+            <NativeAudioWithOverlay src={row.recording_url.includes('api.twilio.com') ? `/api/call-logs/${row.id || row._id}/recording` : row.recording_url} durationInSeconds={row.duration} className="w-[240px]!" />
           ) : (
             <span className="text-md text-subtitle-color break-all whitespace-normal line-clamp-2">{t('no_recording') || 'No recording'}</span>
           )}
@@ -333,11 +333,15 @@ export default function CallLogsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">{t('all_clients', 'All Clients')}</SelectItem>
-                  {clients.map((c) => (
-                    <SelectItem key={c.id || (c as unknown as { _id?: string })._id} value={c.id || (c as unknown as { _id?: string })._id || ''}>
-                      {c.name ? `${c.name} (${c.email})` : c.email}
-                    </SelectItem>
-                  ))}
+                  {clients.map((c) => {
+                    const cid = String(c.id || (c as unknown as { _id?: string })._id || '');
+                    if (!cid) return null;
+                    return (
+                      <SelectItem key={cid} value={cid}>
+                        {c.name ? `${c.name} (${c.email})` : c.email}
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
             )}

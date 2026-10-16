@@ -235,7 +235,7 @@ export default function CallDetailDialog({ call }: { call: CallLog }) {
 
         {call.recording_url && (
           <section className="mt-4">
-            <NativeAudioWithOverlay src={call.recording_url} durationInSeconds={call.duration} className="w-full!" />
+            <NativeAudioWithOverlay src={call.recording_url.includes('api.twilio.com') ? `/api/call-logs/${callId}/recording` : call.recording_url} durationInSeconds={call.duration} className="w-full!" />
           </section>
         )}
 
