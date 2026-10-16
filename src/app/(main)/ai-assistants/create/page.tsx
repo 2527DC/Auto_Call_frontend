@@ -335,6 +335,7 @@ export default function CreateAgentPage() {
               ttsModel={ttsModel}
               setTtsModel={setTtsModel}
               language={language}
+              setLanguage={setLanguage}
               idleTimeout={idleTimeout}
               setIdleTimeout={setIdleTimeout}
               maxCallDuration={maxCallDuration}

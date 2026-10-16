@@ -266,6 +266,7 @@ export interface TelephonyVoiceCardProps {
   ttsModel: string
   setTtsModel: (model: string) => void
   language: string
+  setLanguage?: (language: string) => void
   idleTimeout: number
   setIdleTimeout: (timeout: number) => void
   maxCallDuration: number

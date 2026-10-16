@@ -29,6 +29,7 @@ export function TelephonyVoiceCard({
   ttsModel,
   setTtsModel,
   language,
+  setLanguage,
   idleTimeout,
   setIdleTimeout,
   maxCallDuration,
@@ -78,8 +79,8 @@ export function TelephonyVoiceCard({
       </h2>
 
       <div className="space-y-6">
-        {/* ── Providers ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* ── Providers & Voice Language ── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-3">
             <Label className="text-md font-medium text-title">{t('telephony_provider')}</Label>
             <Select value={telephonyProvider} onValueChange={(val) => setTelephonyProvider(val as TelephonyProvider)}>
@@ -108,6 +109,25 @@ export function TelephonyVoiceCard({
               </SelectContent>
             </Select>
           </div>
+
+          {setLanguage && (
+            <div className="space-y-3">
+              <Label className="text-md font-medium text-title flex items-center gap-1.5">
+                <span>{t('voice_language', 'Voice Language')}</span>
+                <span className="text-xs font-normal text-muted-foreground">({t('speaks_in', 'AI speaks in')})</span>
+              </Label>
+              <Select value={language || 'en'} onValueChange={setLanguage}>
+                <SelectTrigger className="h-10 rounded-radius bg-input-color shadow-none border-input-border-color font-bold dark:bg-white/5 dark:border-white/10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-radius border-input-border-color">
+                  <SelectItem value="en" className="font-bold">English (EN)</SelectItem>
+                  <SelectItem value="kn" className="font-bold">ಕನ್ನಡ (Kannada - KN)</SelectItem>
+                  <SelectItem value="hi" className="font-bold">हिन्दी (Hindi - HI)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
 
         {/* ── Voice ID Selection ── */}
