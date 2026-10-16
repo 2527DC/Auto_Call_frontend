@@ -31,6 +31,7 @@ import { useGetUsersQuery } from '@/redux/api/userApi'
 import CallCostDialog from './CallCostDialog'
 import CallDetailDialog from './CallDetailDialog'
 import TakeActionModal from './TakeActionModal'
+import { socketService } from '@/services/socketService'
 
 export default function CallLogsPage() {
   const { t } = useTranslation()
@@ -77,7 +78,23 @@ export default function CallLogsPage() {
     sortOrder,
     prioritizeRestricted: isScannedSort,
     user_id: clientFilter === 'all' ? undefined : clientFilter,
+  }, {
+    // If there is any active call on the current page, poll every 4 seconds to guarantee fresh status and duration
+    pollingInterval: (callLogsResponse?.data || []).some(
+      (c: CallLog) => c.status === 'in-progress' || c.status === 'queued' || c.status === 'ringing'
+    ) ? 4000 : 0
   })
+
+  // Live WebSocket updates: refresh table immediately as soon as a call completes or outcome is analysed
+  React.useEffect(() => {
+    const unsubPersonal = user?.id ? socketService.on(`call-status-update-${user.id}`, () => refetch()) : null
+    const unsubGlobal = socketService.on('call-status-update', () => refetch())
+
+    return () => {
+      unsubPersonal?.()
+      unsubGlobal()
+    }
+  }, [user?.id, refetch])
 
   const handleScanAll = async () => {
     try {
