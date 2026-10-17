@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { useGetVoiceModelsQuery } from '@/redux/api/voiceApi'
-import { TelephonyProvider, TelephonyVoiceCardProps, VoiceProvider } from '@/types/agent'
+import { STTProvider, TelephonyProvider, TelephonyVoiceCardProps, VoiceProvider } from '@/types/agent'
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { TransferTeamSelector } from './TransferTeamSelector'
@@ -38,6 +38,8 @@ const SARVAM_DEFAULT_VOICES = [
 export function TelephonyVoiceCard({
   telephonyProvider,
   setTelephonyProvider,
+  sttProvider,
+  setSttProvider,
   voiceProvider,
   setVoiceProvider,
   voiceId,
@@ -122,8 +124,46 @@ export function TelephonyVoiceCard({
             </Select>
           </div>
 
+          {setSttProvider && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-md font-medium text-title">{t('stt_provider', 'Speech-to-Text (Transcriber)')}</Label>
+                <span className="text-xs text-muted-foreground">{t('how_ai_listens', 'Listening & Transcription')}</span>
+              </div>
+              <Select
+                value={sttProvider || STTProvider.DEEPGRAM}
+                onValueChange={(val) => setSttProvider(val as STTProvider)}
+              >
+                <SelectTrigger className="h-10 rounded-radius bg-input-color shadow-none border-input-border-color font-bold dark:bg-white/5 dark:border-white/10">
+                  <SelectValue placeholder={t('select_stt_provider', 'Select STT Provider')} />
+                </SelectTrigger>
+                <SelectContent className="rounded-radius border-input-border-color">
+                  <SelectItem value={STTProvider.DEEPGRAM}>
+                    Deepgram Nova-2 (⚡ Recommended • ~200ms • Lowest Cost)
+                  </SelectItem>
+                  <SelectItem value={STTProvider.SARVAM_AI}>
+                    Sarvam AI Saaras v3 (🇮🇳 Best for Kannada & Indian Languages)
+                  </SelectItem>
+                  <SelectItem value={STTProvider.ELEVENLABS}>
+                    ElevenLabs Scribe (🎙️ High Fidelity)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-[11px] text-muted-foreground font-medium">
+                {sttProvider === STTProvider.DEEPGRAM || !sttProvider
+                  ? '⚡ Deepgram Nova-2 delivers real-time ~200ms speech recognition with lowest telephony costs.'
+                  : sttProvider === STTProvider.SARVAM_AI
+                  ? '🇮🇳 Optimized for Indian regional accents and mixed languages (Kannada, Hindi, etc.).'
+                  : '🎙️ High accuracy transcription using ElevenLabs Scribe API.'}
+              </p>
+            </div>
+          )}
+
           <div className="space-y-3">
-            <Label className="text-md font-medium text-title">{t('voice_provider', 'AI Voice Provider')}</Label>
+            <div className="flex items-center justify-between">
+              <Label className="text-md font-medium text-title">{t('voice_provider', 'AI Voice Provider (TTS)')}</Label>
+              <span className="text-xs text-muted-foreground">{t('how_ai_speaks', 'Speaking & Voice Output')}</span>
+            </div>
             <Select
               value={voiceProvider}
               onValueChange={(val) => {

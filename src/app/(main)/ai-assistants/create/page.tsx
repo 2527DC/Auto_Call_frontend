@@ -22,7 +22,7 @@ import {
 import { useGetFlowsQuery } from '@/redux/api/flowApi'
 import { useGetKnowledgeBaseQuery } from '@/redux/api/knowledgeBaseApi'
 import { useGetVoicesQuery } from '@/redux/api/voiceApi'
-import { GreetingMode, InterruptionSensitivity, TelephonyProvider, VoiceProvider, AgentAnalysis } from '@/types/agent'
+import { GreetingMode, InterruptionSensitivity, TelephonyProvider, VoiceProvider, STTProvider, AgentAnalysis } from '@/types/agent'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -43,6 +43,7 @@ export default function CreateAgentPage() {
   const [voiceTone, setVoiceTone] = useState('Professional')
   const [personality, setPersonality] = useState('Helpful')
   const [telephonyProvider, setTelephonyProvider] = useState<TelephonyProvider>(TelephonyProvider.TWILIO)
+  const [sttProvider, setSttProvider] = useState<STTProvider>(STTProvider.DEEPGRAM)
   const [voiceProvider, setVoiceProvider] = useState<VoiceProvider>(VoiceProvider.ELEVENLABS)
   const [flowId, setFlowId] = useState('')
   const [voiceId, setVoiceId] = useState('')
@@ -107,6 +108,7 @@ export default function CreateAgentPage() {
       setVoiceTone(agent.voice_tone || 'Professional')
       setPersonality(agent.personality || 'Helpful')
       setTelephonyProvider(agent.telephony_provider || TelephonyProvider.TWILIO)
+      setSttProvider(agent.stt_provider || STTProvider.DEEPGRAM)
       setVoiceProvider(agent.voice_provider || VoiceProvider.ELEVENLABS)
       setFlowId(agent.flow_id || '')
       setVoiceId(agent.voice_id || '')
@@ -181,6 +183,7 @@ export default function CreateAgentPage() {
         voice_tone: type === 'incoming' ? voiceTone : null,
         personality: type === 'incoming' ? personality : null,
         telephony_provider: telephonyProvider,
+        stt_provider: sttProvider,
         voice_provider: voiceProvider,
         voice_id: voiceId || null,
         tts_model: voiceProvider === VoiceProvider.ELEVENLABS ? (ttsModel || null) : null,
@@ -330,6 +333,8 @@ export default function CreateAgentPage() {
             <TelephonyVoiceCard
               telephonyProvider={telephonyProvider}
               setTelephonyProvider={setTelephonyProvider}
+              sttProvider={sttProvider}
+              setSttProvider={setSttProvider}
               voiceProvider={voiceProvider}
               setVoiceProvider={setVoiceProvider}
               voiceId={voiceId}

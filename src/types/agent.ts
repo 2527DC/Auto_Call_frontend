@@ -13,6 +13,12 @@ export enum VoiceProvider {
   SARVAM_AI = 'sarvam_ai',
 }
 
+export enum STTProvider {
+  DEEPGRAM = 'deepgram',
+  SARVAM_AI = 'sarvam_ai',
+  ELEVENLABS = 'elevenlabs',
+}
+
 export interface Agent {
   _id: string
   id: string
@@ -22,6 +28,7 @@ export interface Agent {
   voice_tone?: string | null
   personality?: string | null
   telephony_provider: TelephonyProvider
+  stt_provider?: STTProvider
   voice_provider: VoiceProvider
   voice_id?: string | null
   language: string
@@ -132,6 +139,7 @@ export interface CreateAgentPayload {
   voice_tone?: string | null
   personality?: string | null
   telephony_provider?: TelephonyProvider
+  stt_provider?: STTProvider
   voice_provider?: VoiceProvider
   voice_id?: string | null
   language?: string
@@ -258,6 +266,8 @@ export interface PromptTemplatesSectionProps {
 export interface TelephonyVoiceCardProps {
   telephonyProvider: TelephonyProvider
   setTelephonyProvider: (provider: TelephonyProvider) => void
+  sttProvider?: STTProvider
+  setSttProvider?: (provider: STTProvider) => void
   voiceProvider: VoiceProvider
   setVoiceProvider: (provider: VoiceProvider) => void
   voiceId: string
