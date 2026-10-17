@@ -929,7 +929,7 @@ i18n
           agent_name_placeholder: 'Enter Agent Name',
           voice_tone: 'Communication Style',
           personality: 'Behavior',
-          telephony_provider: 'Voice Provider',
+          telephony_provider: 'Telephony Provider',
           select_voice_agent: 'Select Voice Agent',
           voice_id_optional: 'Voice ID (Optional)',
           voice_id_placeholder: 'Enter ElevenLabs Voice ID',

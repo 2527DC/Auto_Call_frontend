@@ -14,9 +14,25 @@ import { Switch } from '@/components/ui/switch'
 import { useGetVoiceModelsQuery } from '@/redux/api/voiceApi'
 import { TelephonyProvider, TelephonyVoiceCardProps, VoiceProvider } from '@/types/agent'
 import { X } from 'lucide-react'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TransferTeamSelector } from './TransferTeamSelector'
+
+const SARVAM_DEFAULT_VOICES = [
+  { voice_id: 'kavitha', name: 'Kavitha (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Female', accent: 'South Indian', description: 'Recommended for Kannada • Natural Tone' } },
+  { voice_id: 'roopa', name: 'Roopa (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Female', accent: 'South Indian', description: 'Warm Kannada / Indic Voice' } },
+  { voice_id: 'shubh', name: 'Shubh (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Male', accent: 'Indian', description: 'Clear & Professional' } },
+  { voice_id: 'ratan', name: 'Ratan (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Male', accent: 'South Indian', description: 'Mature Business Voice' } },
+  { voice_id: 'aditya', name: 'Aditya (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Male', accent: 'Indian', description: 'Energetic & Conversational' } },
+  { voice_id: 'priya', name: 'Priya (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Female', accent: 'Indian', description: 'Crisp Customer Care' } },
+  { voice_id: 'kavya', name: 'Kavya (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Female', accent: 'Indian', description: 'Expressive & Gentle' } },
+  { voice_id: 'gokul', name: 'Gokul (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Male', accent: 'South Indian', description: 'Approachable & Natural' } },
+  { voice_id: 'mani', name: 'Mani (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Male', accent: 'South Indian', description: 'Calm & Friendly' } },
+  { voice_id: 'neha', name: 'Neha (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Female', accent: 'Indian', description: 'Soft & Polite' } },
+  { voice_id: 'pooja', name: 'Pooja (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Female', accent: 'Indian', description: 'Friendly Support' } },
+  { voice_id: 'rahul', name: 'Rahul (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Male', accent: 'Indian', description: 'Young & Clear' } },
+  { voice_id: 'simran', name: 'Simran (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Female', accent: 'Indian', description: 'Calm & Natural' } },
+  { voice_id: 'ishita', name: 'Ishita (Sarvam AI)', category: 'Predefined', provider: 'sarvam_ai', labels: { gender: 'Female', accent: 'Indian', description: 'Upbeat & Clear' } },
+]
 
 export function TelephonyVoiceCard({
   telephonyProvider,
@@ -59,6 +75,13 @@ export function TelephonyVoiceCard({
     !chosenModel.languages.some((l) => l.id.toLowerCase().startsWith(languageCode))
   const { t } = useTranslation()
 
+  const availableVoices = React.useMemo(() => {
+    const list = (voicesData?.data || []).filter((voice: any) => voice.provider === voiceProvider)
+    if (list.length > 0) return list
+    if (voiceProvider === VoiceProvider.SARVAM_AI) return SARVAM_DEFAULT_VOICES
+    return list
+  }, [voicesData?.data, voiceProvider])
+
   const handleKeywordAdd = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -84,7 +107,7 @@ export function TelephonyVoiceCard({
         {/* ── Providers & Voice Language ── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-3">
-            <Label className="text-md font-medium text-title">{t('telephony_provider')}</Label>
+            <Label className="text-md font-medium text-title">{t('telephony_provider', 'Telephony Provider')}</Label>
             <Select value={telephonyProvider} onValueChange={(val) => setTelephonyProvider(val as TelephonyProvider)}>
               <SelectTrigger className="h-10 rounded-radius bg-input-color shadow-none border-input-border-color font-bold dark:bg-white/5 dark:border-white/10">
                 <SelectValue placeholder={t('select_telephony_provider')} />
@@ -99,17 +122,33 @@ export function TelephonyVoiceCard({
           </div>
 
           <div className="space-y-3">
-            <Label className="text-md font-medium text-title">{t('voice_provider')}</Label>
-            <Select value={voiceProvider} onValueChange={(val) => { setVoiceProvider(val as VoiceProvider); setVoiceId(''); }}>
+            <Label className="text-md font-medium text-title">{t('voice_provider', 'AI Voice Provider')}</Label>
+            <Select
+              value={voiceProvider}
+              onValueChange={(val) => {
+                const newProv = val as VoiceProvider
+                setVoiceProvider(newProv)
+                if (newProv === VoiceProvider.SARVAM_AI) {
+                  setVoiceId('kavitha')
+                } else {
+                  setVoiceId('')
+                }
+              }}
+            >
               <SelectTrigger className="h-10 rounded-radius bg-input-color shadow-none border-input-border-color font-bold dark:bg-white/5 dark:border-white/10">
                 <SelectValue placeholder={t('select_voice_provider')} />
               </SelectTrigger>
               <SelectContent className="rounded-radius border-input-border-color">
+                <SelectItem value={VoiceProvider.SARVAM_AI}>{t('sarvam_ai')} (Bulbul v3 • Kannada/Indic)</SelectItem>
                 <SelectItem value={VoiceProvider.ELEVENLABS}>{t('elevenlabs')}</SelectItem>
                 <SelectItem value={VoiceProvider.DEEPGRAM}>{t('deepgram')}</SelectItem>
-                <SelectItem value={VoiceProvider.SARVAM_AI}>{t('sarvam_ai')}</SelectItem>
               </SelectContent>
             </Select>
+            {voiceProvider === VoiceProvider.SARVAM_AI && (
+              <p className="text-[11px] text-primary font-bold">
+                ⚡ Native Indian voices (Bulbul v3). Best for Kannada & regional languages.
+              </p>
+            )}
           </div>
 
           {setLanguage && (
@@ -134,24 +173,38 @@ export function TelephonyVoiceCard({
 
         {/* ── Voice ID Selection ── */}
         <div className="space-y-3 pt-6 border-t border-slate-100 dark:border-white/5">
-          <Label className="text-md mb-2 font-medium text-title">{t('voice_id')}</Label>
-          <Select value={voiceId} onValueChange={setVoiceId}>
+          <div className="flex items-center justify-between">
+            <Label className="text-md font-medium text-title">{t('voice_id', 'Voice ID / Speaker')}</Label>
+            {voiceProvider === VoiceProvider.SARVAM_AI && language === 'kn' && (
+              <span className="text-xs font-semibold text-primary">
+                ✨ Kavitha recommended for Kannada
+              </span>
+            )}
+          </div>
+          <Select value={voiceId || (voiceProvider === VoiceProvider.SARVAM_AI ? 'kavitha' : '')} onValueChange={setVoiceId}>
             <SelectTrigger className="h-10 rounded-radius bg-input-color shadow-none border-input-border-color font-bold dark:bg-white/5 dark:border-white/10">
-              <SelectValue placeholder={t('select_voice_agent')} />
+              <SelectValue placeholder={t('select_voice_agent', 'Select Voice Speaker')} />
             </SelectTrigger>
             <SelectContent className="rounded-radius border-input-border-color max-h-75 w-[var(--radix-select-trigger-width)]">
-              {voicesData?.data?.filter((voice: any) => voice.provider === voiceProvider).map((voice: any) => (
+              {availableVoices.map((voice: any) => (
                 <SelectItem key={voice.voice_id} value={voice.voice_id} className="font-bold py-3">
                   <div className="flex flex-col gap-1 text-left overflow-hidden">
                     <span className="text-sm font-black truncate block w-full">{voice.name}</span>
-                    <span className="text-[9px] text-muted-foreground/40 uppercase tracking-widest font-black truncate block w-full">
-                      {voice.category?.toLowerCase() === 'premade' ? 'Predefined' : voice.category?.replace(/_/g, ' ')} • {voice.labels?.gender?.replace(/_/g, ' ')} • {voice.labels?.accent?.replace(/_/g, ' ')}
+                    <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-black truncate block w-full">
+                      {voice.category?.toLowerCase() === 'premade' ? 'Predefined' : voice.category?.replace(/_/g, ' ')} • {voice.labels?.gender?.replace(/_/g, ' ')} • {voice.labels?.accent?.replace(/_/g, ' ')} {voice.labels?.description ? `• ${voice.labels.description}` : ''}
                     </span>
                   </div>
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          {voiceProvider === VoiceProvider.SARVAM_AI && (
+            <p className="text-[12px] text-muted-foreground">
+              {language === 'kn'
+                ? '💡 Tip: For natural Kannada conversations, Kavitha (Female) or Ratan / Shubh (Male) sound authentic and clear.'
+                : 'Select the voice character that best matches your agent persona.'}
+            </p>
+          )}
         </div>
 
         {/* ── ElevenLabs voice model ── */}
