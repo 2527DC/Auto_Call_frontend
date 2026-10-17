@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useMemo } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -75,7 +76,7 @@ export function TelephonyVoiceCard({
     !chosenModel.languages.some((l) => l.id.toLowerCase().startsWith(languageCode))
   const { t } = useTranslation()
 
-  const availableVoices = React.useMemo(() => {
+  const availableVoices = useMemo(() => {
     const list = (voicesData?.data || []).filter((voice: any) => voice.provider === voiceProvider)
     if (list.length > 0) return list
     if (voiceProvider === VoiceProvider.SARVAM_AI) return SARVAM_DEFAULT_VOICES

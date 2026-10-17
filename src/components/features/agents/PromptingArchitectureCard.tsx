@@ -51,7 +51,7 @@ export function PromptingArchitectureCard({
   }
 
   const applyTemplate = (template: string) => {
-    if (systemPrompt && !window.confirm('Do you want to replace your current system prompt with this template?')) {
+    if (systemPrompt && typeof window !== 'undefined' && !window.confirm('Do you want to replace your current system prompt with this template?')) {
       return
     }
     setSystemPrompt(template)
